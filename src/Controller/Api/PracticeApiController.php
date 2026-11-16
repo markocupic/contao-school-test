@@ -16,10 +16,13 @@ namespace Markocupic\ContaoSchoolTest\Controller\Api;
 
 use Doctrine\DBAL\Connection;
 use Markocupic\ContaoSchoolTest\Controller\ContentElement\SchoolTestPracticeController;
+use Markocupic\ContaoSchoolTest\Task\AnswerChecker;
 use Markocupic\ContaoSchoolTest\Task\Evaluator;
 use Markocupic\ContaoSchoolTest\Task\SolutionRenderer;
 use Markocupic\ContaoSchoolTest\Task\TaskPresenter;
 use Markocupic\ContaoSchoolTest\Task\TaskTranslator;
+use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleGenerator;
+use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleGeometry;
 use Markocupic\ContaoSchoolTest\TestType\PracticeTestTypeInterface;
 use Markocupic\ContaoSchoolTest\TestType\TestTypeRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -115,6 +118,22 @@ final class PracticeApiController
                 // Angles: the sketch with the solution
                 if ('angles' === ($task['a']['type'] ?? '')) {
                     $tasks[$id]['svg'] = $task['a']['solSvg'];
+                }
+
+                // Triangle constructions: the solution triangle and the measures of the student's triangle
+                if ('triangle' === ($task['a']['type'] ?? '')) {
+                    $measured = AnswerChecker::triangleMeasures(\is_array($answers[$id] ?? null) ? $answers[$id] : []);
+                    $tasks[$id]['shape'] = $task['a']['shape'];
+                    $tasks[$id]['given'] = array_map(static function (array $g) use ($measured): array {
+                        $angle = \in_array($g['k'], TriangleGeometry::ANGLES, true);
+
+                        return [
+                            'label' => TriangleGenerator::LABELS[$g['k']],
+                            'v' => $g['v'],
+                            'unit' => $angle ? '°' : ' cm',
+                            'yours' => null === $measured ? null : round($measured[$g['k']], $angle ? 1 : 2),
+                        ];
+                    }, $task['a']['given']);
                 }
 
                 // Drawing tasks: the solution points for the board, and a hint for rotations in the wrong direction

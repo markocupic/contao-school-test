@@ -86,6 +86,12 @@ class TaskTranslatorTest extends TestCase
 
             $this->assertDoesNotMatchRegularExpression(self::GERMAN, $translator->text(GeometryTransformTestType::INSTRUCTION, $lang));
 
+            foreach ([GeometryTransformTestType::INSTRUCTION_GGB] as $instruction) {
+                $text = $translator->text(sprintf($instruction, '1.5'), $lang);
+                $this->assertDoesNotMatchRegularExpression(self::GERMAN, $text, $instruction);
+                $this->assertStringContainsString('en' === $lang ? '1.5 mm' : '1,5 mm', $text);
+            }
+
             foreach (TransformGenerator::KINDS as $kind) {
                 foreach (TransformGenerator::LEVELS as $level) {
                     for ($i = 0; $i < 60; ++$i) {

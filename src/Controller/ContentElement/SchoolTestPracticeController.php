@@ -44,7 +44,7 @@ class SchoolTestPracticeController extends AbstractContentElementController
 
         foreach ($this->testTypes->all() as $alias => $type) {
             if ($type instanceof PracticeTestTypeInterface) {
-                $types[] = ['alias' => $alias, 'labels' => $type->getPracticeLabels(), 'topics' => $type->getPracticeTopics(), 'difficulty' => $type->hasPracticeDifficulty()];
+                $types[] = ['alias' => $alias, 'area' => $type->getPracticeArea(), 'labels' => $type->getPracticeLabels(), 'topics' => $type->getPracticeTopics(), 'difficulty' => $type->hasPracticeDifficulty()];
             }
         }
 

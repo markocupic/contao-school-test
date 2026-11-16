@@ -105,6 +105,11 @@ final class AngleTestType implements PracticeTestTypeInterface
         return [$this->section($kind, $this->many($kind, 4))];
     }
 
+    public function getPracticeArea(): string
+    {
+        return 'geometrie';
+    }
+
     public function hasPracticeDifficulty(): bool
     {
         return false;

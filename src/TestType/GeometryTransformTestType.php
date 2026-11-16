@@ -31,15 +31,15 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
         'punkt' => 'Punktspiegelung',
         'drehung' => 'Drehung',
         'verschiebung' => 'Verschiebung',
-        'achse_frei' => 'Achsenspiegelung ohne Häuschen',
-        'punkt_frei' => 'Punktspiegelung ohne Häuschen',
+        'achse_ggb' => 'Achsenspiegelung mit GeoGebra',
+        'punkt_ggb' => 'Punktspiegelung mit GeoGebra',
         'gemischt' => 'Gemischt',
     ];
 
     /**
      * %s: allowed deviation in mm, depends on the difficulty.
      */
-    public const INSTRUCTION_FREE = 'Konstruiere die Bildpunkte mit Gerade, Zirkel und Geodreieck und setze sie mit «Punkt». Bis %s mm Abweichung gilt als richtig.';
+    public const INSTRUCTION_GGB = 'Konstruiere die Bildpunkte mit den Werkzeugen von GeoGebra. Wähle zuerst den Bildpunkt (A′, B′, …) und klicke dann in der Zeichnung auf die Stelle, am besten auf einen Schnittpunkt. Bis %s mm Abweichung gilt als richtig. Verbinde zum Schluss die Bildpunkte mit Strecken zur Bildfigur, das gibt einen Punkt mehr.';
 
     public const INSTRUCTION = 'Setze die Bildpunkte auf die Gitterpunkte. Ein Klick auf einen gesetzten Punkt entfernt ihn.';
 
@@ -118,6 +118,7 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
             return [$this->section('gemischt', $tasks)];
         }
 
+        $topic = TransformGenerator::LEGACY_KINDS[$topic] ?? $topic;
         $kind = \in_array($topic, TransformGenerator::KINDS, true) ? $topic : 'achse';
 
         // Constructions take longer: two per round
@@ -143,7 +144,7 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
 
     private function section(string $kind, array $tasks, string $difficulty = 'medium'): array
     {
-        $instruction = isset(TransformGenerator::FREE_KINDS[$kind]) ? sprintf(self::INSTRUCTION_FREE, TransformGenerator::toleranceMm($difficulty)) : self::INSTRUCTION;
+        $instruction = isset(TransformGenerator::FREE_KINDS[$kind]) ? sprintf(self::INSTRUCTION_GGB, TransformGenerator::toleranceMm($difficulty)) : self::INSTRUCTION;
 
         return ['area' => $kind, 'title' => self::TITLES[$kind], 'instruction' => $instruction, 'tasks' => $tasks];
     }
@@ -162,9 +163,17 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
             $value = @unserialize($value, ['allowed_classes' => false]);
         }
 
+        // Earlier constructions without squares are now the GeoGebra ones
+        $value = \is_array($value) ? array_map(static fn (mixed $k): mixed => TransformGenerator::LEGACY_KINDS[$k] ?? $k, $value) : $value;
         $kinds = \is_array($value) ? array_values(array_intersect(TransformGenerator::KINDS, $value)) : [];
 
-        return $kinds ?: TransformGenerator::KINDS;
+        // Nothing selected: all kinds except the GeoGebra variants (they load GeoGebra from outside)
+        return $kinds ?: array_values(array_diff(TransformGenerator::KINDS, TransformGenerator::GGB_KINDS));
+    }
+
+    public function getPracticeArea(): string
+    {
+        return 'geometrie';
     }
 
     public function hasPracticeDifficulty(): bool

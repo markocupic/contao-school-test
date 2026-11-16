@@ -21,10 +21,14 @@ use Doctrine\DBAL\Connection;
 use Markocupic\ContaoSchoolTest\Grading\GradeCalculator;
 use Markocupic\ContaoSchoolTest\Participation\ParticipationStatus;
 use Markocupic\ContaoSchoolTest\Participation\ParticipationSynchronizer;
+use Markocupic\ContaoSchoolTest\Task\AnswerChecker;
 use Markocupic\ContaoSchoolTest\Task\Evaluator;
 use Markocupic\ContaoSchoolTest\Task\Geometry\BoardSvg;
 use Markocupic\ContaoSchoolTest\Task\SolutionRenderer;
 use Markocupic\ContaoSchoolTest\Task\TaskPresenter;
+use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleGenerator;
+use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleGeometry;
+use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleSvg;
 use Markocupic\ContaoSchoolTest\Task\Util;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -83,11 +87,12 @@ class PrintController
                         'q' => $task['q'],
                         'isTable' => 'table' === $task['a']['type'],
                         'figure' => match ($task['a']['type']) {
-                            'points' => $this->board->render($task['a'], Evaluator::gridPoints($given, \count($task['a']['img']), $task['a']['draw']['grid'], !empty($task['a']['draw']['free'])), $r['correct']),
+                            'points' => $this->renderBoard($task['a'], $given, $r['correct']),
+                            'triangle' => $this->renderTriangle($task['a'], $given, $r['correct']),
                             'angles' => $task['a']['solSvg'].$this->renderAngles($task['a'], \is_array($given) ? $given : [], $r['correct']),
                             default => '',
                         },
-                        'legend' => 'points' === $task['a']['type'] ? 'Lösung grün gestrichelt'.(empty($task['a']['draw']['free']) ? '' : ', Kreise: '.(string) round((float) ($task['a']['tol'] ?? 0.6) * 5, 1).' mm Toleranz').' · gesetzte Punkte: grün richtig, rot falsch' : '',
+                        'legend' => 'triangle' === $task['a']['type'] ? 'Lösung grün gestrichelt auf die Seite AB gelegt · Seiten: grün alle drei als Strecken gezeichnet, rot nicht' : ('points' === $task['a']['type'] ? 'Lösung grün gestrichelt'.(empty($task['a']['draw']['free']) ? '' : ', Kreise: '.(string) round((float) ($task['a']['tol'] ?? 0.6) * 5, 1).' mm Toleranz').' · gesetzte Punkte: grün richtig, rot falsch'.(empty($task['a']['draw']['ggb']) ? '' : ' · Strecken: grün richtig verbunden, rot falsch') : ''),
                         'table' => 'table' === $task['a']['type'] ? $this->renderTable($task['a'], \is_array($given) ? $given : [], $r['correct']) : '',
                         'given' => $this->renderGiven($task['a'], $given),
                         'solution' => $this->solutions->solution($task['a']),
@@ -193,6 +198,19 @@ class PrintController
             return '' === $v ? '–' : StringUtil::specialchars($v).$this->solutions->suffix($a);
         }
 
+        // Triangle: the given measures as the student's triangle has them
+        if ('triangle' === $a['type']) {
+            $m = AnswerChecker::triangleMeasures(\is_array($given) ? $given : []);
+
+            if (null === $m) {
+                return '–';
+            }
+
+            $generator = new TriangleGenerator();
+
+            return implode(', ', array_map(static fn (array $g): string => $generator->measure($g['k'], round($m[$g['k']], \in_array($g['k'], TriangleGeometry::ANGLES, true) ? 1 : 2)), $a['given']));
+        }
+
         if ('frac' === $a['type']) {
             $g = \is_array($given) ? $given : [];
             $w = trim((string) ($g['w'] ?? ''));
@@ -241,5 +259,25 @@ class PrintController
         }
 
         return '<table class="pt"><tr><th>'.StringUtil::specialchars($a['name']).'</th>'.$top.'</tr><tr><th>Anteil in %</th>'.$bot.'</tr></table>';
+    }
+
+    /**
+     * Drawing with the solution and the student's points (GeoGebra: also the segments).
+     */
+    private function renderBoard(array $a, mixed $given, array $correct): string
+    {
+        $points = Evaluator::gridPoints($given, \count($a['img']), $a['draw']['grid'], !empty($a['draw']['free']));
+        $edges = empty($a['draw']['ggb']) ? null : Evaluator::edges($given, $points);
+
+        return $this->board->render($a, $points, $correct, $edges);
+    }
+
+    private function renderTriangle(array $a, mixed $given, array $correct): string
+    {
+        $points = Evaluator::triangleAnswer($given);
+
+        $svg = (new TriangleSvg())->render($a, \array_slice($points, 0, 3), $points[3], (bool) end($correct));
+
+        return $svg.'<div class="legend">Gegeben: '.$this->solutions->solution($a).' · gemessen im Dreieck des Kindes: '.$this->renderGiven($a, $given).'</div>';
     }
 }

@@ -162,7 +162,7 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
         'transformKinds' => [
             'inputType' => 'checkbox',
             'exclude' => true,
-            'options' => ['achse', 'punkt', 'drehung', 'verschiebung', 'achse_frei', 'punkt_frei'],
+            'options' => ['achse', 'punkt', 'drehung', 'verschiebung', 'achse_ggb', 'punkt_ggb'],
             'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['transformKindsOptions'],
             'eval' => ['multiple' => true, 'tl_class' => 'clr'],
             'sql' => 'blob NULL',
@@ -172,6 +172,14 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
             'exclude' => true,
             'options' => ['scheitel', 'parallel', 'dreieck', 'viereck', 'vieleck', 'kombi', 'profi'],
             'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['angleKindsOptions'],
+            'eval' => ['multiple' => true, 'tl_class' => 'clr'],
+            'sql' => 'blob NULL',
+        ],
+        'triangleKinds' => [
+            'inputType' => 'checkbox',
+            'exclude' => true,
+            'options' => ['sss', 'sws', 'wsw', 'ssw', 'hoehe', 'winkelhalbierende', 'schwerelinie'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['triangleKindsOptions'],
             'eval' => ['multiple' => true, 'tl_class' => 'clr'],
             'sql' => 'blob NULL',
         ],

@@ -73,6 +73,73 @@ final class Evaluator
     }
 
     /**
+     * Triangle construction: A, B, C (cm, anywhere near the sheet) and the segments between them.
+     */
+    public static function triangleAnswer(mixed $v): array
+    {
+        $points = [];
+
+        for ($i = 0; $i < 3; ++$i) {
+            $p = \is_array($v) ? ($v[$i] ?? null) : null;
+            $ok = \is_array($p) && isset($p[0], $p[1]) && is_numeric($p[0]) && is_numeric($p[1]) && abs((float) $p[0]) <= 100 && abs((float) $p[1]) <= 100;
+            $points[$i] = $ok ? [round((float) $p[0], 4), round((float) $p[1], 4)] : null;
+        }
+
+        $points[] = self::edges($v, $points);
+
+        return $points;
+    }
+
+    /**
+     * Image points; with GeoGebra followed by the segments between them (one more list element).
+     */
+    public static function pointsAnswer(array $a, mixed $v): array
+    {
+        $points = self::gridPoints($v, \count($a['img']), $a['draw']['grid'] ?? [20, 14], !empty($a['draw']['free']));
+
+        if (!empty($a['draw']['ggb'])) {
+            $points[] = self::edges($v, $points);
+        }
+
+        return $points;
+    }
+
+    /**
+     * Segments between two placed image points as sorted index pairs [i, j] with i < j, each once.
+     *
+     * @param array<int, array{0: float, 1: float}|null> $points
+     *
+     * @return list<array{0: int, 1: int}>
+     */
+    public static function edges(mixed $v, array $points): array
+    {
+        $n = \count($points);
+        $raw = \is_array($v) ? ($v[$n] ?? null) : null;
+        $out = [];
+
+        if (!\is_array($raw)) {
+            return [];
+        }
+
+        foreach (\array_slice($raw, 0, 64) as $e) {
+            if (!\is_array($e) || !isset($e[0], $e[1]) || !is_numeric($e[0]) || !is_numeric($e[1])) {
+                continue;
+            }
+
+            $i = (int) min($e[0], $e[1]);
+            $j = (int) max($e[0], $e[1]);
+
+            if ($i >= 0 && $j < $n && $i !== $j && null !== $points[$i] && null !== $points[$j]) {
+                $out[$i.'-'.$j] = [$i, $j];
+            }
+        }
+
+        ksort($out);
+
+        return array_values($out);
+    }
+
+    /**
      * Keep only answers that belong to a task and have a sane shape and size.
      */
     public function sanitizeAnswers(array $sections, mixed $answers): array
@@ -100,7 +167,8 @@ final class Evaluator
                     'table' => \is_array($v) ? array_map($str, array_intersect_key($v, array_filter($task['a']['cols'], static fn ($c) => isset($c['ask'])))) : [],
                     'rat' => mb_substr($str($v), 0, 20),
                     'angles' => \is_array($v) ? array_map($str, array_intersect_key($v, $task['a']['v'])) : [],
-                    'points' => self::gridPoints($v, \count($task['a']['img']), $task['a']['draw']['grid'] ?? [20, 14], !empty($task['a']['draw']['free'])),
+                    'points' => self::pointsAnswer($task['a'], $v),
+                    'triangle' => self::triangleAnswer($v),
                     default => '',
                 };
             }

@@ -152,6 +152,11 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface
         return $this->generatePractice('kr', $difficulty);
     }
 
+    public function getPracticeArea(): string
+    {
+        return 'arithmetik';
+    }
+
     public function hasPracticeDifficulty(): bool
     {
         return true;

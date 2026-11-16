@@ -36,10 +36,13 @@ class GeometryTransformTest extends TestCase
                     $a = $task['a'];
                     $this->assertSame('points', $a['type']);
                     $this->assertCount($a['draw']['n'], $a['img']);
-                    $this->assertSame($task['points'], $a['draw']['n']);
+                    // GeoGebra: one more point for joining the image figure
+                    $this->assertSame($task['points'], $a['draw']['n'] + (\in_array($kind, TransformGenerator::GGB_KINDS, true) ? 1 : 0));
 
                     $free = isset(TransformGenerator::FREE_KINDS[$kind]);
                     $this->assertSame($free, !empty($a['draw']['free']));
+                    // GeoGebra only for its own kinds
+                    $this->assertSame(\in_array($kind, TransformGenerator::GGB_KINDS, true), !empty($a['draw']['ggb']));
                     // Geodreieck: not allowed on squared paper at the hard level
                     $this->assertSame(!$free && 'hard' === $level, !empty($a['draw']['noGeo']));
 
@@ -88,13 +91,15 @@ class GeometryTransformTest extends TestCase
                 $this->assertSame($tol, $task['a']['draw']['tol']);
                 $this->assertArrayNotHasKey('axType', $task['a']['draw']);
 
+                // Only the image points here (GeoGebra: the point for the segments is missing)
+                $max = \count($img);
                 $near = $img;
                 $near[0] = [$img[0][0] + $tol - 0.01, $img[0][1]];
-                $this->assertSame($task['points'], $checker->check($task, $near)['points']);
+                $this->assertSame($max, $checker->check($task, $near)['points']);
 
                 $far = $img;
                 $far[0] = [$img[0][0], $img[0][1] - $tol - 0.01];
-                $this->assertSame($task['points'] - 1, $checker->check($task, $far)['points']);
+                $this->assertSame($max - 1, $checker->check($task, $far)['points']);
             }
         }
 
@@ -102,6 +107,55 @@ class GeometryTransformTest extends TestCase
         $this->assertSame('4', TransformGenerator::toleranceMm('easy'));
 
         $this->assertSame([[1.235, 2.5], null], Evaluator::gridPoints([[1.23456, 2.5], [21, 3]], 2, [20, 14], true));
+    }
+
+    public function testGeoGebraKindsAreNotInTheDefaultSelection(): void
+    {
+        $type = new GeometryTransformTestType();
+        $areas = array_column($type->generate(['difficulty' => 'medium', 'transformKinds' => '', 'tasksPerKind' => 1]), 'area');
+        $this->assertSame(['achse', 'punkt', 'drehung', 'verschiebung'], $areas);
+
+        // Earlier constructions on the own board are now the GeoGebra ones
+        $legacy = $type->generate(['difficulty' => 'easy', 'transformKinds' => serialize(['achse_frei']), 'tasksPerKind' => 1]);
+        $this->assertSame('achse_ggb', $legacy[0]['area']);
+
+        $sections = $type->generate(['difficulty' => 'hard', 'transformKinds' => serialize(['punkt_ggb']), 'tasksPerKind' => 1]);
+        $this->assertSame('Punktspiegelung mit GeoGebra', $sections[0]['title']);
+        $this->assertStringContainsString('GeoGebra', $sections[0]['instruction']);
+        $this->assertStringContainsString('1.5 mm', $sections[0]['instruction']);
+        $this->assertStringContainsString('«Gerade»', $sections[0]['tasks'][0]['way']);
+    }
+
+    public function testGeoGebraNeedsTheImageFigureJoined(): void
+    {
+        $checker = new AnswerChecker();
+        $evaluator = new Evaluator($checker);
+        mt_srand(21);
+        $task = (new TransformGenerator())->build('achse_ggb', 'medium');
+        $img = $task['a']['img'];
+        $n = \count($img);
+        $ring = array_map(static fn (int $i): array => [$i, ($i + 1) % $n], range(0, $n - 1));
+
+        $this->assertSame($n + 1, $task['points']);
+        $this->assertSame($n + 1, $checker->check($task, [...$img, $ring])['points']);
+        // Points right, not joined
+        $this->assertSame($n, $checker->check($task, $img)['points']);
+        // One segment missing, or a diagonal too much
+        $this->assertSame($n, $checker->check($task, [...$img, \array_slice($ring, 1)])['points']);
+        $this->assertSame($n, $checker->check($task, [...$img, [...$ring, [0, 2]]])['points']);
+        // Order and direction of the pairs do not matter
+        $this->assertSame($n + 1, $checker->check($task, [...$img, array_reverse(array_map('array_reverse', $ring))])['points']);
+
+        // Sanitizing: pairs between placed points only, sorted, each once
+        $given = $img;
+        $given[1] = null;
+        $clean = $evaluator->sanitizeAnswers([['tasks' => [$task]]], ['s0t0' => [...$given, [[1, 0], [0, 2], [2, 0], [0, 0], [0, 9], 'x', [3, 2]]]]);
+        $this->assertSame([[0, 2], [2, 3]], $clean['s0t0'][$n]);
+        $this->assertNull($clean['s0t0'][1]);
+
+        // Print: the segments are drawn
+        $svg = (new BoardSvg())->render($task['a'], $img, array_fill(0, $n + 1, true), $ring);
+        $this->assertSame($n, substr_count($svg, 'stroke-width="1.4"'));
     }
 
     public function testSanitizingKeepsOnlyGridPoints(): void

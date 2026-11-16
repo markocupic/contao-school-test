@@ -130,6 +130,11 @@ final class EquationTestType implements PracticeTestTypeInterface
         return [['area' => $topic, 'title' => $title, 'instruction' => self::INSTRUCTION, 'tasks' => $tasks]];
     }
 
+    public function getPracticeArea(): string
+    {
+        return 'algebra';
+    }
+
     public function hasPracticeDifficulty(): bool
     {
         return true;

@@ -31,13 +31,20 @@ final class TransformGenerator
 
     public const H = 14;
 
-    public const KINDS = ['achse', 'punkt', 'drehung', 'verschiebung', 'achse_frei', 'punkt_frei'];
+    public const KINDS = ['achse', 'punkt', 'drehung', 'verschiebung', 'achse_ggb', 'punkt_ggb'];
 
     /**
-     * Without squares: construction with line, compass and set square. One square of the
-     * board is 5 mm (as on squared paper), an image point counts if it is no more than 3 mm off.
+     * Without squares: construction in GeoGebra. One square of the board is 5 mm
+     * (as on squared paper), an image point counts within the tolerance of the level.
      */
-    public const FREE_KINDS = ['achse_frei' => 'achse', 'punkt_frei' => 'punkt'];
+    public const FREE_KINDS = ['achse_ggb' => 'achse', 'punkt_ggb' => 'punkt'];
+
+    public const GGB_KINDS = ['achse_ggb', 'punkt_ggb'];
+
+    /**
+     * Earlier constructions on the own board, now done with GeoGebra.
+     */
+    public const LEGACY_KINDS = ['achse_frei' => 'achse_ggb', 'punkt_frei' => 'punkt_ggb'];
 
     /**
      * Allowed deviation in squares of 5 mm: easy 4 mm, medium 3 mm, hard 1.5 mm.
@@ -58,6 +65,8 @@ final class TransformGenerator
 
     public function build(string $kind, string $level): array
     {
+        $kind = self::LEGACY_KINDS[$kind] ?? $kind;
+
         if (isset(self::FREE_KINDS[$kind])) {
             return $this->buildFree($kind, $level);
         }
@@ -451,16 +460,19 @@ final class TransformGenerator
                 continue;
             }
 
+            $out['ggb'] = true;
+
             $way = 'achse' === $base
-                ? 'Lege die Mittellinie des Geodreiecks auf die Achse s und schiebe es, bis die lange Kante durch den Punkt geht. Zeichne die Gerade entlang der Kante, miss den Abstand vom Punkt bis zur Achse und trage ihn auf der anderen Seite ab. Mit dem Zirkel geht es auch: Schlage um zwei Punkte der Achse je einen Kreis durch den Punkt. Die Kreise schneiden sich im Bildpunkt.'
-                : 'Zeichne die Gerade durch den Punkt und Z. Nimm den Abstand vom Punkt bis Z in den Zirkel und schlage einen Kreis um Z. Der Kreis schneidet die Gerade auf der anderen Seite im Bildpunkt.';
+                ? 'Zeichne mit «Senkrechte Gerade» die Senkrechte zur Achse s durch den Punkt. Zeichne mit «Kreis mit Mittelpunkt durch Punkt» einen Kreis um den Schnittpunkt der Senkrechten mit s durch den Punkt. Der Kreis schneidet die Senkrechte auf der anderen Seite im Bildpunkt. Verbinde zum Schluss die Bildpunkte mit «Strecke» zur Bildfigur.'
+                : 'Zeichne mit «Gerade» die Gerade durch den Punkt und Z. Zeichne mit «Kreis mit Mittelpunkt durch Punkt» den Kreis um Z durch den Punkt. Er schneidet die Gerade auf der anderen Seite im Bildpunkt. Verbinde zum Schluss die Bildpunkte mit «Strecke» zur Bildfigur.';
 
             return [
                 'q' => $task['q'],
                 'key' => md5(json_encode([$pts, $out], JSON_THROW_ON_ERROR)),
                 'a' => ['type' => 'points', 'img' => $img, 'tol' => $tol, 'draw' => $out],
                 'way' => $way,
-                'points' => $task['points'],
+                // One more point for joining the image points with segments
+                'points' => $task['points'] + 1,
                 'area' => $kind,
             ];
         }

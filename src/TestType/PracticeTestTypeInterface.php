@@ -17,13 +17,24 @@ namespace Markocupic\ContaoSchoolTest\TestType;
 /**
  * A test type that can also be practised in the content element «Online-Test üben».
  *
- * In the frontend the student first picks the type, then one of its topics
+ * In the frontend the student first picks the main area (Arithmetik, Algebra, Geometrie),
+ * then the type, then one of its topics
  * and a difficulty (easy, medium, hard). Labels are needed in all frontend
  * languages: ['de' => …, 'fr' => …, 'it' => …, 'en' => …].
  */
 interface PracticeTestTypeInterface extends TestTypeInterface
 {
     public const DIFFICULTIES = ['easy', 'medium', 'hard'];
+
+    /**
+     * Main areas of the practice picker, in display order.
+     */
+    public const AREAS = ['arithmetik', 'algebra', 'geometrie'];
+
+    /**
+     * Main area of the type: one of AREAS.
+     */
+    public function getPracticeArea(): string;
 
     /**
      * Name of the type in the practice picker, per language.

@@ -32,6 +32,7 @@ final class AnswerChecker
             'table' => $this->checkTable($a, \is_array($answer) ? $answer : []),
             'points' => $this->checkPoints($a, \is_array($answer) ? $answer : []),
             'angles' => $this->checkAngles($a, \is_array($answer) ? $answer : []),
+            'triangle' => $this->checkTriangle($a, \is_array($answer) ? $answer : []),
             'rat' => $this->checkRational($a, $answer, (int) ($task['points'] ?? 1)),
             default => throw new \InvalidArgumentException(\sprintf('Unknown answer type "%s".', $a['type'])),
         };
@@ -176,7 +177,83 @@ final class AnswerChecker
                 && hypot((float) $p[0] - $q[0], (float) $p[1] - $q[1]) <= $tol;
         }
 
+        // GeoGebra: one more point if the image points are joined to the image figure, without extra segments
+        if (!empty($a['draw']['ggb'])) {
+            $n = \count($a['img']);
+            $expected = [];
+
+            for ($i = 0; $i < $n; ++$i) {
+                $j = ($i + 1) % $n;
+                $expected[min($i, $j).'-'.max($i, $j)] = true;
+            }
+
+            $given = [];
+
+            foreach (\is_array($raw[$n] ?? null) ? $raw[$n] : [] as $e) {
+                if (\is_array($e) && isset($e[0], $e[1]) && is_numeric($e[0]) && is_numeric($e[1])) {
+                    $given[(int) min($e[0], $e[1]).'-'.(int) max($e[0], $e[1])] = true;
+                }
+            }
+
+            ksort($expected);
+            ksort($given);
+            $correct[$n] = $given === $expected;
+        }
+
         return $this->result($correct);
+    }
+
+    /**
+     * Triangle construction: one entry per given measure (does the triangle ABC have it within
+     * the tolerance?), the last entry for the three sides drawn as segments.
+     * Position, orientation and direction of the labels do not matter.
+     */
+    private function checkTriangle(array $a, array $raw): array
+    {
+        $correct = [];
+        $measured = self::triangleMeasures($raw);
+        [$tolLen, $tolAng] = $a['tol'];
+
+        foreach ($a['given'] as $g) {
+            $tol = \in_array($g['k'], Triangle\TriangleGeometry::ANGLES, true) ? $tolAng : $tolLen;
+            $correct[] = null !== $measured && abs($measured[$g['k']] - (float) $g['v']) <= $tol + 1e-9;
+        }
+
+        $sides = [];
+
+        foreach (\is_array($raw[3] ?? null) ? $raw[3] : [] as $e) {
+            if (\is_array($e) && isset($e[0], $e[1]) && is_numeric($e[0]) && is_numeric($e[1])) {
+                $sides[(int) min($e[0], $e[1]).'-'.(int) max($e[0], $e[1])] = true;
+            }
+        }
+
+        $correct[] = null !== $measured && isset($sides['0-1'], $sides['1-2'], $sides['0-2']);
+
+        return $this->result($correct);
+    }
+
+    /**
+     * Measures of the student's triangle, null without three points or for a degenerate triangle.
+     *
+     * @return array<string, float>|null
+     */
+    public static function triangleMeasures(array $raw): array|null
+    {
+        $pts = [];
+
+        for ($i = 0; $i < 3; ++$i) {
+            $p = $raw[$i] ?? null;
+
+            if (!\is_array($p) || !isset($p[0], $p[1]) || !is_numeric($p[0]) || !is_numeric($p[1])) {
+                return null;
+            }
+
+            $pts[] = [(float) $p[0], (float) $p[1]];
+        }
+
+        $m = Triangle\TriangleGeometry::measures(...$pts);
+
+        return $m['hc'] < 0.05 ? null : $m;
     }
 
     /**

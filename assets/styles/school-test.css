@@ -110,6 +110,9 @@
 .school-test .st-options { display: flex; flex-wrap: wrap; gap: 6px; }
 .school-test .st-opt { font: inherit; padding: 7px 14px; border: 2px solid var(--st-line); border-radius: 10px; background: #fff; color: inherit; cursor: pointer; }
 .school-test .st-opt.on { border-color: var(--st-accent); background: var(--st-accent); color: #fff; font-weight: 600; }
+.school-test .st-mainnav { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--st-line); }
+.school-test .st-main { font-weight: 600; }
+.school-test .st-main:disabled { opacity: .45; cursor: not-allowed; }
 .school-test .st-optnum { min-width: 3em; text-align: center; }
 .school-test .st-msg.ok { background: #e2f4e9; color: var(--st-ok); }
 .school-test .st-task.st-ok { background: linear-gradient(90deg, #e2f4e9, transparent 70%); }
@@ -130,6 +133,7 @@
 .school-test .st-chip.set { border-color: #e08a1e; color: #a35a00; }
 .school-test .st-chip.on { border-color: var(--st-accent); background: var(--st-accent); color: #fff; }
 .school-test .st-clear { margin-left: auto; font-size: .88rem; }
+.school-test .st-help-lines { font-size: .88rem; }
 .school-test .st-svg { display: block; width: 100%; max-width: 680px; height: auto; background: #fff; border: 1px solid var(--st-line); border-radius: 8px; cursor: crosshair; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
 .school-test .st-board-done .st-svg { cursor: default; }
 .school-test .st-svg text { font: 600 14px system-ui, sans-serif; }
@@ -190,19 +194,12 @@
 .school-test .st-gdt-rot { fill: #fff; stroke: var(--st-accent); stroke-width: 2; cursor: grab; }
 .school-test .st-gdt-rotsym { fill: none; stroke: var(--st-accent); stroke-width: 1.6; pointer-events: none; }
 
-/* Construction without squares */
-.school-test .st-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-.school-test .st-tools .st-opt.on { border-color: var(--st-accent); background: var(--st-accent); color: #fff; }
-.school-test .st-paper { fill: #fff; stroke: #e2e8f0; stroke-width: 1; }
-.school-test .st-cons { fill: none; stroke: #64748b; stroke-width: 1; }
-.school-test .st-cons.st-prev { stroke: var(--st-accent); stroke-dasharray: 5 4; pointer-events: none; }
-.school-test .st-radius { font: 600 12px system-ui, sans-serif; fill: var(--st-accent); paint-order: stroke; stroke: #fff; stroke-width: 3; pointer-events: none; }
-.school-test .st-tol { fill: rgba(31, 138, 76, .08); stroke: var(--st-ok); stroke-width: 1; stroke-dasharray: 3 3; }
 .school-test .st-gdt-move { fill: #fff; stroke: var(--st-accent); stroke-width: 2; cursor: move; }
-.school-test .st-preview { pointer-events: none; }
 .school-test .st-geo-btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(1); background: linear-gradient(to top right, transparent calc(50% - 1px), #888 50%, transparent calc(50% + 1px)); }
 .school-test .st-geo-btn { display: inline-flex; align-items: center; justify-content: center; padding: 6px 10px; line-height: 0; }
 .school-test .st-geo-btn[aria-pressed="true"] { border-color: var(--st-accent); background: var(--st-accent); color: #fff; }
-.school-test .st-cons.st-sel { stroke: var(--st-accent); stroke-width: 2.5; }
-.school-test .st-free .st-svg { cursor: crosshair; }
-.school-test .st-tool { display: inline-flex; align-items: center; justify-content: center; padding: 5px 9px; line-height: 0; }
+
+/* Construction with GeoGebra */
+.school-test .st-ggb-wrap { position: relative; width: 100%; max-width: 640px; }
+.school-test .st-ggb-msg { padding: 12px 0; font-size: .9rem; color: var(--st-muted, #667085); }
+.school-test .st-ggb-msg[hidden] { display: none; }

@@ -16,6 +16,7 @@ namespace Markocupic\ContaoSchoolTest\Task;
 
 use Markocupic\ContaoSchoolTest\Task\Angle\AngleTexts;
 use Markocupic\ContaoSchoolTest\Task\Equation\EquationTexts;
+use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleTexts;
 
 /**
  * Translates the German task texts for the frontend (fr, it, en).
@@ -150,8 +151,8 @@ final class TaskTranslator
         'Drehung' => ['Rotation', 'Rotazione', 'Rotation'],
         'Verschiebung' => ['Translation', 'Traslazione', 'Translation'],
         'Gemischt' => ['Mélangé', 'Misto', 'Mixed'],
-        'Achsenspiegelung ohne Häuschen' => ['Symétrie axiale sans quadrillage', 'Simmetria assiale senza quadretti', 'Reflection in a line without grid'],
-        'Punktspiegelung ohne Häuschen' => ['Symétrie centrale sans quadrillage', 'Simmetria centrale senza quadretti', 'Point reflection without grid'],
+        'Achsenspiegelung mit GeoGebra' => ['Symétrie axiale avec GeoGebra', 'Simmetria assiale con GeoGebra', 'Reflection in a line with GeoGebra'],
+        'Punktspiegelung mit GeoGebra' => ['Symétrie centrale avec GeoGebra', 'Simmetria centrale con GeoGebra', 'Point reflection with GeoGebra'],
         'Setze die Bildpunkte auf die Gitterpunkte. Ein Klick auf einen gesetzten Punkt entfernt ihn.' => ['Place les points images sur les points du quadrillage. Un clic sur un point placé le supprime.', 'Posiziona i punti immagine sui punti della griglia. Un clic su un punto già posizionato lo elimina.', 'Place the image points on the grid points. Clicking a placed point removes it.'],
         'Gewicht' => ['Poids', 'Peso', 'Weight'],
         'Länge' => ['Longueur', 'Lunghezza', 'Length'],
@@ -160,18 +161,22 @@ final class TaskTranslator
     ];
 
     /**
-     * Phrases of the solution paths (regex => [fr, it, en]), applied in this order.
+     * Instruction of the GeoGebra constructions (fr, it, en), %s: tolerance in mm.
      */
-    private const INSTRUCTION_FREE = [
-        'Construis les points images avec la droite, le compas et l’équerre, puis place-les avec «&nbsp;Point&nbsp;». Un écart jusqu’à %s mm est accepté.',
-        'Costruisci i punti immagine con retta, compasso e squadra e posizionali con «Punto». Uno scarto fino a %s mm è accettato.',
-        'Construct the image points with the line, compass and set square tools and place them with “Point”. A deviation of up to %s mm counts as correct.',
+    private const INSTRUCTION_GGB = [
+        'Construis les points images avec les outils de GeoGebra. Choisis d’abord le point image (A′, B′, …), puis clique dans le dessin à l’endroit voulu, de préférence sur un point d’intersection. Un écart jusqu’à %s mm est accepté. Pour finir, relie les points images par des segments pour obtenir la figure image&nbsp;: cela donne un point de plus.',
+        'Costruisci i punti immagine con gli strumenti di GeoGebra. Scegli prima il punto immagine (A′, B′, …) e poi clicca nel disegno nel punto giusto, possibilmente su un punto di intersezione. Uno scarto fino a %s mm è accettato. Alla fine collega i punti immagine con dei segmenti per ottenere la figura immagine: vale un punto in più.',
+        'Construct the image points with the GeoGebra tools. First choose the image point (A′, B′, …), then click on the spot in the drawing, ideally on an intersection point. A deviation of up to %s mm counts as correct. Finally, join the image points with segments to form the image figure; this gives one more point.',
     ];
 
+    /**
+     * Phrases of the solution paths (regex => [fr, it, en]), applied in this order.
+     */
     private const WAY = [
         // Spiegeln, Drehen, Verschieben (whole sentences first)
-        '/Lege die Mittellinie des Geodreiecks auf die Achse s und schiebe es, bis die lange Kante durch den Punkt geht\. Zeichne die Gerade entlang der Kante, miss den Abstand vom Punkt bis zur Achse und trage ihn auf der anderen Seite ab\. Mit dem Zirkel geht es auch: Schlage um zwei Punkte der Achse je einen Kreis durch den Punkt\. Die Kreise schneiden sich im Bildpunkt\./u' => ['Pose la ligne médiane de l’équerre sur l’axe s et fais-la glisser jusqu’à ce que le grand côté passe par le point. Trace la droite le long du côté, mesure la distance du point à l’axe et reporte-la de l’autre côté. Avec le compas, c’est aussi possible&nbsp;: trace autour de deux points de l’axe un cercle passant par le point. Les cercles se coupent au point image.', 'Appoggia la linea mediana della squadra sull’asse s e falla scorrere finché il lato lungo passa per il punto. Traccia la retta lungo il lato, misura la distanza dal punto all’asse e riportala dall’altra parte. Si può anche con il compasso: traccia attorno a due punti dell’asse un cerchio che passa per il punto. I cerchi si intersecano nel punto immagine.', 'Put the centre line of the set square on the axis s and slide it until the long edge passes through the point. Draw the line along the edge, measure the distance from the point to the axis and mark it off on the other side. You can also use the compass: around two points of the axis, draw a circle through the point. The circles meet at the image point.'],
-        '/Zeichne die Gerade durch den Punkt und Z\. Nimm den Abstand vom Punkt bis Z in den Zirkel und schlage einen Kreis um Z\. Der Kreis schneidet die Gerade auf der anderen Seite im Bildpunkt\./u' => ['Trace la droite passant par le point et Z. Prends la distance du point à Z dans le compas et trace un cercle autour de Z. Le cercle coupe la droite de l’autre côté au point image.', 'Traccia la retta che passa per il punto e per Z. Prendi con il compasso la distanza dal punto a Z e traccia un cerchio attorno a Z. Il cerchio interseca la retta dall’altra parte nel punto immagine.', 'Draw the line through the point and Z. Set the compass to the distance from the point to Z and draw a circle around Z. The circle cuts the line on the other side at the image point.'],
+        '/Zeichne mit «Senkrechte Gerade» die Senkrechte zur Achse s durch den Punkt\. Zeichne mit «Kreis mit Mittelpunkt durch Punkt» einen Kreis um den Schnittpunkt der Senkrechten mit s durch den Punkt\. Der Kreis schneidet die Senkrechte auf der anderen Seite im Bildpunkt\./u' => ['Avec «&nbsp;Droite perpendiculaire&nbsp;», trace la perpendiculaire à l’axe s passant par le point. Avec «&nbsp;Cercle (centre-point)&nbsp;», trace un cercle centré au point d’intersection de la perpendiculaire avec s et passant par le point. Le cercle coupe la perpendiculaire de l’autre côté au point image.', 'Con «Retta perpendicolare» traccia la perpendicolare all’asse s che passa per il punto. Con «Circonferenza dati il centro e un punto» traccia un cerchio con centro nel punto di intersezione della perpendicolare con s che passa per il punto. Il cerchio interseca la perpendicolare dall’altra parte nel punto immagine.', 'With “Perpendicular Line”, draw the perpendicular to the axis s through the point. With “Circle with Center through Point”, draw a circle around the intersection of the perpendicular and s through the point. The circle cuts the perpendicular on the other side at the image point.'],
+        '/Verbinde zum Schluss die Bildpunkte mit «Strecke» zur Bildfigur\./u' => ['Pour finir, relie les points images avec «&nbsp;Segment&nbsp;» pour obtenir la figure image.', 'Alla fine collega i punti immagine con «Segmento» per ottenere la figura immagine.', 'Finally, join the image points with “Segment” to form the image figure.'],
+        '/Zeichne mit «Gerade» die Gerade durch den Punkt und Z\. Zeichne mit «Kreis mit Mittelpunkt durch Punkt» den Kreis um Z durch den Punkt\. Er schneidet die Gerade auf der anderen Seite im Bildpunkt\./u' => ['Avec «&nbsp;Droite&nbsp;», trace la droite passant par le point et Z. Avec «&nbsp;Cercle (centre-point)&nbsp;», trace le cercle de centre Z passant par le point. Il coupe la droite de l’autre côté au point image.', 'Con «Retta» traccia la retta che passa per il punto e per Z. Con «Circonferenza dati il centro e un punto» traccia il cerchio con centro Z che passa per il punto. Interseca la retta dall’altra parte nel punto immagine.', 'With “Line”, draw the line through the point and Z. With “Circle with Center through Point”, draw the circle around Z through the point. It cuts the line on the other side at the image point.'],
         '/Die Achse ist schräg\. Gehe vom Punkt diagonal durch die Häuschen-Ecken bis zur Achse und auf der anderen Seite gleich weit weiter\./u' => ['L’axe est oblique. Pars du point en diagonale à travers les coins des carreaux jusqu’à l’axe, puis continue de la même distance de l’autre côté.', 'L’asse è obliquo. Dal punto vai in diagonale attraverso gli angoli dei quadretti fino all’asse e poi prosegui della stessa distanza dall’altra parte.', 'The axis is slanted. Go diagonally from the point through the corners of the squares to the axis and the same distance on the other side.'],
         '/Gehe vom Punkt rechtwinklig zur Achse und zähle die Häuschen\. Auf der anderen Seite gehst du gleich weit\./u' => ['Pars du point perpendiculairement à l’axe et compte les carreaux. De l’autre côté, va aussi loin.', 'Dal punto vai perpendicolarmente all’asse e conta i quadretti. Dall’altra parte vai altrettanto lontano.', 'Go from the point at right angles to the axis and count the squares. On the other side, go the same distance.'],
         '/Achtung: Die Achse liegt in der Mitte zwischen zwei Gitterlinien\./u' => ['Attention&nbsp;: l’axe se trouve au milieu entre deux lignes du quadrillage.', 'Attenzione: l’asse si trova a metà tra due linee della griglia.', 'Careful: the axis lies halfway between two grid lines.'],
@@ -326,11 +331,9 @@ final class TaskTranslator
      */
     public function text(string $text, string $lang): string
     {
-        // Construction without squares: the tolerance in mm is part of the instruction
-        if (preg_match('/^Konstruiere die Bildpunkte mit Gerade, Zirkel und Geodreieck und setze sie mit «Punkt»\. Bis ([\d.]+) mm Abweichung gilt als richtig\.$/u', $text, $m) && null !== ($i = $this->index($lang))) {
-            $mm = 'en' === $lang ? $m[1] : str_replace('.', ',', $m[1]);
-
-            return sprintf(self::INSTRUCTION_FREE[$i], $mm);
+        // Construction with GeoGebra: the tolerance in mm is part of the instruction
+        if (preg_match('/^Konstruiere die Bildpunkte mit den Werkzeugen von GeoGebra\. Wähle zuerst den Bildpunkt \(A′, B′, …\) und klicke dann in der Zeichnung auf die Stelle, am besten auf einen Schnittpunkt\. Bis ([\d.]+) mm Abweichung gilt als richtig\. Verbinde zum Schluss die Bildpunkte mit Strecken zur Bildfigur, das gibt einen Punkt mehr\.$/u', $text, $m) && null !== ($i = $this->index($lang))) {
+            return sprintf(self::INSTRUCTION_GGB[$i], 'en' === $lang ? $m[1] : str_replace('.', ',', $m[1]));
         }
 
         $i = $this->index($lang);
@@ -339,7 +342,7 @@ final class TaskTranslator
             return $text;
         }
 
-        return self::TEXTS[$text][$i] ?? AngleTexts::TITLES[$text][$i] ?? EquationTexts::TITLES[$text][$i] ?? $this->phrase($text, $i) ?? $text;
+        return self::TEXTS[$text][$i] ?? AngleTexts::TITLES[$text][$i] ?? EquationTexts::TITLES[$text][$i] ?? TriangleTexts::TITLES[$text][$i] ?? $this->phrase($text, $i) ?? $text;
     }
 
     /**
@@ -375,12 +378,14 @@ final class TaskTranslator
      */
     private function phrase(string $text, int $i): string|null
     {
-        foreach (self::phrases() as $regex => [$replacements, $groups]) {
+        foreach (self::phrases() as $regex => [$replacements, $groups, $decimal]) {
             if (preg_match($regex, $text, $m)) {
                 $out = $replacements[$i];
 
                 foreach ($groups as $placeholder => $group) {
-                    $out = str_replace('{'.$placeholder.'}', $m[$group], $out);
+                    // Triangles: decimal comma in French and Italian
+                    $value = $decimal && $i < 2 ? preg_replace('/(\d)\.(\d)/', '$1,$2', $m[$group]) : $m[$group];
+                    $out = str_replace('{'.$placeholder.'}', $value, $out);
                 }
 
                 return $out;
@@ -405,7 +410,7 @@ final class TaskTranslator
         }
 
         $compiled = [];
-        $templates = AngleTexts::PHRASES + EquationTexts::PHRASES;
+        $templates = AngleTexts::PHRASES + EquationTexts::PHRASES + TriangleTexts::PHRASES;
 
         // Most literal text first: "bei {1} und {2}" before "bei {1}"
         uksort($templates, static fn (string $a, string $b): int => mb_strlen(preg_replace('/\{\d+\}/', '', $b)) <=> mb_strlen(preg_replace('/\{\d+\}/', '', $a)));
@@ -426,7 +431,7 @@ final class TaskTranslator
                 }
             }
 
-            $compiled['#^'.$regex.'$#su'] = [$translations, $groups];
+            $compiled['#^'.$regex.'$#su'] = [$translations, $groups, isset(TriangleTexts::PHRASES[$tpl])];
         }
 
         return $compiled;

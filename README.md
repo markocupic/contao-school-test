@@ -22,8 +22,19 @@ Zweiter Testtyp: **Spiegeln, Drehen, Verschieben** auf Häuschenpapier (20 × 14
 | Punktspiegelung | am Punkt Z |
 | Drehung | um Z, 90°, 180° oder 270° im Gegenuhrzeigersinn |
 | Verschiebung | um den Pfeil v |
+| Achsen-/Punktspiegelung mit GeoGebra | Konstruktion ohne Häuschen in GeoGebra, Toleranz 4 / 3 / 1.5 mm je nach Schwierigkeit; einen Punkt mehr, wenn die Bildpunkte mit Strecken zur Bildfigur verbunden sind |
 
 Im Backend wählst du Schwierigkeit, Abbildungsarten und Aufgaben pro Art. Die Kinder setzen die Bildpunkte A′, B′, … mit einem Klick auf die Gitterpunkte, ein Klick auf einen gesetzten Punkt entfernt ihn. Jeder richtige Bildpunkt gibt einen Punkt. Auf dem Auswertungsblatt erscheint jede Aufgabe als Zeichnung: Lösung grün gestrichelt, gesetzte Punkte grün oder rot.
+
+### GeoGebra
+
+Die Varianten «mit GeoGebra» laden GeoGebra beim ersten Anzeigen der Aufgabe von `https://www.geogebra.org/apps/deployggb.js`. Ohne Auswahl im Backend sind sie deshalb nicht im Test. Die Werkzeugleiste ist eingeschränkt (Bewegen, Punkt, Schneiden, Gerade, Strecke, Halbgerade, Senkrechte, Parallele, Kreise, Zirkel, Löschen), Eingabezeile, Algebra-Ansicht, Kontextmenü und die Spiegeln-Werkzeuge fehlen. Das Kind wählt A′, B′, … und klickt dann auf die Stelle in der Zeichnung; der Punkt heisst danach in GeoGebra A′. Bewertet wird über die Koordinaten der Bildpunkte. Dazu kommt ein Punkt, wenn die Bildpunkte mit Strecken (Werkzeug Strecke oder Vieleck) genau zur Bildfigur verbunden sind: alle Seiten vorhanden, keine Diagonale zu viel. Gespeichert werden die Bildpunkte und diese Strecken, andere Hilfslinien nicht.
+
+GeoGebra ist für die nicht-kommerzielle Nutzung (Schule, Unterricht) frei, siehe [geogebra.org/license](https://www.geogebra.org/license). Für eine selbst gehostete Kopie des Math Apps Bundle vor dem Script setzen:
+
+```html
+<script>window.SchoolTestGeoGebra = {deploy: '/files/geogebra/deployggb.js', codebase: '/files/geogebra/HTML5/5.0/web3d/'};</script>
+```
 
 Dritter Testtyp: **Winkel** mit Skizze zu jeder Aufgabe
 
@@ -40,6 +51,22 @@ Dritter Testtyp: **Winkel** mit Skizze zu jeder Aufgabe
 Jeder gesuchte Winkel gibt einen Punkt. Beim Üben und auf dem Auswertungsblatt erscheint die Skizze mit der Lösung, dazu der Lösungsweg.
 
 Vierter Testtyp: **Lineare Gleichungen** in zehn Stufen, von «x + a = b» bis zu Binomen mit Koeffizienten. Die Kinder geben x als ganze Zahl oder Bruch ein (z. B. `-3/4`, ungekürzt gilt auch). Punkte: 1 (Stufe 1–3), 2 (Stufe 4–7), 3 (Stufe 8–10). Schwierigkeit: Leicht = nur ganzzahlige Lösungen, Mittel = auch Brüche, Anspruchsvoller = meistens Brüche. Beim Üben zeigt der Lösungsweg jede Umformung («| − 3x», «| : 4»).
+
+Fünfter Testtyp: **Dreieckskonstruktionen** mit GeoGebra
+
+| Bereich | Gegeben |
+|---|---|
+| SSS | drei Seiten |
+| SWS | zwei Seiten und der Zwischenwinkel |
+| WSW | eine Seite und die beiden anliegenden Winkel |
+| SsW | zwei Seiten und der Gegenwinkel der grösseren Seite |
+| Mit Höhe | Grundseite, Höhe und ein Winkel oder eine Seite; Anspruchsvoller auch Höhe mit zwei Winkeln oder zwei Seiten |
+| Mit Winkelhalbierender | eine Seite, ein anliegender Winkel und dessen Winkelhalbierende |
+| Mit Schwerelinie | Grundseite, Schwerelinie dazu und eine Seite oder ein Winkel; Anspruchsvoller auch die Schwerelinie auf eine gegebene Seite |
+
+Das Kind konstruiert das Dreieck irgendwo auf dem Blatt (1 Einheit = 1 cm). Die ersten drei Punkte heissen in GeoGebra A, B und C, mit den Knöpfen A, B, C gibt es einem anderen Punkt den Namen. Bewertet werden nicht Koordinaten, sondern die gegebenen Masse: Jedes Mass, das das Dreieck ABC innerhalb der Toleranz hat, gibt einen Punkt (Lage, Drehung und Spiegelung egal), einen weiteren gibt es für die drei Seiten als Strecken. Toleranz: Leicht 2 mm und 2°, Mittel 1 mm und 1°, Anspruchsvoller 0.5 mm und 0.5°. Leicht baut immer auf der Seite c auf, Werte auf 0.5 cm und 5°. Beim Üben zeigt die Rückmeldung jedes Mass mit dem Wert im Dreieck des Kindes, die Lösung liegt grün gestrichelt auf seiner Seite AB.
+
+Neues Feld in `tl_st_test`: `triangleKinds` (nach dem Update `contao:migrate`).
 
 ## Ablauf
 

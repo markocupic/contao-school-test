@@ -12,7 +12,10 @@ declare(strict_types=1);
  * @link https://github.com/markocupic/contao-school-test
  */
 
+use Markocupic\ContaoSchoolTest\Controller\ContentElement\SchoolTestController;
 use Markocupic\ContaoSchoolTest\Controller\ContentElement\SchoolTestPracticeController;
 
-// No settings: the student chooses area and level in the frontend
-$GLOBALS['TL_DCA']['tl_content']['palettes'][SchoolTestPracticeController::TYPE] = '{type_legend},type,headline;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
+// No own settings: the test comes from the student's code, the practice choice is made in the frontend.
+// Headline, template, CSS ID/classes, protection and visibility as with every content element.
+$GLOBALS['TL_DCA']['tl_content']['palettes'][SchoolTestController::TYPE] = '{type_legend},type,headline;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes'][SchoolTestPracticeController::TYPE] = $GLOBALS['TL_DCA']['tl_content']['palettes'][SchoolTestController::TYPE];

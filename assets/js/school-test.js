@@ -17,7 +17,7 @@
     const LANGS = {de: 'Deutsch', fr: 'Français', it: 'Italiano', en: 'English'};
     const I18N = {
         de: {
-            chooseType: 'Was möchtest du üben?',
+            chooseMain: 'Was möchtest du üben?', chooseType: 'Thema', main_arithmetik: 'Arithmetik', main_algebra: 'Algebra', main_geometrie: 'Geometrie',
             chooseArea: 'Bereich', chooseLevel: 'Schwierigkeit', easy: 'Leicht', medium: 'Mittel', hard: 'Anspruchsvoller',
             practiceHead: 'Üben', practiceIntro2: 'Wähle aus, was du üben möchtest, und die Schwierigkeit. Bei jedem Start gibt es neue Aufgaben. Nichts wird gespeichert und es gibt keine Note. Nach dem Auswerten siehst du zu jeder Aufgabe die Lösung und den Lösungsweg.', otherChoice: 'Andere Auswahl',
             language: 'Sprache', startTitle: 'Test starten', enterCode: 'Gib deinen fünfstelligen Code ein.', code: 'Code', start: 'Starten',
@@ -42,14 +42,15 @@
             err_invalid_code: 'Diesen Code gibt es nicht. Prüfe deine Eingabe.', err_invalid_resume_code: 'Der Wiederaufnahme-Code stimmt nicht.',
             err_too_many_attempts: 'Zu viele falsche Versuche. Warte 15 Minuten oder melde dich bei deiner Lehrperson.',
             err_unknown_type: 'Dieser Test kann nicht gestartet werden. Melde dich bei deiner Lehrperson.',
-            tool_point: 'Punkt', tool_line: 'Gerade', tool_circle: 'Zirkel', undo: 'Rückgängig', clearLines: 'Hilfslinien löschen', tool_select: 'Auswählen', delSel: 'Auswahl löschen', toolsHint: 'Gerade: von einem Punkt zum anderen ziehen oder auf eine Kante des Geodreiecks klicken. Zirkel: beim Mittelpunkt drücken und bis zum Radius ziehen. Auswählen: Hilfslinie anklicken und verschieben, mit der Taste Entf löschen. Punkt: Bildpunkt setzen, er rastet auf Schnittpunkten ein; zum Korrigieren ziehen.',
             geoOff: 'Bei schweren Aufgaben ist das Geodreieck nicht erlaubt.',
             geoShow: 'Geodreieck einblenden', geoHide: 'Geodreieck ausblenden', geoLeft: 'Geodreieck nach links drehen', geoRight: 'Geodreieck nach rechts drehen', geoHint: 'Am Geodreieck ziehen verschiebt es, am runden Griff drehst du es.',
             imagePoints: 'Bildpunkte', board: 'Zeichenfläche: Klicke auf einen Gitterpunkt, um den gewählten Bildpunkt zu setzen.', clearPoints: 'Alle Punkte entfernen', pointsRight: '{0} von {1} Bildpunkten richtig.', solutionDashed: 'Die Lösung ist grün gestrichelt eingezeichnet.', wrongDir: 'Du hast in die falsche Richtung gedreht.',
             err_expired: 'Die Übung ist abgelaufen. Starte eine neue Übung.', err_unavailable: 'Diese Übung ist nicht verfügbar.',
+            helpHide: 'Hilfslinien ausblenden', helpShow: 'Hilfslinien einblenden', ggbHint: 'Klicke zuerst auf A′, B′ … und dann in der Zeichnung auf die Stelle, am besten auf einen Schnittpunkt. Einen gesetzten Bildpunkt kannst du mit dem Pfeil verschieben. Verbinde zum Schluss die Bildpunkte mit «Strecke» zur Bildfigur. Hilfslinien darfst du löschen oder ausblenden, die gesetzten Punkte bleiben.', edgesOk: 'Die Bildfigur ist richtig verbunden.', edgesBad: 'Die Bildpunkte sind nicht richtig mit Strecken verbunden.', ggbLoading: 'GeoGebra wird geladen …', ggbError: 'GeoGebra konnte nicht geladen werden.', ggbRetry: 'Nochmals versuchen',
+            vertices: 'Ecken', triHint: 'Die ersten drei Punkte heissen A, B und C. Willst du einem anderen Punkt einen dieser Namen geben, klicke zuerst auf A, B oder C und dann auf den Punkt. Zeichne zum Schluss die drei Seiten als Strecken. Hilfslinien darfst du löschen oder ausblenden, die Ecken bleiben.', measuresRight: '{0} von {1} Massen stimmen:', yours: 'bei dir {0}', sidesOk: 'Die drei Seiten sind als Strecken gezeichnet.', sidesBad: 'Zeichne die drei Seiten als Strecken.', solutionTri: 'Die Lösung ist grün gestrichelt auf deine Seite AB gelegt.',
         },
         fr: {
-            chooseType: 'Que veux-tu travailler ?',
+            chooseMain: 'Que veux-tu travailler ?', chooseType: 'Thème', main_arithmetik: 'Arithmétique', main_algebra: 'Algèbre', main_geometrie: 'Géométrie',
             chooseArea: 'Domaine', chooseLevel: 'Difficulté', easy: 'Facile', medium: 'Moyen', hard: 'Exigeant',
             practiceHead: 'S’entraîner', practiceIntro2: 'Choisis ce que tu veux travailler et la difficulté. À chaque départ, tu reçois de nouvelles tâches. Rien n’est enregistré et il n’y a pas de note. Après la correction, tu vois la solution et la démarche de chaque tâche.', otherChoice: 'Autre choix',
             language: 'Langue', startTitle: 'Commencer le test', enterCode: 'Saisis ton code à cinq chiffres.', code: 'Code', start: 'Commencer',
@@ -74,14 +75,15 @@
             err_invalid_code: 'Ce code n’existe pas. Vérifie ta saisie.', err_invalid_resume_code: 'Le code de reprise est incorrect.',
             err_too_many_attempts: 'Trop d’essais erronés. Attends 15 minutes ou adresse-toi à ton enseignant·e.',
             err_unknown_type: 'Ce test ne peut pas commencer. Adresse-toi à ton enseignant·e.',
-            tool_point: 'Point', tool_line: 'Droite', tool_circle: 'Compas', undo: 'Annuler', clearLines: 'Effacer les traits de construction', tool_select: 'Sélectionner', delSel: 'Supprimer la sélection', toolsHint: 'Droite&nbsp;: fais glisser d’un point à l’autre ou clique sur un bord de l’équerre. Compas&nbsp;: appuie au centre et fais glisser jusqu’au rayon. Sélectionner&nbsp;: clique sur un trait de construction pour le déplacer, la touche Suppr l’efface. Point&nbsp;: place un point image, il s’accroche aux intersections&nbsp;; fais-le glisser pour le corriger.',
             geoOff: 'L’équerre n’est pas autorisée pour les tâches difficiles.',
             geoShow: 'Afficher l’équerre', geoHide: 'Masquer l’équerre', geoLeft: 'Tourner l’équerre vers la gauche', geoRight: 'Tourner l’équerre vers la droite', geoHint: 'Fais glisser l’équerre pour la déplacer, utilise la poignée ronde pour la tourner.',
             imagePoints: 'Points images', board: 'Surface de dessin&nbsp;: clique sur un point du quadrillage pour placer le point image choisi.', clearPoints: 'Supprimer tous les points', pointsRight: '{0} points images justes sur {1}.', solutionDashed: 'La solution est dessinée en vert pointillé.', wrongDir: 'Tu as tourné dans le mauvais sens.',
             err_expired: 'L’entraînement a expiré. Commence un nouvel entraînement.', err_unavailable: 'Cet entraînement n’est pas disponible.',
+            helpHide: 'Masquer les lignes de construction', helpShow: 'Afficher les lignes de construction', ggbHint: 'Clique d’abord sur A′, B′ … puis dans le dessin à l’endroit voulu, de préférence sur un point d’intersection. Tu peux déplacer un point image placé avec la flèche. Pour finir, relie les points images avec «&nbsp;Segment&nbsp;» pour obtenir la figure image. Tu peux effacer ou masquer les lignes de construction, les points placés restent.', edgesOk: 'La figure image est correctement reliée.', edgesBad: 'Les points images ne sont pas correctement reliés par des segments.', ggbLoading: 'Chargement de GeoGebra …', ggbError: 'GeoGebra n’a pas pu être chargé.', ggbRetry: 'Réessayer',
+            vertices: 'Sommets', triHint: 'Les trois premiers points s’appellent A, B et C. Pour donner un de ces noms à un autre point, clique d’abord sur A, B ou C, puis sur le point. Pour finir, trace les trois côtés comme segments. Tu peux effacer ou masquer les lignes de construction, les sommets restent.', measuresRight: '{0} mesures sur {1} sont justes&nbsp;:', yours: 'chez toi {0}', sidesOk: 'Les trois côtés sont tracés comme segments.', sidesBad: 'Trace les trois côtés comme segments.', solutionTri: 'La solution est tracée en vert pointillé sur ton côté AB.',
         },
         it: {
-            chooseType: 'Cosa vuoi esercitare?',
+            chooseMain: 'Cosa vuoi esercitare?', chooseType: 'Tema', main_arithmetik: 'Aritmetica', main_algebra: 'Algebra', main_geometrie: 'Geometria',
             chooseArea: 'Campo', chooseLevel: 'Difficoltà', easy: 'Facile', medium: 'Medio', hard: 'Impegnativo',
             practiceHead: 'Esercitarsi', practiceIntro2: 'Scegli cosa vuoi esercitare e la difficoltà. A ogni avvio ricevi nuovi esercizi. Non viene salvato nulla e non c’è nessun voto. Dopo la correzione vedi la soluzione e il procedimento di ogni esercizio.', otherChoice: 'Altra scelta',
             language: 'Lingua', startTitle: 'Iniziare il test', enterCode: 'Inserisci il tuo codice di cinque cifre.', code: 'Codice', start: 'Iniziare',
@@ -106,14 +108,15 @@
             err_invalid_code: 'Questo codice non esiste. Controlla l’inserimento.', err_invalid_resume_code: 'Il codice di ripresa non è corretto.',
             err_too_many_attempts: 'Troppi tentativi errati. Aspetta 15 minuti o rivolgiti al tuo docente.',
             err_unknown_type: 'Questo test non può essere avviato. Rivolgiti al tuo docente.',
-            tool_point: 'Punto', tool_line: 'Retta', tool_circle: 'Compasso', undo: 'Annulla', clearLines: 'Cancella le linee di costruzione', tool_select: 'Seleziona', delSel: 'Elimina selezione', toolsHint: 'Retta: trascina da un punto all’altro o clicca su un bordo della squadra. Compasso: premi sul centro e trascina fino al raggio. Seleziona: clicca su una linea di costruzione per spostarla, il tasto Canc la elimina. Punto: posiziona un punto immagine, si aggancia alle intersezioni; trascinalo per correggerlo.',
             geoOff: 'Per i compiti difficili la squadra non è permessa.',
             geoShow: 'Mostra la squadra', geoHide: 'Nascondi la squadra', geoLeft: 'Ruota la squadra a sinistra', geoRight: 'Ruota la squadra a destra', geoHint: 'Trascina la squadra per spostarla, usa la maniglia rotonda per ruotarla.',
             imagePoints: 'Punti immagine', board: 'Area di disegno: clicca su un punto della griglia per posizionare il punto immagine scelto.', clearPoints: 'Eliminare tutti i punti', pointsRight: '{0} punti immagine giusti su {1}.', solutionDashed: 'La soluzione è disegnata in verde tratteggiato.', wrongDir: 'Hai ruotato nella direzione sbagliata.',
             err_expired: 'L’esercizio è scaduto. Inizia un nuovo esercizio.', err_unavailable: 'Questo esercizio non è disponibile.',
+            helpHide: 'Nascondi le linee di costruzione', helpShow: 'Mostra le linee di costruzione', ggbHint: 'Clicca prima su A′, B′ … e poi nel disegno nel punto giusto, possibilmente su un punto di intersezione. Puoi spostare un punto immagine già posizionato con la freccia. Alla fine collega i punti immagine con «Segmento» per ottenere la figura immagine. Puoi cancellare o nascondere le linee di costruzione, i punti posizionati restano.', edgesOk: 'La figura immagine è collegata correttamente.', edgesBad: 'I punti immagine non sono collegati correttamente con dei segmenti.', ggbLoading: 'Caricamento di GeoGebra …', ggbError: 'Non è stato possibile caricare GeoGebra.', ggbRetry: 'Riprova',
+            vertices: 'Vertici', triHint: 'I primi tre punti si chiamano A, B e C. Per dare uno di questi nomi a un altro punto, clicca prima su A, B o C e poi sul punto. Alla fine traccia i tre lati come segmenti. Puoi cancellare o nascondere le linee di costruzione, i vertici restano.', measuresRight: '{0} misure su {1} sono giuste:', yours: 'da te {0}', sidesOk: 'I tre lati sono tracciati come segmenti.', sidesBad: 'Traccia i tre lati come segmenti.', solutionTri: 'La soluzione è disegnata in verde tratteggiato sul tuo lato AB.',
         },
         en: {
-            chooseType: 'What do you want to practise?',
+            chooseMain: 'What do you want to practise?', chooseType: 'Topic', main_arithmetik: 'Arithmetic', main_algebra: 'Algebra', main_geometrie: 'Geometry',
             chooseArea: 'Area', chooseLevel: 'Difficulty', easy: 'Easy', medium: 'Medium', hard: 'Challenging',
             practiceHead: 'Practice', practiceIntro2: 'Choose what you want to practise and the difficulty. Every start gives you new tasks. Nothing is saved and there is no grade. After checking you see the solution and the steps for every task.', otherChoice: 'Change selection',
             language: 'Language', startTitle: 'Start the test', enterCode: 'Enter your five-digit code.', code: 'Code', start: 'Start',
@@ -138,11 +141,12 @@
             err_invalid_code: 'This code does not exist. Check your entry.', err_invalid_resume_code: 'The resume code is wrong.',
             err_too_many_attempts: 'Too many wrong attempts. Wait 15 minutes or ask your teacher.',
             err_unknown_type: 'This test cannot be started. Ask your teacher.',
-            tool_point: 'Point', tool_line: 'Line', tool_circle: 'Compass', undo: 'Undo', clearLines: 'Clear construction lines', tool_select: 'Select', delSel: 'Delete selection', toolsHint: 'Line: drag from one point to another or click an edge of the set square. Compass: press at the centre and drag to the radius. Select: click a construction line to move it, the Delete key removes it. Point: place an image point, it snaps to intersections; drag it to correct it.',
             geoOff: 'The set square is not allowed for hard tasks.',
             geoShow: 'Show the set square', geoHide: 'Hide the set square', geoLeft: 'Rotate the set square to the left', geoRight: 'Rotate the set square to the right', geoHint: 'Drag the set square to move it, use the round handle to rotate it.',
             imagePoints: 'Image points', board: 'Drawing area: click a grid point to place the selected image point.', clearPoints: 'Remove all points', pointsRight: '{0} of {1} image points correct.', solutionDashed: 'The solution is drawn as a dashed green line.', wrongDir: 'You rotated in the wrong direction.',
             err_expired: 'The practice has expired. Start a new practice.', err_unavailable: 'This practice is not available.',
+            helpHide: 'Hide construction lines', helpShow: 'Show construction lines', ggbHint: 'First click A′, B′ … and then the spot in the drawing, ideally an intersection point. You can move a placed image point with the arrow tool. Finally, join the image points with “Segment” to form the image figure. You may delete or hide construction lines; the placed points stay.', edgesOk: 'The image figure is joined correctly.', edgesBad: 'The image points are not joined correctly with segments.', ggbLoading: 'Loading GeoGebra …', ggbError: 'GeoGebra could not be loaded.', ggbRetry: 'Try again',
+            vertices: 'Vertices', triHint: 'The first three points are called A, B and C. To give one of these names to another point, first click A, B or C and then the point. Finally draw the three sides as segments. You may delete or hide construction lines; the vertices stay.', measuresRight: '{0} of {1} measures are right:', yours: 'yours {0}', sidesOk: 'The three sides are drawn as segments.', sidesBad: 'Draw the three sides as segments.', solutionTri: 'The solution is drawn in dashed green on your side AB.',
         },
     };
 
@@ -156,6 +160,13 @@
         });
 
         return s;
+    };
+
+    // Decimal comma in French and Italian
+    const fmtNum = (v) => {
+        const t = String(+(+v).toFixed(2));
+
+        return 'fr' === lang || 'it' === lang ? t.replace('.', ',') : t;
     };
 
     const errorText = (res, fallbackKey) => (res && res.error && I18N.de['err_' + res.error] ? tx('err_' + res.error) : tx(fallbackKey));
@@ -191,8 +202,8 @@
             const fields = a.fields.map((f, i) => `<label class="st-angin"><span>${esc(f.label)}&nbsp;=</span><input data-k="${t.id}" data-col="${i}" inputmode="decimal" autocomplete="off" aria-label="${esc(f.label)}"><span>${esc(f.unit)}</span></label>`).join('');
 
             return `<li class="st-task st-wide st-ang" data-task="${t.id}"><span class="st-nr">${ti + 1}</span><div class="st-body"><span class="st-q">${t.q}</span><div class="st-angfig">${a.svg}</div><div class="st-angins">${fields}</div></div></li>`;
-        } else if ('points' === a.type) {
-            return `<li class="st-task st-wide st-geo" data-task="${t.id}"><span class="st-nr">${ti + 1}</span><div class="st-body"><span class="st-q">${t.q}</span>${boardHtml(t)}</div></li>`;
+        } else if ('points' === a.type || 'triangle' === a.type) {
+            return `<li class="st-task st-wide st-geo${'triangle' === a.type ? ' st-tri' : ''}" data-task="${t.id}"><span class="st-nr">${ti + 1}</span><div class="st-body"><span class="st-q">${t.q}</span>${boardHtml(t)}</div></li>`;
         } else if ('table' === a.type) {
             const cell = (c, i, row) => {
                 if (c.ref) {
@@ -220,7 +231,19 @@
 
     function boardHtml(t) {
         const n = t.a.draw.n;
-        const chips = Array.from({length: n}, (_, i) => `<button type="button" class="st-chip" data-chip="${i}">${LETTERS[i]}${PRIME}</button>`).join('');
+        // Image points A′, B′, …; triangle constructions: the vertices A, B, C
+        const names = t.a.draw.names || null;
+        const chips = Array.from({length: n}, (_, i) => `<button type="button" class="st-chip" data-chip="${i}">${names ? esc(names[i]) : LETTERS[i] + PRIME}</button>`).join('');
+
+        // Construction (without squares): GeoGebra instead of the own board
+        if (t.a.draw.free) {
+            return `<div class="st-board st-ggb" data-draw="${esc(JSON.stringify(t.a.draw))}">
+                <div class="st-chips" role="group" aria-label="${tx(names ? 'vertices' : 'imagePoints')}">${chips}<button type="button" class="st-link st-clear" data-clear>${tx('clearPoints')}</button><button type="button" class="st-link st-help-lines" data-help-lines aria-pressed="false">${tx('helpHide')}</button></div>
+                <div class="st-geo-hint">${tx(t.a.draw.tri ? 'triHint' : 'ggbHint')}</div>
+                <div class="st-ggb-wrap"><div class="st-ggb-app"></div><div class="st-ggb-msg" aria-live="polite">${tx('ggbLoading')}</div></div>
+                <input type="hidden" data-k="${t.id}" data-pts="${n}" data-edges="1">
+            </div>`;
+        }
 
         // Geodreieck for reflections (axis or point, no rotation angle)
         const geo = hasGeo(t.a.draw) && t.a.draw.noGeo
@@ -229,37 +252,13 @@
             ? `<div class="st-geotools"><button type="button" class="st-opt st-geo-btn" data-geo aria-pressed="false" aria-label="${esc(tx('geoShow'))}" title="${esc(tx('geoShow'))}">${GEO_ICON}</button><span class="st-geo-rot" hidden><button type="button" class="st-opt" data-geo-rot="-45" aria-label="${tx('geoLeft')}">↺</button><button type="button" class="st-opt" data-geo-rot="45" aria-label="${tx('geoRight')}">↻</button><span class="st-geo-hint">${tx('geoHint')}</span></span></div>`
             : '';
 
-        // Without squares: tools for the construction
-        const tools = t.a.draw.free
-            ? `<div class="st-tools" role="group">${['select', 'point', 'line', 'circle'].map((k) => `<button type="button" class="st-opt st-tool${'point' === k ? ' on' : ''}" data-tool="${k}" aria-pressed="${'point' === k}" aria-label="${esc(tx('tool_' + k))}" title="${esc(tx('tool_' + k))}">${TOOL_ICONS[k]}</button>`).join('')}<button type="button" class="st-link" data-del-sel hidden>${tx('delSel')}</button><button type="button" class="st-link" data-undo>${tx('undo')}</button><button type="button" class="st-link" data-clear-cons>${tx('clearLines')}</button></div><div class="st-geo-hint">${tx('toolsHint')}</div>`
-            : '';
 
-        return `<div class="st-board${t.a.draw.free ? ' st-free' : ''}" data-draw="${esc(JSON.stringify(t.a.draw))}">
-            <div class="st-chips" role="group" aria-label="${tx('imagePoints')}">${chips}<button type="button" class="st-link st-clear" data-clear>${tx('clearPoints')}</button></div>${tools}${geo}
+        return `<div class="st-board" data-draw="${esc(JSON.stringify(t.a.draw))}">
+            <div class="st-chips" role="group" aria-label="${tx('imagePoints')}">${chips}<button type="button" class="st-link st-clear" data-clear>${tx('clearPoints')}</button></div>${geo}
             <svg class="st-svg" role="img" aria-label="${esc(tx('board').replace(/&nbsp;/g, ' '))}"></svg>
             <input type="hidden" data-k="${t.id}" data-pts="${n}">
         </div>`;
     }
-
-    // Board used last: the Delete key removes its selected construction line
-    let lastBoard = null;
-
-    document.addEventListener('keydown', (e) => {
-        if (('Delete' === e.key || 'Backspace' === e.key) && lastBoard && lastBoard.isConnected && !(e.target instanceof Element && e.target.closest('input, textarea, select, [contenteditable]'))) {
-            if (lastBoard.stDelete?.()) {
-                e.preventDefault();
-            }
-        }
-    });
-
-    // Tool icons: select (arrow), point (cross), line through two points, compass
-    const toolIcon = (inner) => `<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
-    const TOOL_ICONS = {
-        select: toolIcon('<path d="M6 3.5l12 8.2-5.6 1.2-2.9 5.6z" fill="currentColor" fill-opacity=".18"/><path d="M12.4 12.9l4.2 6.1"/>'),
-        point: toolIcon('<path d="M7 7l10 10M17 7L7 17"/>'),
-        line: toolIcon('<path d="M3 20L21 4"/><circle cx="8.2" cy="15.4" r="1.9" fill="currentColor" stroke="none"/><circle cx="15.8" cy="8.6" r="1.9" fill="currentColor" stroke="none"/>'),
-        circle: toolIcon('<circle cx="12" cy="4" r="1.8"/><path d="M11.2 5.6L6 19.5M12.8 5.6L18 19.5M8.2 13.5h7.6"/><path d="M3.5 21.2q8.5 2.6 17 0" stroke-dasharray="2 2.2"/>'),
-    };
 
     // Button icon: Geodreieck with scale and centre line
     const GEO_ICON = '<svg viewBox="0 0 34 19" width="34" height="19" aria-hidden="true" focusable="false"><path d="M2 2.5h30L17 17.5z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M17 2.5v12.5" fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="2 1.5"/><path d="M7 2.5v2.6M12 2.5v2.6M22 2.5v2.6M27 2.5v2.6M9.5 2.5v1.5M14.5 2.5v1.5M19.5 2.5v1.5M24.5 2.5v1.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>';
@@ -336,13 +335,13 @@
             v = [];
         }
 
-        return Array.from({length: n}, (_, i) => (Array.isArray(v) && Array.isArray(v[i]) && 2 === v[i].length ? [+v[i][0], +v[i][1]] : null));
+        return Array.from({length: n}, (_, i) => (Array.isArray(v) && Array.isArray(v[i]) && 2 === v[i].length && Number.isFinite(+v[i][0]) && Number.isFinite(+v[i][1]) && null !== v[i][0] && null !== v[i][1] && !Array.isArray(v[i][0]) ? [+v[i][0], +v[i][1]] : null));
     };
 
     function mountBoards(root) {
         root.querySelectorAll('.st-board:not([data-mounted])').forEach((el) => {
             el.dataset.mounted = '1';
-            el.stBoard = createBoard(el);
+            el.stBoard = el.classList.contains('st-ggb') ? createGgbBoard(el) : createBoard(el);
         });
     }
 
@@ -368,317 +367,8 @@
         let geo = null;
         let geoDrag = null;
         let suppressClick = false;
-        // Without squares: tool and construction lines (board pixels, not saved)
-        const free = !!d.free;
-        const tol = free ? (d.tol || 0.6) : 0;
-        let tool = 'point';
-        let cons = [];
-        let consDrag = null;
-        // Selected construction line (index) and its move
-        let sel = -1;
-        let consMove = null;
         const box = [P, P, P + W * S, P + H * S];
-        const inBox = (q) => q[0] >= box[0] - 0.5 && q[0] <= box[2] + 0.5 && q[1] >= box[1] - 0.5 && q[1] <= box[3] + 0.5;
 
-        // Infinite line through a and b, cut at the paper border
-        const clipLine = (a, b) => {
-            const dx = b[0] - a[0];
-            const dy = b[1] - a[1];
-            let t0 = -1e9;
-            let t1 = 1e9;
-
-            for (const [p0, dp, lo, hi] of [[a[0], dx, box[0], box[2]], [a[1], dy, box[1], box[3]]]) {
-                if (Math.abs(dp) < 1e-9) {
-                    if (p0 < lo || p0 > hi) {
-                        return null;
-                    }
-
-                    continue;
-                }
-
-                let u0 = (lo - p0) / dp;
-                let u1 = (hi - p0) / dp;
-
-                if (u0 > u1) {
-                    [u0, u1] = [u1, u0];
-                }
-
-                t0 = Math.max(t0, u0);
-                t1 = Math.min(t1, u1);
-            }
-
-            return t0 < t1 ? [[a[0] + t0 * dx, a[1] + t0 * dy], [a[0] + t1 * dx, a[1] + t1 * dy]] : null;
-        };
-
-        const intersect = (u, v) => {
-            if ('circle' === u.t && 'line' === v.t) {
-                [u, v] = [v, u];
-            }
-
-            if ('line' === u.t && 'line' === v.t) {
-                const [x1, y1] = u.a;
-                const [x2, y2] = u.b;
-                const [x3, y3] = v.a;
-                const [x4, y4] = v.b;
-                const den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-
-                if (Math.abs(den) < 1e-9) {
-                    return [];
-                }
-
-                const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
-
-                return [[x1 + t * (x2 - x1), y1 + t * (y2 - y1)]];
-            }
-
-            if ('line' === u.t) {
-                const dx = u.b[0] - u.a[0];
-                const dy = u.b[1] - u.a[1];
-                const fx = u.a[0] - v.c[0];
-                const fy = u.a[1] - v.c[1];
-                const A = dx * dx + dy * dy;
-                const B = 2 * (fx * dx + fy * dy);
-                const C = fx * fx + fy * fy - v.r * v.r;
-                const disc = B * B - 4 * A * C;
-
-                if (disc < 0) {
-                    return [];
-                }
-
-                const sq = Math.sqrt(disc);
-
-                return [(-B - sq) / (2 * A), (-B + sq) / (2 * A)].map((t) => [u.a[0] + t * dx, u.a[1] + t * dy]);
-            }
-
-            const dx = v.c[0] - u.c[0];
-            const dy = v.c[1] - u.c[1];
-            const dist = Math.hypot(dx, dy);
-
-            if (dist < 1e-9 || dist > u.r + v.r || dist < Math.abs(u.r - v.r)) {
-                return [];
-            }
-
-            const a = (u.r * u.r - v.r * v.r + dist * dist) / (2 * dist);
-            const h = Math.sqrt(Math.max(0, u.r * u.r - a * a));
-            const mx = u.c[0] + a * dx / dist;
-            const my = u.c[1] + a * dy / dist;
-
-            return [[mx + h * dy / dist, my - h * dx / dist], [mx - h * dy / dist, my + h * dx / dist]];
-        };
-
-        const axisLine = () => (d.seg ? {t: 'line', a: [X(d.seg[0][0]), Y(d.seg[0][1])], b: [X(d.seg[1][0]), Y(d.seg[1][1])]} : null);
-
-        // Snap targets: intersections of the construction (with the axis), optionally the given points
-        const snapTargets = (withPoints) => {
-            const items = [...cons];
-            const ax = axisLine();
-            const out = [];
-
-            if (ax) {
-                items.push(ax);
-            }
-
-            for (let i = 0; i < items.length; ++i) {
-                for (let j = i + 1; j < items.length; ++j) {
-                    out.push(...intersect(items[i], items[j]));
-                }
-            }
-
-            if (withPoints) {
-                out.push(...d.pts.map((q) => [X(q[0]), Y(q[1])]), ...pts.filter(Boolean).map((q) => [X(q[0]), Y(q[1])]));
-
-                if (d.center) {
-                    out.push([X(d.center[0]), Y(d.center[1])]);
-                }
-            }
-
-            return out.filter(inBox);
-        };
-
-        const snapTo = (q, withPoints, radius = 8) => {
-            let best = null;
-            let bd = radius;
-
-            for (const c of snapTargets(withPoints)) {
-                const dd = Math.hypot(c[0] - q[0], c[1] - q[1]);
-
-                if (dd < bd) {
-                    bd = dd;
-                    best = c;
-                }
-            }
-
-            return best ? [best[0], best[1]] : [q[0], q[1]];
-        };
-
-        const consSvg = (c, cls) => {
-            if ('circle' === c.t) {
-                return `<circle class="${cls}" cx="${c.c[0].toFixed(2)}" cy="${c.c[1].toFixed(2)}" r="${c.r.toFixed(2)}"/>`;
-            }
-
-            const seg = clipLine(c.a, c.b);
-
-            return seg ? `<line class="${cls}" x1="${seg[0][0].toFixed(2)}" y1="${seg[0][1].toFixed(2)}" x2="${seg[1][0].toFixed(2)}" y2="${seg[1][1].toFixed(2)}"/>` : '';
-        };
-
-        // Line along an edge of the Geodreieck (long edge or centre line) near q
-        const geoEdgeAt = (q) => {
-            if (!geo) {
-                return null;
-            }
-
-            const rad = geo.a * Math.PI / 180;
-            const cos = Math.cos(rad);
-            const sin = Math.sin(rad);
-            const lx = (q[0] - geo.x) * cos + (q[1] - geo.y) * sin;
-            const ly = -(q[0] - geo.x) * sin + (q[1] - geo.y) * cos;
-            const len = 80 * MM;
-
-            if (Math.abs(ly) < 10 && Math.abs(lx) <= len) {
-                return {t: 'line', a: [geo.x, geo.y], b: [geo.x + cos * 100, geo.y + sin * 100]};
-            }
-
-            if (Math.abs(lx) < 10 && ly > 0 && ly <= len) {
-                return {t: 'line', a: [geo.x, geo.y], b: [geo.x - sin * 100, geo.y + cos * 100]};
-            }
-
-            return null;
-        };
-
-        // Construction line or circle under q (within 7 px of the stroke)
-        const hitCons = (q) => {
-            let best = -1;
-            let bd = 7;
-
-            cons.forEach((c, i) => {
-                let dd;
-
-                if ('circle' === c.t) {
-                    dd = Math.abs(Math.hypot(q[0] - c.c[0], q[1] - c.c[1]) - c.r);
-                } else {
-                    const dx = c.b[0] - c.a[0];
-                    const dy = c.b[1] - c.a[1];
-                    dd = Math.abs((q[0] - c.a[0]) * dy - (q[1] - c.a[1]) * dx) / Math.hypot(dx, dy);
-                }
-
-                if (dd < bd) {
-                    bd = dd;
-                    best = i;
-                }
-            });
-
-            return best;
-        };
-
-        // Moved line or circle: a line snaps onto a point it passes close by, a circle centre onto a point
-        const movedCons = (orig, dx, dy) => {
-            const keep = cons;
-            cons = cons.filter((c, i) => i !== consMove.i);
-            const targets = snapTargets(true);
-            cons = keep;
-
-            if ('circle' === orig.t) {
-                const c = [orig.c[0] + dx, orig.c[1] + dy];
-                const near = targets.find((t) => Math.hypot(t[0] - c[0], t[1] - c[1]) < 8);
-
-                return {t: 'circle', c: near ? [near[0], near[1]] : c, r: orig.r};
-            }
-
-            let a = [orig.a[0] + dx, orig.a[1] + dy];
-            let b = [orig.b[0] + dx, orig.b[1] + dy];
-            const ux = b[0] - a[0];
-            const uy = b[1] - a[1];
-            const len = Math.hypot(ux, uy);
-
-            for (const t of targets) {
-                const dist = ((t[0] - a[0]) * uy - (t[1] - a[1]) * ux) / len;
-
-                if (Math.abs(dist) < 6) {
-                    const sx = uy / len * dist;
-                    const sy = -ux / len * dist;
-                    a = [a[0] + sx, a[1] + sy];
-                    b = [b[0] + sx, b[1] + sy];
-                    break;
-                }
-            }
-
-            return {t: 'line', a, b};
-        };
-
-        // Image point: onto an intersection (generous), otherwise onto a line or circle nearby
-        const snapPlace = (q) => {
-            const hit = snapTo(q, false, 14);
-
-            if (hit[0] !== q[0] || hit[1] !== q[1]) {
-                return hit;
-            }
-
-            let best = null;
-            let bd = 8;
-
-            for (const c of cons) {
-                let f;
-
-                if ('circle' === c.t) {
-                    const len = Math.hypot(q[0] - c.c[0], q[1] - c.c[1]) || 1;
-                    f = [c.c[0] + (q[0] - c.c[0]) / len * c.r, c.c[1] + (q[1] - c.c[1]) / len * c.r];
-                } else {
-                    const ux = c.b[0] - c.a[0];
-                    const uy = c.b[1] - c.a[1];
-                    const t = ((q[0] - c.a[0]) * ux + (q[1] - c.a[1]) * uy) / (ux * ux + uy * uy);
-                    f = [c.a[0] + t * ux, c.a[1] + t * uy];
-                }
-
-                const dd = Math.hypot(f[0] - q[0], f[1] - q[1]);
-
-                if (dd < bd) {
-                    bd = dd;
-                    best = f;
-                }
-            }
-
-            return best || q;
-        };
-
-        const toCell = (q) => [+((q[0] - P) / S).toFixed(3), +(H - (q[1] - P) / S).toFixed(3)];
-
-        // Dragging a placed image point (free mode)
-        let pointDrag = null;
-
-        const deleteSelection = () => {
-            if (sel < 0) {
-                return false;
-            }
-
-            cons.splice(sel, 1);
-            sel = -1;
-            render();
-
-            return true;
-        };
-
-        // Delete key: only for the board used last, never while typing in a field
-        el.stDelete = deleteSelection;
-
-        const previewSvg = () => {
-            if (!consDrag) {
-                return '';
-            }
-
-            const [a, b] = [consDrag.start, consDrag.cur];
-
-            if ('circle' === tool) {
-                const r = Math.hypot(b[0] - a[0], b[1] - a[1]);
-
-                return consSvg({t: 'circle', c: a, r}, 'st-cons st-prev') + `<line class="st-cons st-prev" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/><text class="st-radius" x="${b[0] + 10}" y="${b[1] - 10}">r = ${(r / MM).toFixed(0)} mm</text>`;
-            }
-
-            if (consDrag.edge && !consDrag.moved) {
-                return consSvg(consDrag.edge, 'st-cons st-prev');
-            }
-
-            return consDrag.moved ? consSvg({t: 'line', a, b}, 'st-cons st-prev') : '';
-        };
         const geoMarkup = hasGeo(d) ? geoTriangle(MM) : '';
 
         svg.setAttribute('viewBox', `0 0 ${W * S + 2 * P} ${H * S + 2 * P}`);
@@ -712,16 +402,12 @@
         function render() {
             let g = '<defs><marker id="st-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="st-arrowhead"/></marker></defs>';
 
-            if (free) {
-                g += `<rect class="st-paper" x="${box[0]}" y="${box[1]}" width="${W * S}" height="${H * S}"/>` + cons.map((c, i) => consSvg(c, i === sel ? 'st-cons st-sel' : 'st-cons')).join('');
-            } else {
-                for (let x = 0; x <= W; ++x) {
-                    g += `<line class="st-gl" x1="${X(x)}" y1="${Y(0)}" x2="${X(x)}" y2="${Y(H)}"/>`;
-                }
+            for (let x = 0; x <= W; ++x) {
+                g += `<line class="st-gl" x1="${X(x)}" y1="${Y(0)}" x2="${X(x)}" y2="${Y(H)}"/>`;
+            }
 
-                for (let y = 0; y <= H; ++y) {
-                    g += `<line class="st-gl" x1="${X(0)}" y1="${Y(y)}" x2="${X(W)}" y2="${Y(y)}"/>`;
-                }
+            for (let y = 0; y <= H; ++y) {
+                g += `<line class="st-gl" x1="${X(0)}" y1="${Y(y)}" x2="${X(W)}" y2="${Y(y)}"/>`;
             }
 
             if (d.seg) {
@@ -758,10 +444,6 @@
 
             if (result) {
                 g += poly(result.img, 'st-ghost');
-
-                if (free) {
-                    g += result.img.map((q) => `<circle class="st-tol" cx="${X(q[0])}" cy="${Y(q[1])}" r="${tol * S}"/>`).join('');
-                }
             }
 
             if (pts.every(Boolean)) {
@@ -775,7 +457,7 @@
 
                 const cls = result ? (result.correct[i] ? ' ok' : ' bad') : (i === active && chosen ? ' on' : '');
 
-                return `<circle class="st-imgpt${cls}" cx="${X(p[0])}" cy="${Y(p[1])}" r="${free ? 4.5 : 6}"/>`;
+                return `<circle class="st-imgpt${cls}" cx="${X(p[0])}" cy="${Y(p[1])}" r="6"/>`;
             }).join('');
 
             if (pts.some(Boolean)) {
@@ -795,7 +477,7 @@
                 }).join('');
             }
 
-            g += '<circle class="st-hover" r="7" cx="-50" cy="-50"/><g class="st-preview"></g>';
+            g += '<circle class="st-hover" r="7" cx="-50" cy="-50"/>';
 
             if (geo) {
                 g += `<g class="st-gdt" transform="${geoTransform()}">${geoMarkup}</g>`;
@@ -803,16 +485,6 @@
 
             svg.innerHTML = g;
             hover = svg.querySelector('.st-hover');
-            const del = el.querySelector('[data-del-sel]');
-
-            if (del) {
-                del.hidden = sel < 0;
-            }
-
-            el.querySelectorAll('[data-tool]').forEach((b) => {
-                b.classList.toggle('on', b.dataset.tool === tool);
-                b.setAttribute('aria-pressed', String(b.dataset.tool === tool));
-            });
 
             chips.forEach((c, i) => {
                 c.classList.toggle('on', i === active && !result && (!pts[i] || chosen));
@@ -847,30 +519,6 @@
 
         // Zero point snaps to grid points, half grid points and the axis
         const snapPoint = (x, y) => {
-            if (free) {
-                const [sx, sy] = snapTo([x, y], true);
-
-                if (sx !== x || sy !== y) {
-                    return [sx, sy];
-                }
-
-                const ax = axisLine();
-
-                if (ax) {
-                    const ux = ax.b[0] - ax.a[0];
-                    const uy = ax.b[1] - ax.a[1];
-                    const t = ((x - ax.a[0]) * ux + (y - ax.a[1]) * uy) / (ux * ux + uy * uy);
-                    const px = ax.a[0] + t * ux;
-                    const py = ax.a[1] + t * uy;
-
-                    if (Math.hypot(px - x, py - y) < 8) {
-                        return [px, py];
-                    }
-                }
-
-                return [x, y];
-            }
-
             const hx = Math.round((x - P) / (S / 2)) * (S / 2) + P;
             const hy = Math.round((y - P) / (S / 2)) * (S / 2) + P;
 
@@ -897,20 +545,6 @@
 
         // Rotation snaps to multiples of 15° (45° more strongly)
         const snapAngle = (a) => {
-            // Without squares: only parallel or perpendicular to the axis
-            if (free) {
-                const ax = axisLine();
-
-                if (!ax) {
-                    return a;
-                }
-
-                const base = Math.atan2(ax.b[1] - ax.a[1], ax.b[0] - ax.a[0]) * 180 / Math.PI;
-                const k = Math.round((a - base) / 90) * 90 + base;
-
-                return Math.abs(k - a) < 3 ? k : a;
-            }
-
             const n45 = Math.round(a / 45) * 45;
 
             if (Math.abs(n45 - a) < 5) {
@@ -922,22 +556,50 @@
             return Math.abs(n15 - a) < 2.5 ? n15 : a;
         };
 
-        // First position: on the axis next to the figure, centre line along the axis; for a point reflection on Z
+        // First position: lying at the edge of the paper, turned away from the axis and away from Z.
+        // The student has to put it in the right place himself.
         const placeGeo = () => {
-            const cx = d.pts.reduce((sum, p) => sum + X(p[0]), 0) / d.pts.length;
-            const cy = d.pts.reduce((sum, p) => sum + Y(p[1]), 0) / d.pts.length;
+            const dir = d.seg ? Math.atan2(Y(d.seg[1][1]) - Y(d.seg[0][1]), X(d.seg[1][0]) - X(d.seg[0][0])) * 180 / Math.PI : null;
 
-            if (d.seg) {
-                const ax = X(d.seg[0][0]);
-                const ay = Y(d.seg[0][1]);
-                const ux = X(d.seg[1][0]) - ax;
-                const uy = Y(d.seg[1][1]) - ay;
-                const t = ((cx - ax) * ux + (cy - ay) * uy) / (ux * ux + uy * uy);
+            // Smallest angle between the hypotenuse or the centre line and the axis
+            const off = (a) => {
+                if (null === dir) {
+                    return 90;
+                }
 
-                return towardsRoom({x: ax + t * ux, y: ay + t * uy, a: Math.atan2(uy, ux) * 180 / Math.PI - 90});
+                const m = (((a - dir) % 90) + 90) % 90;
+
+                return Math.min(m, 90 - m);
+            };
+
+            const angle = [0, 15, -15, 30, -30].find((a) => off(a) >= 20) ?? 15;
+
+            // Distance of the zero point from the axis or from Z
+            const away = (x, y) => {
+                if (d.seg) {
+                    const ax = X(d.seg[0][0]);
+                    const ay = Y(d.seg[0][1]);
+                    const ux = X(d.seg[1][0]) - ax;
+                    const uy = Y(d.seg[1][1]) - ay;
+
+                    return Math.abs((x - ax) * uy - (y - ay) * ux) / Math.hypot(ux, uy);
+                }
+
+                return Math.hypot(x - X(d.center[0]), y - Y(d.center[1]));
+            };
+
+            // Hypotenuse at the top edge (tip down, scale readable) or at the bottom edge (tip up)
+            const spots = [];
+
+            for (const f of [0.5, 0.35, 0.65, 0.2, 0.8]) {
+                const x = box[0] + f * (box[2] - box[0]);
+                spots.push({x, y: box[1] + 4, a: angle}, {x, y: box[3] - 4, a: angle + 180});
             }
 
-            return towardsRoom({x: X(d.center[0]), y: Y(d.center[1]), a: 0});
+            // At the top the numbers can be read, so the top edge gets a bonus
+            const score = (g) => away(g.x, g.y) + (g.y < box[1] + 10 ? 200 : 0);
+
+            return spots.reduce((best, g) => (score(g) > score(best) + 1 ? g : best));
         };
 
         // Turn the Geodreieck by 180° if its handles would end up outside the board
@@ -966,7 +628,7 @@
 
         el.querySelectorAll('[data-geo-rot]').forEach((b) => b.addEventListener('click', () => {
             if (geo) {
-                geo.a = free ? geo.a + +b.dataset.geoRot : Math.round((geo.a + +b.dataset.geoRot) / 45) * 45;
+                geo.a = Math.round((geo.a + +b.dataset.geoRot) / 45) * 45;
                 updateGeo();
             }
         }));
@@ -978,71 +640,7 @@
                 return;
             }
 
-            const handle = e.target.closest('.st-gdt-rot, .st-gdt-move');
-            lastBoard = el;
-
-            // Drag a placed image point onto an intersection
-            if (free && 'point' === tool && !handle && !result) {
-                const i = pts.findIndex((q) => q && Math.hypot(X(q[0]) - p.x, Y(q[1]) - p.y) < 10);
-
-                if (i >= 0) {
-                    pointDrag = {i, start: [p.x, p.y], moved: false};
-
-                    try {
-                        svg.setPointerCapture(e.pointerId);
-                    } catch (err) {
-                        // Pointer already released
-                    }
-
-                    e.preventDefault();
-
-                    return;
-                }
-            }
-
-            // Select and move a construction line
-            if (free && 'select' === tool && !handle) {
-                const q = [p.x, p.y];
-                sel = hitCons(q);
-
-                if (sel >= 0) {
-                    consMove = {i: sel, start: q, orig: JSON.parse(JSON.stringify(cons[sel])), moved: false};
-
-                    try {
-                        svg.setPointerCapture(e.pointerId);
-                    } catch (err) {
-                        // Pointer already released
-                    }
-
-                    e.preventDefault();
-                    render();
-
-                    return;
-                }
-
-                render();
-            }
-
-            const onGeo = geo && e.target.closest('.st-gdt') && (handle || 'point' === tool || 'select' === tool);
-
-            // Construction: line or circle
-            if (free && ('line' === tool || 'circle' === tool) && !onGeo) {
-                const q = [p.x, p.y];
-                const edge = 'line' === tool ? geoEdgeAt(q) : null;
-                const start = edge ? q : snapTo(q, true);
-                consDrag = {start, cur: start, edge, moved: false};
-
-                try {
-                    svg.setPointerCapture(e.pointerId);
-                } catch (err) {
-                    // Pointer already released
-                }
-
-                svg.querySelector('.st-preview').innerHTML = previewSvg();
-                e.preventDefault();
-
-                return;
-            }
+            const onGeo = geo && e.target.closest('.st-gdt');
 
             if (!onGeo) {
                 return;
@@ -1060,70 +658,14 @@
         });
 
         svg.addEventListener('pointerup', () => {
-            // A real drag moved the point; a tap stays a click (which removes the point)
-            if (pointDrag) {
-                if (pointDrag.moved) {
-                    suppressClick = true;
-                    commit();
-                }
-
-                pointDrag = null;
-            }
-
-            if (consMove) {
-                consMove = null;
-                suppressClick = true;
-            }
-
             if (geoDrag) {
                 suppressClick = geoDrag.moved || geoDrag.rot;
                 geoDrag = null;
-            }
-
-            if (consDrag) {
-                const [a, b] = [consDrag.start, consDrag.cur];
-                const dist = Math.hypot(b[0] - a[0], b[1] - a[1]);
-
-                if ('circle' === tool && dist > 4) {
-                    cons.push({t: 'circle', c: a, r: dist});
-                } else if ('line' === tool && consDrag.edge && !consDrag.moved) {
-                    cons.push(consDrag.edge);
-                } else if ('line' === tool && dist > 6) {
-                    cons.push({t: 'line', a, b});
-                }
-
-                consDrag = null;
-                suppressClick = true;
-                render();
             }
         });
 
         svg.addEventListener('pointercancel', () => {
             geoDrag = null;
-            consDrag = null;
-            consMove = null;
-            pointDrag = null;
-        });
-
-        el.querySelectorAll('[data-tool]').forEach((b) => b.addEventListener('click', () => {
-            tool = b.dataset.tool;
-            sel = -1;
-            lastBoard = el;
-            render();
-        }));
-
-        el.querySelector('[data-del-sel]')?.addEventListener('click', deleteSelection);
-
-        el.querySelector('[data-undo]')?.addEventListener('click', () => {
-            cons.pop();
-            sel = -1;
-            render();
-        });
-
-        el.querySelector('[data-clear-cons]')?.addEventListener('click', () => {
-            cons = [];
-            sel = -1;
-            render();
         });
 
         const commit = () => {
@@ -1140,31 +682,17 @@
                 return;
             }
 
-            if (result || (free && 'point' !== tool)) {
+            if (result) {
                 return;
             }
 
-            let g;
-            let hit;
+            const g = gridPoint(e);
 
-            if (free) {
-                const raw = toSvg(e);
-
-                if (!raw || !inBox([raw.x, raw.y])) {
-                    return;
-                }
-
-                hit = pts.findIndex((p) => p && Math.hypot(X(p[0]) - raw.x, Y(p[1]) - raw.y) < 9);
-                g = toCell(snapPlace([raw.x, raw.y]));
-            } else {
-                g = gridPoint(e);
-
-                if (!g) {
-                    return;
-                }
-
-                hit = pts.findIndex((p) => p && p[0] === g[0] && p[1] === g[1]);
+            if (!g) {
+                return;
             }
+
+            const hit = pts.findIndex((p) => p && p[0] === g[0] && p[1] === g[1]);
 
             // A click on a placed point removes it, its letter is next
             if (hit >= 0) {
@@ -1212,77 +740,7 @@
                 return;
             }
 
-            if (pointDrag) {
-                const p = toSvg(e);
-
-                if (!p) {
-                    return;
-                }
-
-                if (pointDrag.moved || Math.hypot(p.x - pointDrag.start[0], p.y - pointDrag.start[1]) > 3) {
-                    pointDrag.moved = true;
-                    const q = snapPlace([Math.min(box[2], Math.max(box[0], p.x)), Math.min(box[3], Math.max(box[1], p.y))]);
-                    pts[pointDrag.i] = toCell(q);
-                    render();
-                }
-
-                return;
-            }
-
-            if (consMove) {
-                const p = toSvg(e);
-
-                if (!p) {
-                    return;
-                }
-
-                const dx = p.x - consMove.start[0];
-                const dy = p.y - consMove.start[1];
-
-                if (consMove.moved || Math.hypot(dx, dy) > 3) {
-                    consMove.moved = true;
-                    cons[consMove.i] = movedCons(consMove.orig, dx, dy);
-                    render();
-                }
-
-                return;
-            }
-
-            if (consDrag) {
-                const p = toSvg(e);
-
-                if (!p) {
-                    return;
-                }
-
-                const q = [p.x, p.y];
-
-                if (Math.hypot(q[0] - consDrag.start[0], q[1] - consDrag.start[1]) > 4) {
-                    consDrag.moved = true;
-                }
-
-                consDrag.cur = snapTo(q, true);
-                svg.querySelector('.st-preview').innerHTML = previewSvg();
-
-                return;
-            }
-
             if ('mouse' !== e.pointerType || !hover) {
-                return;
-            }
-
-            if (free) {
-                const p = toSvg(e);
-
-                if (p && inBox([p.x, p.y])) {
-                    const [hx, hy] = 'point' === tool ? snapPlace([p.x, p.y]) : snapTo([p.x, p.y], true, 8);
-                    const snapped = hx !== p.x || hy !== p.y;
-                    hover.setAttribute('cx', snapped ? hx : -50);
-                    hover.setAttribute('cy', snapped ? hy : -50);
-                } else {
-                    hover.setAttribute('cx', -50);
-                }
-
                 return;
             }
 
@@ -1333,11 +791,587 @@
         };
     }
 
+    /* ---------- Construction with GeoGebra (draw.ggb) ---------- */
+
+    // GeoGebra comes from geogebra.org. A page can use a self-hosted copy:
+    // window.SchoolTestGeoGebra = {deploy: '/path/deployggb.js', codebase: '/path/HTML5/5.0/web3d/'}
+    const GGB = Object.assign({deploy: 'https://www.geogebra.org/apps/deployggb.js', codebase: ''}, window.SchoolTestGeoGebra || {});
+
+    // Move | point, intersect | line, segment, polygon, ray | perpendicular, parallel | circle through point, circle with radius, compass | delete.
+    // No reflection tools and no input bar: the student has to construct.
+    const GGB_TOOLBAR = '0 | 1 5 | 2 15 16 18 | 4 3 | 10 34 53 | 6';
+
+    // Triangles: also segment with given length, midpoint, bisectors, angle with given size and measuring
+    const GGB_TOOLBAR_TRI = '0 | 1 5 19 | 2 15 45 16 18 | 4 3 8 9 | 10 34 53 | 36 46 38 | 6';
+
+    // Colours of the own board
+    const GGB_COLORS = {fig: [29, 63, 143], mark: [107, 47, 168], img: [224, 138, 30], help: [80, 80, 80], ok: [26, 127, 67], bad: [196, 43, 43]};
+
+    let ggbScript = null;
+    let ggbSeq = 0;
+
+    const loadGgb = () => {
+        if (window.GGBApplet) {
+            return Promise.resolve();
+        }
+
+        if (!ggbScript) {
+            ggbScript = new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = GGB.deploy;
+                s.async = true;
+                s.onload = () => (window.GGBApplet ? resolve() : reject(new Error('GGBApplet missing')));
+                s.onerror = () => {
+                    s.remove();
+                    ggbScript = null;
+                    reject(new Error('GeoGebra not reachable'));
+                };
+                document.head.appendChild(s);
+            });
+        }
+
+        return ggbScript;
+    };
+
+    function createGgbBoard(el) {
+        const d = JSON.parse(el.dataset.draw);
+        const [W, H] = d.grid;
+        const n = d.n;
+        // Pixels per square (as on the own board) or per cm (triangles)
+        const S = d.scale || 30;
+        const tri = !!d.tri;
+        const input = el.querySelector('input[data-pts]');
+        const chips = [...el.querySelectorAll('[data-chip]')];
+        const host = el.querySelector('.st-ggb-app');
+        const msg = el.querySelector('.st-ggb-msg');
+        // The image points are the GeoGebra points named A', B', …; triangles: A, B, C
+        const NAMES = d.names || Array.from({length: n}, (_, i) => `${LETTERS[i]}'`);
+        const given = new Set();
+        let pts = parsePoints(input.value, n);
+        let edges = parseEdges(input.value, n);
+        // Segments that join two image points (for the colours after checking)
+        let edgeSegs = [];
+        // Objects of the solution drawn after checking
+        let solutionObjs = [];
+        let api = null;
+        let ready = false;
+        let armed = -1;
+        let result = null;
+        let view = null;
+        let syncTimer = null;
+        let lastAdd = 0;
+        let pointer = null;
+
+        const num = (v) => String(+(+v).toFixed(4));
+        const xy = (p) => `(${num(p[0])}, ${num(p[1])})`;
+        const color = (name, c) => api.setColor(name, c[0], c[1], c[2]);
+        const isPoint = (name) => api.exists(name) && 'point' === api.getObjectType(name);
+
+        const renderChips = () => {
+            chips.forEach((c, i) => {
+                c.classList.toggle('on', i === armed && !result);
+                c.classList.toggle('set', !!pts[i]);
+                c.setAttribute('aria-pressed', String(i === armed));
+            });
+        };
+
+        // Answer: coordinates of A', B', … in squares (y up), as on the own board
+        const sync = () => {
+            clearTimeout(syncTimer);
+            syncTimer = null;
+
+            if (!ready || result) {
+                return;
+            }
+
+            // A point on an intersection hangs on its lines: make it free, so deleting a construction
+            // line does not delete the point (it keeps its place)
+            NAMES.forEach((name) => {
+                if (isPoint(name) && api.isDefined(name) && !api.isIndependent(name)) {
+                    const x = api.getXcoord(name);
+                    const y = api.getYcoord(name);
+                    api.evalCommand(`${name} = (${x.toFixed(6)}, ${y.toFixed(6)})`);
+                    styleAnswer(name);
+                    // No undo point here: after an undo this would cut off the redo steps
+                }
+            });
+
+            // Triangles may lie anywhere (only the measures count), image points stay on the sheet
+            const clamp = (v, hi) => +(tri ? v : Math.min(hi, Math.max(0, v))).toFixed(tri ? 4 : 3);
+            const raw = NAMES.map((name) => (isPoint(name) && api.isDefined(name) ? [api.getXcoord(name), api.getYcoord(name)] : null));
+            const next = raw.map((p) => (p ? [clamp(p[0], W), clamp(p[1], H)] : null));
+
+            // Segments whose ends lie on two image points (also from the polygon tool)
+            const at = (x, y) => raw.findIndex((p) => p && Math.hypot(p[0] - x, p[1] - y) < 0.005);
+            const found = {};
+            edgeSegs = [];
+
+            api.getAllObjectNames('segment').forEach((seg) => {
+                if (given.has(seg) || !api.isDefined(seg)) {
+                    return;
+                }
+
+                const v = (k, c) => +api.getValue(`${c}(Point(${seg}, ${k}))`);
+                const i = at(v(0, 'x'), v(0, 'y'));
+                const j = at(v(1, 'x'), v(1, 'y'));
+
+                if (i >= 0 && j >= 0 && i !== j) {
+                    found[`${Math.min(i, j)}-${Math.max(i, j)}`] = [Math.min(i, j), Math.max(i, j)];
+                    edgeSegs.push(seg);
+                }
+            });
+
+            const nextEdges = Object.keys(found).sort().map((k) => found[k]);
+
+            if (JSON.stringify([next, nextEdges]) !== JSON.stringify([pts, edges])) {
+                pts = next;
+                edges = nextEdges;
+                input.value = JSON.stringify([...pts, edges]);
+                input.dispatchEvent(new Event('input', {bubbles: true}));
+            }
+
+            renderChips();
+        };
+
+        const later = () => {
+            if (!syncTimer) {
+                syncTimer = setTimeout(sync, 120);
+            }
+        };
+
+        const styleAnswer = (name) => {
+            color(name, GGB_COLORS.img);
+            api.setPointSize(name, 5);
+            api.setLabelVisible(name, true);
+        };
+
+        // An image point that is replaced stays as an ordinary helper point
+        const retire = (name) => {
+            let k = 1;
+
+            while (api.exists(`P_${k}`)) {
+                ++k;
+            }
+
+            api.renameObject(name, `P_${k}`);
+            color(`P_${k}`, GGB_COLORS.help);
+            api.setPointSize(`P_${k}`, 3);
+        };
+
+        // The point becomes the chosen image point (A', B', …)
+        const assign = (name) => {
+            const i = armed;
+
+            // Another image point or vertex may take the name too (it gives up its own)
+            if (i < 0 || result || !isPoint(name) || given.has(name) || name === NAMES[i]) {
+                return;
+            }
+
+            armed = -1;
+            renderChips();
+
+            // Not inside GeoGebra's own event
+            setTimeout(() => {
+                if (!api.exists(name)) {
+                    return;
+                }
+
+                if (api.exists(NAMES[i])) {
+                    retire(NAMES[i]);
+                }
+
+                api.renameObject(name, NAMES[i]);
+                styleAnswer(NAMES[i]);
+                // Undo and redo keep the image point
+                api.setUndoPoint();
+                api.setMode(0);
+                sync();
+            }, 0);
+        };
+
+        // With the point tool, a click on an existing point creates nothing: take the nearest point instead
+        const nearest = () => {
+            const canvas = [...host.querySelectorAll('canvas')].sort((a, b) => b.width * b.height - a.width * a.height)[0];
+
+            if (!canvas || !pointer || !view) {
+                return null;
+            }
+
+            const r = canvas.getBoundingClientRect();
+            const ux = view.x0 + (pointer[0] - r.left) / r.width * (view.x1 - view.x0);
+            const uy = view.y1 - (pointer[1] - r.top) / r.height * (view.y1 - view.y0);
+            let best = null;
+            let dist = 12 / r.width * (view.x1 - view.x0);
+
+            api.getAllObjectNames('point').forEach((name) => {
+                if (given.has(name) || name === NAMES[armed] || !api.isDefined(name) || !api.getVisible(name)) {
+                    return;
+                }
+
+                const dd = Math.hypot(api.getXcoord(name) - ux, api.getYcoord(name) - uy);
+
+                if (dd < dist) {
+                    dist = dd;
+                    best = name;
+                }
+            });
+
+            return best;
+        };
+
+        const applyResult = () => {
+            armed = -1;
+            api.setMode(0);
+            const style = (name, thickness) => {
+                color(name, GGB_COLORS.ok);
+                api.setLineStyle(name, 1);
+                api.setLineThickness(name, thickness);
+                api.setLabelVisible(name, false);
+                api.setFixed(name, true, false);
+            };
+
+            const last = result.correct.length - 1;
+
+            // Triangle: the solution laid onto the student's side AB, on the side of C
+            if (tri) {
+                const sh = result.shape || [];
+
+                if (sh.length === 3 && isPoint(NAMES[0]) && isPoint(NAMES[1])) {
+                    const A = [api.getXcoord(NAMES[0]), api.getYcoord(NAMES[0])];
+                    const B = [api.getXcoord(NAMES[1]), api.getYcoord(NAMES[1])];
+                    const len = Math.hypot(B[0] - A[0], B[1] - A[1]) || 1;
+                    const u = [(B[0] - A[0]) / len, (B[1] - A[1]) / len];
+                    let side = 1;
+
+                    if (isPoint(NAMES[2])) {
+                        const C = [api.getXcoord(NAMES[2]), api.getYcoord(NAMES[2])];
+                        side = u[0] * (C[1] - A[1]) - u[1] * (C[0] - A[0]) < 0 ? -1 : 1;
+                    }
+
+                    const place = (p) => [A[0] + p[0] * u[0] - side * p[1] * u[1], A[1] + p[0] * u[1] + side * p[1] * u[0]];
+                    const polyT = api.evalCommandGetLabels(`Polygon(${sh.map(place).map(xy).join(', ')})`).split(',').filter(Boolean);
+                    solutionObjs.push(...polyT);
+                    polyT.forEach((name) => style(name, 4));
+                    api.setFilling(polyT[0], 0);
+                }
+
+                edgeSegs.forEach((seg) => api.exists(seg) && color(seg, result.correct[last] ? GGB_COLORS.ok : GGB_COLORS.bad));
+                NAMES.forEach((name) => isPoint(name) && api.setFixed(name, true, false));
+
+                return;
+            }
+
+            // Solution: green dashed figure, circles show the tolerance
+            const poly = api.evalCommandGetLabels(`Polygon(${result.img.map(xy).join(', ')})`).split(',').filter(Boolean);
+            solutionObjs.push(...poly);
+            poly.forEach((name) => style(name, 4));
+            api.setFilling(poly[0], 0);
+            result.img.forEach((q) => {
+                const c = api.evalCommandGetLabels(`Circle(${xy(q)}, ${num(d.tol || 0.6)})`);
+                solutionObjs.push(c);
+                style(c, 2);
+            });
+
+            NAMES.forEach((name, i) => {
+                if (isPoint(name)) {
+                    color(name, result.correct[i] ? GGB_COLORS.ok : GGB_COLORS.bad);
+                    api.setFixed(name, true, false);
+                }
+            });
+
+            // Segments of the image figure: green if the figure is joined correctly
+            edgeSegs.forEach((seg) => api.exists(seg) && color(seg, result.correct[last] ? GGB_COLORS.ok : GGB_COLORS.bad));
+        };
+
+        // Construction with the given figure; it is loaded as a file, so undo cannot go further back
+        const build = (a) => {
+            api = a;
+            api.setRepaintingActive(false);
+
+            // Graphics view in pixels: one square = S pixels, figure in the middle
+            const corner = api.evalCommandGetLabels('Corner(5)');
+            const w = api.getXcoord(corner);
+            const h = api.getYcoord(corner);
+            api.deleteObject(corner);
+            // Reflections: figure in the middle; triangles: origin bottom left, 1 unit = 1 cm
+            const x0 = tri ? 0 : W / 2 - w / 2 / S;
+            const y0 = tri ? 0 : H / 2 - h / 2 / S;
+            view = {x0, x1: x0 + w / S, y0, y1: y0 + h / S};
+            api.setCoordSystem(view.x0, view.x1, view.y0, view.y1);
+            api.setAxesVisible(false, false);
+            api.setGridVisible(false);
+
+            const fix = (name, c) => {
+                given.add(name);
+                api.setFixed(name, true, true);
+                color(name, c);
+                api.setLabelVisible(name, true);
+            };
+
+            if (d.seg) {
+                api.evalCommand(`s = Line(${xy(d.seg[0])}, ${xy(d.seg[1])})`);
+                fix('s', GGB_COLORS.mark);
+                api.setLineThickness('s', 5);
+            }
+
+            if (d.center) {
+                api.evalCommand(`Z = ${xy(d.center)}`);
+                fix('Z', GGB_COLORS.mark);
+                api.setPointSize('Z', 5);
+            }
+
+            d.pts.forEach((p, i) => {
+                api.evalCommand(`${LETTERS[i]} = ${xy(p)}`);
+                fix(LETTERS[i], GGB_COLORS.fig);
+                api.setPointSize(LETTERS[i], 5);
+            });
+
+            if (d.pts.length > 2) {
+                const poly = api.evalCommandGetLabels(`Polygon(${LETTERS.slice(0, d.pts.length).split('').join(', ')})`).split(',').filter(Boolean);
+                poly.forEach((name) => {
+                    given.add(name);
+                    api.setFixed(name, true, false);
+                    color(name, GGB_COLORS.fig);
+                    api.setLabelVisible(name, false);
+                });
+                api.setFilling(poly[0], 0.12);
+            }
+
+            // Saved answers (resume after a lock)
+            pts.forEach((p, i) => {
+                if (p) {
+                    api.evalCommand(`${NAMES[i]} = ${xy(p)}`);
+                    styleAnswer(NAMES[i]);
+                }
+            });
+
+            edges.forEach(([i, j]) => {
+                if (pts[i] && pts[j]) {
+                    api.evalCommand(`Segment(${NAMES[i]}, ${NAMES[j]})`);
+                }
+            });
+
+            api.setRepaintingActive(true);
+            api.getBase64((file) => api.setBase64(file, listen));
+        };
+
+        const listen = () => {
+            if (ready) {
+                return;
+            }
+
+            ready = true;
+            msg.hidden = true;
+            api.setMode(0);
+
+            api.registerAddListener((name) => {
+                lastAdd = Date.now();
+
+                if (armed >= 0 && 1 === api.getMode()) {
+                    assign(name);
+                } else if (NAMES.includes(name) && isPoint(name)) {
+                    // GeoGebra names the first points A, B, C by itself
+                    setTimeout(() => api.exists(name) && styleAnswer(name), 0);
+                }
+
+                later();
+            });
+            api.registerRemoveListener(later);
+            api.registerRenameListener(later);
+            api.registerUpdateListener(later);
+            api.registerClientListener((e) => {
+                const type = e.type;
+
+                if ('select' === type && armed >= 0 && [0, 1].includes(api.getMode())) {
+                    assign(e.target);
+                } else if ('mouseDown' === type && armed >= 0 && 1 === api.getMode()) {
+                    const t0 = Date.now();
+                    setTimeout(() => {
+                        const near = armed >= 0 && lastAdd < t0 ? nearest() : null;
+
+                        if (near) {
+                            assign(near);
+                        }
+                    }, 150);
+                } else if ('setMode' === type && armed >= 0) {
+                    // Another tool: the chosen image point waits no longer (the event comes before the switch)
+                    setTimeout(() => {
+                        if (armed >= 0 && ![0, 1].includes(api.getMode())) {
+                            armed = -1;
+                            renderChips();
+                        }
+                    }, 0);
+                } else if (['undo', 'redo', 'deselect', 'dragEnd', 'renameComplete'].includes(type)) {
+                    later();
+                }
+            });
+            host.addEventListener('pointerdown', (e) => {
+                pointer = [e.clientX, e.clientY];
+            }, true);
+
+            if (result) {
+                applyResult();
+            }
+
+            renderChips();
+        };
+
+        const start = () => {
+            msg.hidden = false;
+            msg.textContent = tx('ggbLoading');
+
+            loadGgb().then(() => {
+                host.id = `st-ggb-${++ggbSeq}`;
+                const applet = new window.GGBApplet({
+                    id: host.id.replace(/-/g, '_'),
+                    appName: 'classic',
+                    width: 640,
+                    height: 520,
+                    perspective: 'G',
+                    showToolBar: true,
+                    customToolBar: tri ? GGB_TOOLBAR_TRI : GGB_TOOLBAR,
+                    showMenuBar: false,
+                    showAlgebraInput: false,
+                    enableRightClick: false,
+                    enableShiftDragZoom: false,
+                    enableLabelDrags: false,
+                    showResetIcon: false,
+                    showZoomButtons: false,
+                    showFullscreenButton: false,
+                    enableUndoRedo: true,
+                    preventFocus: true,
+                    language: lang,
+                    borderColor: '#d0d5dd',
+                    scaleContainerClass: 'st-ggb-wrap',
+                    allowUpscale: false,
+                    appletOnLoad: (a) => {
+                        if (!api) {
+                            build(a);
+                        }
+                    },
+                }, true);
+
+                if (GGB.codebase) {
+                    applet.setHTML5Codebase(GGB.codebase);
+                }
+
+                applet.inject(host.id);
+            }).catch(() => {
+                msg.innerHTML = `${esc(tx('ggbError'))} <button type="button" class="st-link" data-ggb-retry>${esc(tx('ggbRetry'))}</button>`;
+                msg.querySelector('[data-ggb-retry]').addEventListener('click', start);
+            });
+        };
+
+        chips.forEach((c, i) => c.addEventListener('click', () => {
+            if (result) {
+                return;
+            }
+
+            armed = armed === i ? -1 : i;
+
+            if (ready) {
+                api.setMode(armed >= 0 ? 1 : 0);
+            }
+
+            renderChips();
+        }));
+
+        // Hide the construction lines and helper points (not deleted), show them again
+        let hidden = [];
+        const helpBtn = el.querySelector('[data-help-lines]');
+
+        helpBtn.addEventListener('click', () => {
+            if (!ready) {
+                return;
+            }
+
+            if (hidden.length) {
+                hidden.forEach((name) => api.exists(name) && api.setVisible(name, true));
+                hidden = [];
+            } else {
+                sync();
+                hidden = api.getAllObjectNames().filter((name) => !given.has(name) && !NAMES.includes(name) && !edgeSegs.includes(name)
+                    && 'polygon' !== api.getObjectType(name) && api.getVisible(name));
+
+                // Solution drawn after checking stays visible
+                if (result) {
+                    hidden = hidden.filter((name) => !solutionObjs.includes(name));
+                }
+
+                hidden.forEach((name) => api.setVisible(name, false));
+            }
+
+            helpBtn.textContent = tx(hidden.length ? 'helpShow' : 'helpHide');
+            helpBtn.setAttribute('aria-pressed', String(hidden.length > 0));
+        });
+
+        el.querySelector('[data-clear]').addEventListener('click', () => {
+            if (result || !ready) {
+                return;
+            }
+
+            NAMES.forEach((name) => api.exists(name) && api.deleteObject(name));
+            api.setUndoPoint();
+            armed = -1;
+            sync();
+        });
+
+        // GeoGebra is big: load it when the task comes into view
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries) => {
+                if (entries.some((e) => e.isIntersecting)) {
+                    io.disconnect();
+                    start();
+                }
+            }, {rootMargin: '300px'});
+            io.observe(el);
+        } else {
+            start();
+        }
+
+        renderChips();
+
+        return {
+            // Practice: show the solution and mark the student's points
+            showResult(img, correct, shape) {
+                result = {img, correct, shape};
+                el.classList.add('st-board-done');
+                el.querySelector('[data-clear]').hidden = true;
+                renderChips();
+
+                if (ready) {
+                    applyResult();
+                }
+            },
+        };
+    }
+
     // Filled means: a value in the input, for drawings at least one point
     const isFilled = (inp) => (inp.dataset.pts ? parsePoints(inp.value, +inp.dataset.pts).some(Boolean) : '' !== inp.value.trim());
 
     // Value of one input for the answers object
-    const inputValue = (inp) => (inp.dataset.pts ? parsePoints(inp.value, +inp.dataset.pts) : inp.value);
+    const inputValue = (inp) => {
+        if (!inp.dataset.pts) {
+            return inp.value;
+        }
+
+        const pts = parsePoints(inp.value, +inp.dataset.pts);
+
+        // GeoGebra: the segments between the image points follow the points
+        return inp.dataset.edges ? [...pts, parseEdges(inp.value, +inp.dataset.pts)] : pts;
+    };
+
+    function parseEdges(value, n) {
+        let v = [];
+
+        try {
+            v = JSON.parse(value || '[]');
+        } catch (e) {
+            v = [];
+        }
+
+        return Array.isArray(v) && Array.isArray(v[n]) ? v[n].filter((e) => Array.isArray(e) && 2 === e.length).map((e) => [+e[0], +e[1]]) : [];
+    }
 
 
     document.querySelectorAll('[data-school-test]').forEach((root) => init(root));
@@ -1883,8 +1917,13 @@
         const L = (labels) => (labels && (labels[lang] || labels.de)) || '';
         const typeOf = (alias) => types.find((x) => x.alias === alias);
 
-        // Current choice, kept while the page is open. With one type it is preselected.
-        const choice = {type: 1 === types.length ? types[0].alias : '', topic: '', difficulty: 'medium'};
+        // Main areas (Arithmetik, Algebra, Geometrie) that have at least one type, in this order
+        const MAINS = ['arithmetik', 'algebra', 'geometrie'];
+        const typesOf = (main) => types.filter((x) => x.area === main);
+        const usable = MAINS.filter((m) => typesOf(m).length);
+
+        // Current choice, kept while the page is open. A single area or type is preselected.
+        const choice = {main: 1 === usable.length ? usable[0] : '', type: 1 === types.length ? types[0].alias : '', topic: '', difficulty: 'medium'};
 
         const topicsOf = (type) => Object.entries((type && type.topics) || {});
 
@@ -1897,8 +1936,32 @@
 
         const optionButtons = (items, attr, current) => items.map(([value, text]) => `<button type="button" class="st-opt${value === current ? ' on' : ''}" data-${attr}="${esc(value)}" aria-pressed="${value === current}">${esc(text)}</button>`).join('');
 
+        // The three main areas, always visible on the choice screen
+        const mainNav = () => `<nav class="st-mainnav" aria-label="${tx('chooseMain')}">${MAINS.map((m) => {
+            const on = m === choice.main;
+            const off = !typesOf(m).length;
+
+            return `<button type="button" class="st-opt st-main${on ? ' on' : ''}" data-main="${m}" aria-pressed="${on}"${off ? ' disabled' : ''}>${tx('main_' + m)}</button>`;
+        }).join('')}</nav>`;
+
+        const bindMainNav = () => root.querySelectorAll('[data-main]').forEach((b) => b.addEventListener('click', () => {
+            if (choice.main !== b.dataset.main) {
+                choice.main = b.dataset.main;
+                choice.type = '';
+                choice.topic = '';
+            }
+
+            showStart();
+        }));
+
         function showStart() {
             stop();
+
+            // One type in the area: preselected
+            if (choice.main && !typeOf(choice.type) && 1 === typesOf(choice.main).length) {
+                choice.type = typesOf(choice.main)[0].alias;
+            }
+
             const type = typeOf(choice.type);
             const topics = topicsOf(type);
 
@@ -1909,11 +1972,14 @@
             root.innerHTML = `
                 <div class="st-card st-practice">
                     ${langPicker()}
+                    ${mainNav()}
                     <h2>${tx('practiceHead')}</h2>
                     <p>${tx('practiceIntro2')}</p>
+                    ${choice.main ? '' : `<p class="st-chooselabel">${tx('chooseMain')}</p>`}
                     <div class="st-choose">
+                        ${choice.main ? `
                         <div class="st-chooselabel">${tx('chooseType')}</div>
-                        <div class="st-options" role="group" aria-label="${tx('chooseType')}">${optionButtons(types.map((x) => [x.alias, L(x.labels)]), 'type', choice.type)}</div>
+                        <div class="st-options" role="group" aria-label="${tx('chooseType')}">${optionButtons(typesOf(choice.main).map((x) => [x.alias, L(x.labels)]), 'type', choice.type)}</div>` : ''}
                         ${type && topics.length ? `
                         <div class="st-chooselabel">${tx('chooseArea')}</div>
                         <div class="st-options" role="group" aria-label="${tx('chooseArea')}">${optionButtons(topics.map(([k, v]) => [k, L(v)]), 'topic', choice.topic)}</div>` : ''}
@@ -1926,6 +1992,7 @@
                 </div>`;
             root.lang = lang;
             bindPicker(root, showStart);
+            bindMainNav();
             root.querySelectorAll('[data-type]').forEach((b) => b.addEventListener('click', () => {
                 choice.type = b.dataset.type;
                 choice.topic = '';
@@ -2100,9 +2167,19 @@
                         }
                     });
                     head = ok ? tx('right') : tx('fieldsRight', r.points, r.max);
+                } else if (li.classList.contains('st-tri')) {
+                    // Triangle: every given measure with the student's value, then the sides
+                    li.querySelector('.st-board')?.stBoard?.showResult([], r.correct, r.shape);
+                    const last = r.correct.length - 1;
+                    const list = (r.given || []).map((g, i) => `${g.label} = ${fmtNum(g.v)}${g.unit} ${r.correct[i] ? '✓' : '✗'}${null === g.yours || r.correct[i] ? '' : ` (${tx('yours', fmtNum(g.yours) + g.unit)})`}`).join(', ');
+                    head = `${tx('measuresRight', r.correct.slice(0, last).filter(Boolean).length, last)} ${list}. ${tx(r.correct[last] ? 'sidesOk' : 'sidesBad')}${ok ? '' : ' ' + tx('solutionTri')}`;
                 } else if (li.classList.contains('st-geo')) {
                     li.querySelector('.st-board')?.stBoard?.showResult(r.img || [], r.correct);
-                    head = ok ? tx('right') : `${tx('pointsRight', r.points, r.max)}${r.wrongDir ? ' ' + tx('wrongDir') : ''} ${tx('solutionDashed')}`;
+                    const ggb = li.querySelector('.st-ggb');
+                    const m = (r.img || []).length;
+                    // GeoGebra: the last entry is the segments of the image figure
+                    const right = ggb && r.correct.length > m ? tx('pointsRight', r.correct.slice(0, m).filter(Boolean).length, m) + ' ' + tx(r.correct[m] ? 'edgesOk' : 'edgesBad') : tx('pointsRight', r.points, r.max);
+                    head = ok ? tx('right') : `${right}${r.wrongDir ? ' ' + tx('wrongDir') : ''} ${tx('solutionDashed')}`;
                 } else if (li.classList.contains('st-wide')) {
                     head = tx('fieldsRight', r.points, r.max);
                 } else {

@@ -27,8 +27,9 @@ final class BoardSvg
     /**
      * @param array<int, array{0: int, 1: int}|null> $given
      * @param array<int, bool>                        $correct
+     * @param list<array{0: int, 1: int}>|null       $edges   GeoGebra: segments drawn by the student (index pairs)
      */
-    public function render(array $a, array $given, array $correct): string
+    public function render(array $a, array $given, array $correct, array|null $edges = null): string
     {
         $d = $a['draw'];
         [$w, $h] = $d['grid'];
@@ -92,7 +93,16 @@ final class BoardSvg
         // Student's points
         $placed = array_values(array_filter($given));
 
-        if (\count($placed) === \count($a['img'])) {
+        if (null !== $edges) {
+            // GeoGebra: the segments the student drew, green if the figure is joined correctly
+            $color = !empty($correct[\count($a['img'])]) ? '#1a7f43' : '#c62828';
+
+            foreach ($edges as [$i, $j]) {
+                if (isset($given[$i], $given[$j])) {
+                    $svg .= '<line x1="'.$x($given[$i][0]).'" y1="'.$y($given[$i][1]).'" x2="'.$x($given[$j][0]).'" y2="'.$y($given[$j][1]).'" stroke="'.$color.'" stroke-width="1.4"/>';
+                }
+            }
+        } elseif (\count($placed) === \count($a['img'])) {
             $svg .= $this->poly($placed, $x, $y, 'fill="none" stroke="#888" stroke-width="1"');
         }
 

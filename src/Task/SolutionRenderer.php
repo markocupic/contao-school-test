@@ -40,6 +40,7 @@ final class SolutionRenderer
             'frac' => \in_array($a['mode'], ['exact', 'improper'], true) ? Util::f($a['n'], $a['d']) : Util::m($a['n'], $a['d']),
             'rat' => '<i>x</i> = '.(new Equation\Fraction((int) $a['n'], (int) $a['d']))->html(),
             'angles' => implode(', ', array_map(static fn (array $f, int|float $v): string => $f['label'].' = '.Util::fmt($v).$f['unit'], $a['fields'], $a['v'])),
+            'triangle' => implode(', ', array_map(static fn (array $g): string => (new Triangle\TriangleGenerator())->measure($g['k'], (float) $g['v']), $a['given'])),
             'points' => implode(', ', array_map(static fn (array $p, int $i): string => \chr(65 + $i).'′ ('.Util::fmt($p[0]).'|'.Util::fmt($p[1]).')', $a['img'], array_keys($a['img']))),
             default => '',
         };
