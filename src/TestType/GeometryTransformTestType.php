@@ -1,0 +1,174 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao School Test.
+ *
+ * (c) Marko Cupic <m.cupic@gmx.ch>
+ * @license MIT
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
+ * @link https://github.com/markocupic/contao-school-test
+ */
+
+namespace Markocupic\ContaoSchoolTest\TestType;
+
+use Markocupic\ContaoSchoolTest\Task\Geometry\TransformGenerator;
+use Markocupic\ContaoSchoolTest\Task\TaskTranslator;
+use Markocupic\ContaoSchoolTest\Task\Util;
+
+/**
+ * Spiegeln, Drehen, Verschieben: the student places the image points on squared paper.
+ * Every correctly placed image point is worth one point.
+ */
+final class GeometryTransformTestType implements PracticeTestTypeInterface
+{
+    public const ALIAS = 'geometry_transform';
+
+    public const TITLES = [
+        'achse' => 'Achsenspiegelung',
+        'punkt' => 'Punktspiegelung',
+        'drehung' => 'Drehung',
+        'verschiebung' => 'Verschiebung',
+        'achse_frei' => 'Achsenspiegelung ohne Häuschen',
+        'punkt_frei' => 'Punktspiegelung ohne Häuschen',
+        'gemischt' => 'Gemischt',
+    ];
+
+    /**
+     * %s: allowed deviation in mm, depends on the difficulty.
+     */
+    public const INSTRUCTION_FREE = 'Konstruiere die Bildpunkte mit Gerade, Zirkel und Geodreieck und setze sie mit «Punkt». Bis %s mm Abweichung gilt als richtig.';
+
+    public const INSTRUCTION = 'Setze die Bildpunkte auf die Gitterpunkte. Ein Klick auf einen gesetzten Punkt entfernt ihn.';
+
+    public const TASKS_PER_KIND = [1, 2, 3, 4, 5];
+
+    private readonly TransformGenerator $generator;
+
+    public function __construct()
+    {
+        $this->generator = new TransformGenerator();
+    }
+
+    public function getAlias(): string
+    {
+        return self::ALIAS;
+    }
+
+    public function getLabel(): string
+    {
+        return 'Spiegeln, Drehen, Verschieben (Achsen- und Punktspiegelung, Drehung, Verschiebung)';
+    }
+
+    public function getPaletteFields(): string
+    {
+        return '{config_legend},difficulty,transformKinds,tasksPerKind';
+    }
+
+    public function generate(array $test): array
+    {
+        $difficulty = $this->difficulty((string) ($test['difficulty'] ?? 'medium'));
+        $kinds = $this->kinds($test['transformKinds'] ?? null);
+        $count = max(1, min(10, (int) ($test['tasksPerKind'] ?? 2)));
+        $sections = [];
+
+        foreach ($kinds as $kind) {
+            $sections[] = $this->section($kind, $this->many($kind, $difficulty, $count), $difficulty);
+        }
+
+        return $sections;
+    }
+
+    public function getPracticeLabels(): array
+    {
+        return [
+            'de' => 'Spiegeln, Drehen, Verschieben',
+            'fr' => 'Symétries, rotations, translations',
+            'it' => 'Simmetrie, rotazioni, traslazioni',
+            'en' => 'Reflections, rotations, translations',
+        ];
+    }
+
+    public function getPracticeTopics(): array
+    {
+        $translator = new TaskTranslator();
+        $topics = [];
+
+        foreach (self::TITLES as $alias => $title) {
+            foreach (TaskTranslator::LANGUAGES as $lang) {
+                $topics[$alias][$lang] = $translator->text($title, $lang);
+            }
+        }
+
+        return $topics;
+    }
+
+    /**
+     * Four tasks of one kind, or one of each kind ("gemischt").
+     */
+    public function generatePractice(string $topic, string $difficulty): array
+    {
+        $difficulty = $this->difficulty($difficulty);
+
+        if ('gemischt' === $topic) {
+            $tasks = array_map(fn (string $kind): array => $this->generator->build($kind, $difficulty), Util::shuffle(['achse', 'punkt', 'drehung', 'verschiebung']));
+
+            return [$this->section('gemischt', $tasks)];
+        }
+
+        $kind = \in_array($topic, TransformGenerator::KINDS, true) ? $topic : 'achse';
+
+        // Constructions take longer: two per round
+        return [$this->section($kind, $this->many($kind, $difficulty, isset(TransformGenerator::FREE_KINDS[$kind]) ? 2 : 4), $difficulty)];
+    }
+
+    private function many(string $kind, string $difficulty, int $count): array
+    {
+        $tasks = [];
+        $seen = [];
+
+        for ($i = 0; \count($tasks) < $count && $i < $count * 20; ++$i) {
+            $task = $this->generator->build($kind, $difficulty);
+
+            if (!isset($seen[$task['key']])) {
+                $seen[$task['key']] = true;
+                $tasks[] = $task;
+            }
+        }
+
+        return $tasks;
+    }
+
+    private function section(string $kind, array $tasks, string $difficulty = 'medium'): array
+    {
+        $instruction = isset(TransformGenerator::FREE_KINDS[$kind]) ? sprintf(self::INSTRUCTION_FREE, TransformGenerator::toleranceMm($difficulty)) : self::INSTRUCTION;
+
+        return ['area' => $kind, 'title' => self::TITLES[$kind], 'instruction' => $instruction, 'tasks' => $tasks];
+    }
+
+    private function difficulty(string $difficulty): string
+    {
+        return \in_array($difficulty, TransformGenerator::LEVELS, true) ? $difficulty : 'medium';
+    }
+
+    /**
+     * Selected kinds from the backend (serialized array), all if nothing is selected.
+     */
+    private function kinds(mixed $value): array
+    {
+        if (\is_string($value) && '' !== $value) {
+            $value = @unserialize($value, ['allowed_classes' => false]);
+        }
+
+        $kinds = \is_array($value) ? array_values(array_intersect(TransformGenerator::KINDS, $value)) : [];
+
+        return $kinds ?: TransformGenerator::KINDS;
+    }
+
+    public function hasPracticeDifficulty(): bool
+    {
+        return true;
+    }
+}

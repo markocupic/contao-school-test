@@ -1,0 +1,10 @@
+/*
+ * This file is part of Contao School Test.
+ *
+ * (c) Marko Cupic <m.cupic@gmx.ch>
+ * @license MIT
+ *
+ * Frontend of the online test: code login, test form with autosave,
+ * lock when the student leaves the page (tab change, reload, navigation), resume with the teacher's code, submit.
+ * Solutions never reach the browser, grading happens on the server.
+ */

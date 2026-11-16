@@ -1,0 +1,139 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao School Test.
+ *
+ * (c) Marko Cupic <m.cupic@gmx.ch>
+ * @license MIT
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
+ * @link https://github.com/markocupic/contao-school-test
+ */
+
+namespace Markocupic\ContaoSchoolTest\Tests\Task;
+
+use Markocupic\ContaoSchoolTest\Task\AnswerChecker;
+use Markocupic\ContaoSchoolTest\Task\Evaluator;
+use Markocupic\ContaoSchoolTest\Task\Geometry\BoardSvg;
+use Markocupic\ContaoSchoolTest\Task\Geometry\TransformGenerator;
+use Markocupic\ContaoSchoolTest\Task\TaskPresenter;
+use Markocupic\ContaoSchoolTest\TestType\GeometryTransformTestType;
+use PHPUnit\Framework\TestCase;
+
+class GeometryTransformTest extends TestCase
+{
+    public function testImagePointsAreOnTheGrid(): void
+    {
+        $generator = new TransformGenerator();
+        mt_srand(3);
+
+        foreach (TransformGenerator::KINDS as $kind) {
+            foreach (TransformGenerator::LEVELS as $level) {
+                for ($i = 0; $i < 150; ++$i) {
+                    $task = $generator->build($kind, $level);
+                    $a = $task['a'];
+                    $this->assertSame('points', $a['type']);
+                    $this->assertCount($a['draw']['n'], $a['img']);
+                    $this->assertSame($task['points'], $a['draw']['n']);
+
+                    $free = isset(TransformGenerator::FREE_KINDS[$kind]);
+                    $this->assertSame($free, !empty($a['draw']['free']));
+                    // Geodreieck: not allowed on squared paper at the hard level
+                    $this->assertSame(!$free && 'hard' === $level, !empty($a['draw']['noGeo']));
+
+                    foreach (array_merge($a['img'], $a['draw']['pts']) as $p) {
+                        if (!$free) {
+                            $this->assertIsInt($p[0]);
+                            $this->assertIsInt($p[1]);
+                        }
+
+                        $this->assertTrue($p[0] >= 0 && $p[0] <= TransformGenerator::W && $p[1] >= 0 && $p[1] <= TransformGenerator::H, "$kind/$level outside");
+                    }
+
+                    // The image differs from the original (otherwise there is nothing to do)
+                    $this->assertNotSame($a['draw']['pts'], $a['img']);
+                }
+            }
+        }
+    }
+
+    public function testCheckerCountsEveryPoint(): void
+    {
+        $checker = new AnswerChecker();
+        $task = (new TransformGenerator())->build('verschiebung', 'medium');
+        $img = $task['a']['img'];
+
+        $this->assertSame($task['points'], $checker->check($task, $img)['points']);
+
+        $wrong = $img;
+        $wrong[0] = [$img[0][0] + 1, $img[0][1]];
+        $wrong[1] = null;
+        $this->assertSame($task['points'] - 2, $checker->check($task, $wrong)['points']);
+        $this->assertSame(0, $checker->check($task, null)['points']);
+        $this->assertSame(0, $checker->check($task, 'abc')['points']);
+    }
+
+    public function testConstructionToleranceIsThreeMillimetres(): void
+    {
+        $checker = new AnswerChecker();
+        mt_srand(12);
+
+        foreach (array_keys(TransformGenerator::FREE_KINDS) as $kind) {
+            foreach (['easy' => 0.8, 'medium' => 0.6, 'hard' => 0.3] as $level => $tol) {
+                $task = (new TransformGenerator())->build($kind, $level);
+                $img = $task['a']['img'];
+                $this->assertSame($tol, $task['a']['tol']);
+                $this->assertSame($tol, $task['a']['draw']['tol']);
+                $this->assertArrayNotHasKey('axType', $task['a']['draw']);
+
+                $near = $img;
+                $near[0] = [$img[0][0] + $tol - 0.01, $img[0][1]];
+                $this->assertSame($task['points'], $checker->check($task, $near)['points']);
+
+                $far = $img;
+                $far[0] = [$img[0][0], $img[0][1] - $tol - 0.01];
+                $this->assertSame($task['points'] - 1, $checker->check($task, $far)['points']);
+            }
+        }
+
+        $this->assertSame('1.5', TransformGenerator::toleranceMm('hard'));
+        $this->assertSame('4', TransformGenerator::toleranceMm('easy'));
+
+        $this->assertSame([[1.235, 2.5], null], Evaluator::gridPoints([[1.23456, 2.5], [21, 3]], 2, [20, 14], true));
+    }
+
+    public function testSanitizingKeepsOnlyGridPoints(): void
+    {
+        $this->assertSame([[1, 2], null, null], Evaluator::gridPoints([[1, 2], [25, 3], 'x'], 3, [20, 14]));
+        $this->assertSame([null, null], Evaluator::gridPoints('[[1,2]]', 2, [20, 14]));
+    }
+
+    public function testNoSolutionInPublicTask(): void
+    {
+        $type = new GeometryTransformTestType();
+        mt_srand(8);
+        $sections = $type->generatePractice('gemischt', 'hard');
+        $json = json_encode((new TaskPresenter())->toPublic($sections, 'de'), JSON_THROW_ON_ERROR);
+
+        $this->assertStringNotContainsString('"img"', $json);
+        $this->assertStringNotContainsString('wrongDirection', $json);
+        $this->assertStringNotContainsString('"way"', $json);
+        $this->assertStringContainsString('"draw"', $json);
+        $this->assertCount(4, $sections[0]['tasks']);
+    }
+
+    public function testBoardSvgMarksPoints(): void
+    {
+        $task = (new TransformGenerator())->build('punkt', 'easy');
+        $given = $task['a']['img'];
+        $given[0] = [0, 0] === $given[0] ? [1, 1] : [0, 0];
+        $correct = (new AnswerChecker())->check($task, $given)['correct'];
+        $svg = (new BoardSvg())->render($task['a'], $given, $correct);
+
+        $this->assertStringStartsWith('<svg', $svg);
+        $this->assertSame(1, substr_count($svg, 'fill="#c62828"'));
+        $this->assertSame(\count($given) - 1, substr_count($svg, 'r="4" fill="#1a7f43"'));
+    }
+}

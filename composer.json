@@ -1,0 +1,64 @@
+{
+    "name": "markocupic/contao-school-test",
+    "description": "Contao bundle for online tests in school: classes, students, test codes, lock on tab change, server side grading and evaluation sheets. First test type: mental arithmetic (Kopfrechnen, Brüche, Prozente).",
+    "keywords": [
+        "contao",
+        "school",
+        "test",
+        "exam",
+        "mental arithmetic",
+        "kopfrechnen"
+    ],
+    "type": "contao-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marko Cupic",
+            "homepage": "https://github.com/markocupic"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "contao/core-bundle": "^5.3 || ^6.0",
+        "doctrine/dbal": "^3.6 || ^4.0",
+        "psr/cache": "^1.0 || ^2.0 || ^3.0",
+        "symfony/config": "^6.4 || ^7.0",
+        "symfony/dependency-injection": "^6.4 || ^7.0",
+        "symfony/http-foundation": "^6.4 || ^7.0",
+        "symfony/http-kernel": "^6.4 || ^7.0",
+        "symfony/routing": "^6.4 || ^7.0",
+        "twig/twig": "^3.8"
+    },
+    "require-dev": {
+        "ext-pdo_sqlite": "*",
+        "contao/manager-plugin": "^2.12",
+        "phpunit/phpunit": "^11.5 || ^12.0"
+    },
+    "conflict": {
+        "contao/manager-plugin": "<2.12 || >=3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Markocupic\\ContaoSchoolTest\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Markocupic\\ContaoSchoolTest\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "contao-components/installer": false,
+            "contao/manager-plugin": false,
+            "php-http/discovery": false
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "Markocupic\\ContaoSchoolTest\\ContaoManager\\Plugin"
+    },
+    "scripts": {
+        "unit-tests": "@php vendor/bin/phpunit --colors=always"
+    },
+    "version": "1.0"
+}

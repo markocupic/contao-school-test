@@ -1,0 +1,48 @@
+{% extends '@MarkocupicContaoSchoolTest/backend/_print_base.html.twig' %}
+
+{% block title %}Codeblatt {{ test.title }}{% endblock %}
+
+{% block style %}
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px dashed #999; border-left: 1px dashed #999; }
+    .card { padding: 14px 16px; min-height: 52mm; border-right: 1px dashed #999; border-bottom: 1px dashed #999; display: flex; flex-direction: column; gap: 6px; break-inside: avoid; page-break-inside: avoid; }
+    .card .t { font-size: 12px; color: #555; }
+    .card .n { font-size: 17px; font-weight: 700; }
+    .card .c { font: 700 34px/1.1 Consolas, "Courier New", monospace; letter-spacing: .25em; margin: 4px 0; }
+    .card .h { font-size: 12px; color: #333; margin-top: auto; }
+    .empty { padding: 20px; color: #c33; }
+    .teacher { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 0 14px; padding: 10px 14px; border: 2px solid #111; border-radius: 6px; }
+    .teacher .l { font-size: 12px; color: #333; }
+    .teacher .c { font: 700 26px/1.1 Consolas, "Courier New", monospace; letter-spacing: .2em; }
+{% endblock %}
+
+{% block toolbar %}{{ test.title }} · {{ class }} · {{ participations|length }} Codes · Entlang der gestrichelten Linien ausschneiden{% endblock %}
+
+{% block body %}
+    <div class="page">
+        <h1>Codeblatt: {{ test.title }}</h1>
+        <p class="sub">{{ test.subject }} · Klasse {{ class }} · Jede Schülerin und jeder Schüler erhält einen Code. Der Code ist persönlich und gilt nur einmal.</p>
+
+        <div class="teacher">
+            <div><strong>Wiederaufnahme-Code</strong><div class="l">Nur für die Lehrperson. Damit wird ein gesperrter Test wieder freigegeben. Diesen Teil nicht an die Klasse abgeben.</div></div>
+            <div class="c">{{ test.resumeCode ?: '–' }}</div>
+        </div>
+
+        {% if participations is empty %}
+            <p class="empty">Diese Klasse hat noch keine Schülerinnen und Schüler. Erfasse sie unter «Klassen».</p>
+        {% else %}
+            <div class="cards">
+                {% for p in participations %}
+                    <div class="card">
+                        <div class="t">{{ test.subject }} · {{ test.title }}</div>
+                        <div class="n">{{ p.studentName }}</div>
+                        <div class="c">{{ p.code }}</div>
+                        <div class="h">
+                            {% if test.codeSheetNote %}{{ test.codeSheetNote }}<br>{% endif %}
+                            {% if test.timeLimit %}Zeit: {{ test.timeLimit }} Minuten. {% endif %}Gib deinen Code auf der Testseite ein. Verlasse den Test nicht, sonst wird er gesperrt.
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,148 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao School Test.
+ *
+ * (c) Marko Cupic <m.cupic@gmx.ch>
+ * @license MIT
+ */
+
+namespace Markocupic\ContaoSchoolTest\TestType;
+
+use Markocupic\ContaoSchoolTest\Task\Angle\AngleGenerator;
+use Markocupic\ContaoSchoolTest\Task\TaskTranslator;
+use Markocupic\ContaoSchoolTest\Task\Util;
+
+/**
+ * Winkel: angles at intersecting lines, at parallels, in triangles, quadrilaterals and
+ * polygons. Every unknown angle is worth one point.
+ */
+final class AngleTestType implements PracticeTestTypeInterface
+{
+    public const ALIAS = 'angles';
+
+    public const TITLES = [
+        'scheitel' => 'Scheitel- und Nebenwinkel',
+        'parallel' => 'Stufenwinkel an Parallelen',
+        'dreieck' => 'Dreieck',
+        'viereck' => 'Viereck',
+        'vieleck' => 'Vieleck',
+        'kombi' => 'Kombiniert',
+        'profi' => 'Profi',
+        'gemischt' => 'Gemischt',
+    ];
+
+    public const INSTRUCTION = 'Berechne die gesuchten Winkel. Die Skizzen sind nicht massstabsgetreu: rechnen, nicht messen!';
+
+    private readonly AngleGenerator $generator;
+
+    public function __construct()
+    {
+        $this->generator = new AngleGenerator();
+    }
+
+    public function getAlias(): string
+    {
+        return self::ALIAS;
+    }
+
+    public function getLabel(): string
+    {
+        return 'Winkel (Scheitel-, Neben- und Stufenwinkel, Dreieck, Viereck, Vieleck)';
+    }
+
+    public function getPaletteFields(): string
+    {
+        return '{config_legend},angleKinds,tasksPerKind';
+    }
+
+    public function generate(array $test): array
+    {
+        $count = max(1, min(10, (int) ($test['tasksPerKind'] ?? 2)));
+        $sections = [];
+
+        foreach ($this->kinds($test['angleKinds'] ?? null) as $kind) {
+            $sections[] = $this->section($kind, $this->many($kind, $count));
+        }
+
+        return $sections;
+    }
+
+    public function getPracticeLabels(): array
+    {
+        return ['de' => 'Winkel', 'fr' => 'Angles', 'it' => 'Angoli', 'en' => 'Angles'];
+    }
+
+    public function getPracticeTopics(): array
+    {
+        $translator = new TaskTranslator();
+        $topics = [];
+
+        foreach (self::TITLES as $alias => $title) {
+            foreach (TaskTranslator::LANGUAGES as $lang) {
+                $topics[$alias][$lang] = $translator->text($title, $lang);
+            }
+        }
+
+        return $topics;
+    }
+
+    /**
+     * Four tasks of one kind, or four of different kinds ("gemischt").
+     */
+    public function generatePractice(string $topic, string $difficulty): array
+    {
+        if ('gemischt' === $topic) {
+            $kinds = \array_slice(Util::shuffle(AngleGenerator::KINDS), 0, 4);
+
+            return [$this->section('gemischt', array_map(fn (string $kind): array => $this->generator->build($kind), $kinds))];
+        }
+
+        $kind = \in_array($topic, AngleGenerator::KINDS, true) ? $topic : 'scheitel';
+
+        return [$this->section($kind, $this->many($kind, 4))];
+    }
+
+    public function hasPracticeDifficulty(): bool
+    {
+        return false;
+    }
+
+    private function many(string $kind, int $count): array
+    {
+        $tasks = [];
+        $seen = [];
+
+        for ($i = 0; \count($tasks) < $count && $i < $count * 20; ++$i) {
+            $task = $this->generator->build($kind);
+
+            if (!isset($seen[$task['key']])) {
+                $seen[$task['key']] = true;
+                $tasks[] = $task;
+            }
+        }
+
+        return $tasks;
+    }
+
+    private function section(string $kind, array $tasks): array
+    {
+        return ['area' => $kind, 'title' => self::TITLES[$kind], 'instruction' => self::INSTRUCTION, 'tasks' => $tasks];
+    }
+
+    /**
+     * Selected kinds from the backend (serialized array), all if nothing is selected.
+     */
+    private function kinds(mixed $value): array
+    {
+        if (\is_string($value) && '' !== $value) {
+            $value = @unserialize($value, ['allowed_classes' => false]);
+        }
+
+        $kinds = \is_array($value) ? array_values(array_intersect(AngleGenerator::KINDS, $value)) : [];
+
+        return $kinds ?: AngleGenerator::KINDS;
+    }
+}

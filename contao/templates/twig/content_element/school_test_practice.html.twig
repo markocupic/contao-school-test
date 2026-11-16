@@ -1,0 +1,14 @@
+{% extends "@Contao/content_element/_base.html.twig" %}
+
+{% block content %}
+    <div class="school-test" data-school-test-practice="{{ practice|json_encode }}">
+        <noscript><p>Zum Üben muss JavaScript eingeschaltet sein.</p></noscript>
+    </div>
+
+    {% add "school_test_css" to head %}
+        <link rel="stylesheet" href="{{ asset('css/school-test.css', 'markocupic_contao_school_test') }}">
+    {% endadd %}
+    {% add "school_test_js" to body %}
+        <script src="{{ asset('js/school-test.js', 'markocupic_contao_school_test') }}" defer></script>
+    {% endadd %}
+{% endblock %}

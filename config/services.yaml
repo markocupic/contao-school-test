@@ -1,0 +1,25 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    _instanceof:
+        Markocupic\ContaoSchoolTest\TestType\TestTypeInterface:
+            tags: ['markocupic_contao_school_test.test_type']
+
+    Markocupic\ContaoSchoolTest\:
+        resource: ../src/
+        exclude:
+            - ../src/ContaoManager/
+            - ../src/DependencyInjection/
+            - ../src/Task/Area/
+            - ../src/Task/Util.php
+            - ../src/MarkocupicContaoSchoolTest.php
+
+    Markocupic\ContaoSchoolTest\TestType\TestTypeRegistry:
+        arguments:
+            - !tagged_iterator markocupic_contao_school_test.test_type
+
+    # Called by Contao through $GLOBALS['BE_MOD'][...]['codesheet'] / ['evaluation'], must be public
+    Markocupic\ContaoSchoolTest\Controller\Backend\PrintController:
+        public: true

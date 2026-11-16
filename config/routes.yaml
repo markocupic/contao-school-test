@@ -1,0 +1,3 @@
+markocupic_contao_school_test_api:
+    resource: ../src/Controller/Api/
+    type: attribute

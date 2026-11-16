@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of Contao School Test.
+ *
+ * (c) Marko Cupic <m.cupic@gmx.ch>
+ * @license MIT
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
+ * @link https://github.com/markocupic/contao-school-test
+ */
+
+$GLOBALS['TL_LANG']['tl_st_test']['title_legend'] = 'Test';
+$GLOBALS['TL_LANG']['tl_st_test']['class_legend'] = 'Klasse';
+$GLOBALS['TL_LANG']['tl_st_test']['config_legend'] = 'Aufgaben';
+$GLOBALS['TL_LANG']['tl_st_test']['grade_legend'] = 'Note';
+$GLOBALS['TL_LANG']['tl_st_test']['time_legend'] = 'Zeit';
+$GLOBALS['TL_LANG']['tl_st_test']['security_legend'] = 'Sperre und Wiederaufnahme';
+$GLOBALS['TL_LANG']['tl_st_test']['codesheet_legend'] = 'Codeblatt';
+$GLOBALS['TL_LANG']['tl_st_test']['publish_legend'] = 'Freigabe';
+
+$GLOBALS['TL_LANG']['tl_st_test']['title'] = ['Titel', 'Zum Beispiel «Kopfrechnen Quartal 2».'];
+$GLOBALS['TL_LANG']['tl_st_test']['subject'] = ['Fach', 'Erscheint auf Codeblatt und Auswertung.'];
+$GLOBALS['TL_LANG']['tl_st_test']['type'] = ['Testtyp', 'Welche Art von Aufgaben der Test enthält.'];
+$GLOBALS['TL_LANG']['tl_st_test']['class'] = ['Klasse', 'Für jede Schülerin und jeden Schüler dieser Klasse wird beim Speichern ein Code erzeugt.'];
+$GLOBALS['TL_LANG']['tl_st_test']['difficulty'] = ['Schwierigkeit', 'Kopfrechnungstest: Leicht = Level 1 und 2, Mittel = Level 3 und 4, Anspruchsvoller = Level 5 und 6 jedes Bereichs. Spiegeln und Drehen: grössere Figuren, schräge Achsen, Drehung um 180°. Gleichungen: Leicht = nur ganzzahlige Lösungen, Mittel = auch Brüche, Anspruchsvoller = meistens Brüche.'];
+$GLOBALS['TL_LANG']['tl_st_test']['difficultyOptions'] = ['easy' => 'Leicht', 'medium' => 'Mittel', 'hard' => 'Anspruchsvoller'];
+$GLOBALS['TL_LANG']['tl_st_test']['tasksPerArea'] = ['Aufgaben pro Bereich', 'Prozent-Tabellen: 1 Tabelle, ab 8 Aufgaben 2 Tabellen (jedes Feld gibt 1 Punkt).'];
+$GLOBALS['TL_LANG']['tl_st_test']['sameTasks'] = ['Gleiche Aufgaben für alle', 'Alle Schülerinnen und Schüler lösen dieselben Aufgaben. Sie werden beim ersten Start erzeugt. Solange niemand gestartet hat, erzeugt jedes Speichern neue Aufgaben. Ohne Häkchen erhält jedes Kind eigene Zufallsaufgaben.'];
+$GLOBALS['TL_LANG']['tl_st_test']['transformKinds'] = ['Abbildungen', 'Jede gewählte Abbildung ergibt einen Abschnitt im Test. Ohne Auswahl alle vier.'];
+$GLOBALS['TL_LANG']['tl_st_test']['transformKindsOptions'] = ['achse' => 'Achsenspiegelung', 'punkt' => 'Punktspiegelung', 'drehung' => 'Drehung', 'verschiebung' => 'Verschiebung', 'achse_frei' => 'Achsenspiegelung ohne Häuschen (Konstruktion, Toleranz: Leicht 4 mm, Mittel 3 mm, Anspruchsvoller 1.5 mm)', 'punkt_frei' => 'Punktspiegelung ohne Häuschen (Konstruktion, Toleranz: Leicht 4 mm, Mittel 3 mm, Anspruchsvoller 1.5 mm)'];
+$GLOBALS['TL_LANG']['tl_st_test']['tasksPerKind'] = ['Aufgaben pro Abschnitt', 'Anzahl Aufgaben pro gewählter Abbildung, Winkelart oder Stufe. Spiegeln und Drehen: jeder richtig gesetzte Bildpunkt gibt einen Punkt (3 bis 5 pro Aufgabe). Winkel: jeder gesuchte Winkel gibt einen Punkt. Gleichungen: 1 Punkt (Stufe 1–3), 2 Punkte (Stufe 4–7) oder 3 Punkte (Stufe 8–10).'];
+$GLOBALS['TL_LANG']['tl_st_test']['angleKinds'] = ['Winkelarten', 'Jede gewählte Art ergibt einen Abschnitt im Test. Ohne Auswahl alle.'];
+$GLOBALS['TL_LANG']['tl_st_test']['angleKindsOptions'] = ['scheitel' => 'Scheitel- und Nebenwinkel', 'parallel' => 'Stufenwinkel an Parallelen', 'dreieck' => 'Dreieck', 'viereck' => 'Viereck', 'vieleck' => 'Vieleck', 'kombi' => 'Kombiniert (mehrere Winkel pro Aufgabe)', 'profi' => 'Profi (gleichschenklige und gleichseitige Dreiecke)'];
+$GLOBALS['TL_LANG']['tl_st_test']['equationLevels'] = ['Stufen', 'Jede gewählte Stufe ergibt einen Abschnitt im Test. Ohne Auswahl Stufe 1 bis 5.'];
+$GLOBALS['TL_LANG']['tl_st_test']['equationLevelsOptions'] = [1 => 'Stufe 1: x + a = b', 2 => 'Stufe 2: ax + b = c', 3 => 'Stufe 3: x auf beiden Seiten', 4 => 'Stufe 4: Lösung als Bruch', 5 => 'Stufe 5: Klammern auflösen', 6 => 'Stufe 6: Brüche als Koeffizienten', 7 => 'Stufe 7: Bruchterme', 8 => 'Stufe 8: Profi-Mix', 9 => 'Stufe 9: Binome (x² fällt weg)', 10 => 'Stufe 10: Binome mit Koeffizienten'];
+$GLOBALS['TL_LANG']['tl_st_test']['gradeStep'] = ['Rundung der Note', 'Note = 1 + 5 · Punkte / Punkte für Note 6, gerundet.'];
+$GLOBALS['TL_LANG']['tl_st_test']['gradeStepOptions'] = ['0.1' => 'auf Zehntel (4.3)', '0.25' => 'auf Viertel (4.25)', '0.5' => 'auf Halbe (4.5)'];
+$GLOBALS['TL_LANG']['tl_st_test']['pointsForSix'] = ['Punkte für Note 6', '0 = alle Punkte. Die Punktzahl hängt von «Aufgaben pro Bereich» ab und steht nach dem ersten Test auf dem Auswertungsblatt.'];
+$GLOBALS['TL_LANG']['tl_st_test']['timeLimit'] = ['Zeit in Minuten', '0 = unbegrenzt. Die Zeit läuft ab dem Start. Solange der Test gesperrt ist, steht die Uhr still. Bei 0 wird automatisch abgegeben.'];
+$GLOBALS['TL_LANG']['tl_st_test']['lockOnLeave'] = ['Bei Verlassen sperren', 'Wechselt eine Schülerin oder ein Schüler im Browser die Seite (anderer Tab, Fenster minimiert, neu laden, wegnavigieren), wird der Test gesperrt. Weiter geht es nur mit dem Wiederaufnahme-Code.'];
+$GLOBALS['TL_LANG']['tl_st_test']['resumeCode'] = ['Wiederaufnahme-Code', 'Genau 6 Zeichen (Buchstaben und Ziffern), nur für die Lehrperson. Leer lassen erzeugt automatisch einen Code.'];
+$GLOBALS['TL_LANG']['tl_st_test']['codeSheetNote'] = ['Hinweis auf dem Codeblatt', 'Zum Beispiel die Adresse der Testseite: «www.schule-ettiswil.ch/test».'];
+$GLOBALS['TL_LANG']['tl_st_test']['published'] = ['Test freigeben', 'Nur freigegebene Tests können im Frontend gestartet werden.'];
+
+$GLOBALS['TL_LANG']['tl_st_test']['children'] = 'Teilnahmen des Tests ID %s anzeigen';
+$GLOBALS['TL_LANG']['tl_st_test']['codesheet'] = 'Codeblatt drucken';
+$GLOBALS['TL_LANG']['tl_st_test']['evaluation'] = 'Auswertungsblätter drucken';

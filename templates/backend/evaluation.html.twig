@@ -1,0 +1,85 @@
+{% extends '@MarkocupicContaoSchoolTest/backend/_print_base.html.twig' %}
+
+{% block title %}Auswertung {{ test.title }}{% endblock %}
+
+{% block style %}
+    table.list { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    table.list th, table.list td { text-align: left; padding: 5px 8px; border-bottom: 1px solid #ccc; vertical-align: middle; }
+    table.list th { font-weight: 600; border-bottom: 1.5px solid #111; }
+    table.list td.r, table.list th.r { text-align: right; }
+    .head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 6px; }
+    .grade { text-align: right; }
+    .grade .g { font-size: 34px; font-weight: 700; line-height: 1; }
+    .grade .p { font-size: 15px; }
+    .tasks { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .tasks td { padding: 4px 6px; border-bottom: 1px dotted #bbb; vertical-align: middle; }
+    .tasks .nr { width: 26px; font-weight: 700; }
+    .tasks .ans { width: 22%; }
+    .tasks .sol { width: 18%; }
+    .tasks .pt { width: 52px; text-align: right; white-space: nowrap; }
+    .tasks tr.wrong .ans { color: #c33; text-decoration: line-through; }
+    .tasks tr.right .ans { color: #2b8a3e; }
+    .muted { color: #666; }
+    .notdone { padding: 12px 14px; background: #fff3d6; border-left: 4px solid #c88a00; margin-top: 12px; }
+{% endblock %}
+
+{% block toolbar %}{{ test.title }} · {{ class }} · Seite 1 ist die Klassenübersicht, danach ein Blatt pro Schülerin und Schüler{% endblock %}
+
+{% block body %}
+    <div class="page">
+        <h1>Klassenübersicht: {{ test.title }}</h1>
+        <p class="sub">{{ test.subject }} · Klasse {{ class }}{% if test.timeLimit %} · Zeit {{ test.timeLimit }} Minuten{% endif %} · Note = 1 + 5 · Punkte / {{ test.pointsForSix ?: 'Maximum' }}, gerundet {{ gradeStep }}</p>
+        <table class="list">
+            <tr><th>Name</th><th>Status</th><th class="r">Punkte</th><th class="r">Note</th><th class="r">Zeit</th><th class="r">Sperren</th></tr>
+            {% for s in sheets %}
+                <tr>
+                    <td>{{ s.row.studentName }}</td>
+                    <td>{{ s.statusLabel }}</td>
+                    <td class="r">{{ s.finished ? s.row.points ~ ' / ' ~ s.row.maxPoints : '–' }}</td>
+                    <td class="r"><strong>{{ s.finished ? s.grade : '–' }}</strong></td>
+                    <td class="r">{{ s.row.usedSeconds ? (s.row.usedSeconds // 60) ~ ':' ~ ('%02d'|format(s.row.usedSeconds % 60)) : '–' }}</td>
+                    <td class="r">{{ s.row.lockCount }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    {% for s in sheets %}
+        <div class="page">
+            <div class="head">
+                <div>
+                    <h1>{{ test.title }}</h1>
+                    <div class="sub" style="margin:0">{{ s.row.studentName }} · {{ test.subject }} · Klasse {{ class }}{% if s.row.finishedAt %} · abgegeben am {{ s.row.finishedAt|date('d.m.Y H:i') }}{% endif %}{% if s.row.lang is defined and s.row.lang and s.row.lang != 'de' %} · gelöst auf {{ {fr: 'Französisch', it: 'Italienisch', en: 'Englisch'}[s.row.lang] ?? s.row.lang }}{% endif %}</div>
+                </div>
+                {% if s.finished %}
+                    <div class="grade"><div class="g">{{ s.grade }}</div><div class="p">{{ s.row.points }} von {{ s.row.maxPoints }} Punkten</div></div>
+                {% endif %}
+            </div>
+
+            {% if not s.finished %}
+                <div class="notdone">Dieser Test ist noch nicht abgegeben (Status: {{ s.statusLabel }}).</div>
+            {% endif %}
+
+            {% for sec in s.sections %}
+                <h2><span class="letter">{{ sec.letter }}</span>{{ sec.title }}<span class="pts">{{ sec.points }} / {{ sec.max }} P.</span></h2>
+                <table class="tasks">
+                    {% for t in sec.tasks %}
+                        {% if t.figure %}
+                            <tr class="{{ t.points == t.max ? 'right' : 'wrong' }}"><td class="nr">{{ loop.index }}</td><td colspan="3"><div>{{ t.q|raw }}</div>{{ t.figure|raw }}{% if t.legend %}<div class="legend">{{ t.legend }}</div>{% endif %}</td><td class="pt">{{ t.points }} / {{ t.max }}</td></tr>
+                        {% elseif t.isTable %}
+                            <tr><td class="nr">{{ loop.index }}</td><td colspan="3">{{ t.table|raw }}</td><td class="pt">{{ t.points }} / {{ t.max }}</td></tr>
+                        {% else %}
+                            <tr class="{{ t.points == t.max ? 'right' : 'wrong' }}">
+                                <td class="nr">{{ loop.index }}</td>
+                                <td>{{ t.q|raw }}</td>
+                                <td class="ans">{{ t.given|raw }}</td>
+                                <td class="sol">{{ t.points == t.max ? '' : t.solution|raw }}</td>
+                                <td class="pt">{{ t.points }} / {{ t.max }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}
