@@ -50,6 +50,18 @@ final class TestSession
     ) {
     }
 
+    /**
+     * Safe Exam Browser settings of the test behind a code, null for an unknown code.
+     *
+     * @return array{only: bool, configKey: string}|null
+     */
+    public function sebSettings(string $code): array|null
+    {
+        $p = $this->findByCode($code);
+
+        return $p ? ['only' => (bool) $p['acceptSebBrowserOnly'], 'configKey' => (string) $p['sebConfigKey']] : null;
+    }
+
     public function start(string $code, string $lang = TaskTranslator::DEFAULT): array
     {
         $p = $this->findByCode($code);
@@ -111,6 +123,31 @@ final class TestSession
             'log' => $this->appendLog($p['log'], 'resumed:'.$lang),
         ], ['id' => $p['id']]);
         $p['status'] = ParticipationStatus::RUNNING;
+
+        return $this->runningPayload($p, $token, $this->decode($p['answers']), $lang);
+    }
+
+    /**
+     * The page was reloaded: a running test with a valid token goes on without the resume code.
+     * A locked test (lock on leave) or another device needs the resume code as before.
+     */
+    public function continue(string $code, string $token, string $lang = TaskTranslator::DEFAULT): array
+    {
+        $p = $this->findRunning($code, $token);
+
+        if (!$p) {
+            return $this->start($code, $lang);
+        }
+
+        if ($this->isTimeUp($p)) {
+            return $this->finalize($p, $this->decode($p['answers']), 'time_up');
+        }
+
+        $this->connection->update('tl_st_participation', [
+            'lang' => $lang,
+            'tstamp' => time(),
+            'log' => $this->appendLog($p['log'], 'reloaded:'.$lang),
+        ], ['id' => $p['id']]);
 
         return $this->runningPayload($p, $token, $this->decode($p['answers']), $lang);
     }
@@ -371,7 +408,7 @@ final class TestSession
         }
 
         $row = $this->connection->fetchAssociative(
-            'SELECT p.*, t.title AS testTitle, t.resumeCode, t.lockOnLeave, t.gradeStep, t.pointsForSix, t.timeLimit
+            'SELECT p.*, t.title AS testTitle, t.resumeCode, t.lockOnLeave, t.gradeStep, t.pointsForSix, t.timeLimit, t.acceptSebBrowserOnly, t.sebConfigKey
                FROM tl_st_participation p
                JOIN tl_st_test t ON t.id = p.pid
               WHERE p.code = ? AND t.published = 1',

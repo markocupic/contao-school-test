@@ -183,6 +183,14 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
             'eval' => ['multiple' => true, 'tl_class' => 'clr'],
             'sql' => 'blob NULL',
         ],
+        'binomialTopics' => [
+            'inputType' => 'checkbox',
+            'exclude' => true,
+            'options' => ['rechteckfiguren', 'geschickt', 'rechteckmodell', 'ausmultiplizieren', 'faktorisieren'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['binomialTopicsOptions'],
+            'eval' => ['multiple' => true, 'tl_class' => 'clr'],
+            'sql' => 'blob NULL',
+        ],
         'equationLevels' => [
             'inputType' => 'checkbox',
             'exclude' => true,
@@ -228,6 +236,20 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
             'default' => true,
             'eval' => ['tl_class' => 'w50 m12'],
             'sql' => ['type' => 'boolean', 'default' => true],
+        ],
+        'acceptSebBrowserOnly' => [
+            'inputType' => 'checkbox',
+            'exclude' => true,
+            // New tests: only with the Safe Exam Browser; existing tests stay as they are
+            'default' => true,
+            'eval' => ['tl_class' => 'w50 m12'],
+            'sql' => ['type' => 'boolean', 'default' => false],
+        ],
+        'sebConfigKey' => [
+            'inputType' => 'text',
+            'exclude' => true,
+            'eval' => ['maxlength' => 64, 'decodeEntities' => true, 'tl_class' => 'w50'],
+            'sql' => "varchar(64) NOT NULL default ''",
         ],
         'resumeCode' => [
             'inputType' => 'text',

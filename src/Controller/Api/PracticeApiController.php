@@ -37,10 +37,15 @@ use Symfony\Component\Routing\Attribute\Route;
  * the student asks for the evaluation.
  */
 #[AsController]
-#[Route('/_school_test_practice/{action}', name: 'markocupic_school_test_practice_api', requirements: ['action' => 'new|check'], defaults: ['_scope' => 'frontend', '_token_check' => false], methods: ['POST'])]
+#[Route('/_school_test_practice/{action}', name: 'markocupic_school_test_practice_api', requirements: ['action' => 'new|try|check'], defaults: ['_scope' => 'frontend', '_token_check' => false], methods: ['POST'])]
 final class PracticeApiController
 {
     private const SESSION_KEY = 'markocupic_school_test_practice_';
+
+    /**
+     * Open practice rounds per element and session (one per browser tab).
+     */
+    private const MAX_ROUNDS = 8;
 
     public function __construct(
         private readonly Connection $connection,
@@ -82,17 +87,26 @@ final class PracticeApiController
 
             $difficulty = \in_array($data['difficulty'] ?? '', PracticeTestTypeInterface::DIFFICULTIES, true) ? (string) $data['difficulty'] : 'medium';
             $sections = $type->generatePractice((string) ($data['topic'] ?? ''), $difficulty);
-            $session->set($key, $sections);
+
+            // Several rounds side by side (one per browser tab), the oldest go first
+            $rounds = self::rounds($session->get($key));
+            $round = bin2hex(random_bytes(8));
+            $rounds[$round] = ['t' => time(), 's' => $sections];
+            uasort($rounds, static fn (array $a, array $b): int => $b['t'] <=> $a['t']);
+            $session->set($key, \array_slice($rounds, 0, self::MAX_ROUNDS, true));
 
             return $this->json([
                 'state' => 'running',
+                'round' => $round,
                 'remaining' => null,
                 'lang' => $lang,
                 'sections' => $this->presenter->toPublic($sections, $lang),
             ]);
         }
 
-        $sections = $session->get($key);
+        $rounds = self::rounds($session->get($key));
+        $round = (string) ($data['round'] ?? '');
+        $sections = $rounds[$round]['s'] ?? null;
 
         if (!\is_array($sections) || !$sections) {
             return $this->json(['state' => 'error', 'error' => 'expired', 'message' => 'Die Übung ist abgelaufen. Starte eine neue Übung.'], 409);
@@ -100,6 +114,12 @@ final class PracticeApiController
 
         $answers = $this->evaluator->sanitizeAnswers($sections, $data['answers'] ?? []);
         $result = $this->evaluator->evaluate($sections, $answers);
+
+        // Check one task without revealing the solution; the round stays open for corrections
+        if ('try' === $action) {
+            return $this->json($this->tryTask($sections, $result, $answers, (string) ($data['task'] ?? '')));
+        }
+
         $tasks = [];
 
         foreach ($sections as $si => $section) {
@@ -111,9 +131,17 @@ final class PracticeApiController
                     'max' => $r['max'],
                     'correct' => $r['correct'],
                     'solution' => $this->translator->units($this->solutions->solution($task['a']), $lang),
-                    'cells' => array_map(fn (string $c): string => $this->translator->units($c, $lang), $this->solutions->tableSolutions($task['a'])),
+                    'cells' => array_map(fn (string $c): string => $this->translator->units($this->translator->text($c, $lang), $lang), $this->solutions->tableSolutions($task['a'])),
                     'way' => $this->translator->way((string) $task['way'], $lang),
+                    // Terms: equivalent, but not in the required form
+                    'notes' => $r['notes'] ?? [],
                 ];
+
+                // Terms: decimal comma in French and Italian
+                if ('terms' === ($task['a']['type'] ?? '')) {
+                    $tasks[$id]['cells'] = array_map(fn (string $c): string => $this->translator->decimals($c, $lang), $tasks[$id]['cells']);
+                    $tasks[$id]['way'] = $this->translator->decimals($tasks[$id]['way'], $lang);
+                }
 
                 // Angles: the sketch with the solution
                 if ('angles' === ($task['a']['type'] ?? '')) {
@@ -122,18 +150,8 @@ final class PracticeApiController
 
                 // Triangle constructions: the solution triangle and the measures of the student's triangle
                 if ('triangle' === ($task['a']['type'] ?? '')) {
-                    $measured = AnswerChecker::triangleMeasures(\is_array($answers[$id] ?? null) ? $answers[$id] : []);
                     $tasks[$id]['shape'] = $task['a']['shape'];
-                    $tasks[$id]['given'] = array_map(static function (array $g) use ($measured): array {
-                        $angle = \in_array($g['k'], TriangleGeometry::ANGLES, true);
-
-                        return [
-                            'label' => TriangleGenerator::LABELS[$g['k']],
-                            'v' => $g['v'],
-                            'unit' => $angle ? '°' : ' cm',
-                            'yours' => null === $measured ? null : round($measured[$g['k']], $angle ? 1 : 2),
-                        ];
-                    }, $task['a']['given']);
+                    $tasks[$id]['given'] = self::given($task, $answers[$id] ?? null);
                 }
 
                 // Drawing tasks: the solution points for the board, and a hint for rotations in the wrong direction
@@ -144,10 +162,74 @@ final class PracticeApiController
             }
         }
 
-        // One evaluation per round
-        $session->remove($key);
+        // One evaluation per round; the other tabs keep theirs
+        unset($rounds[$round]);
+        $session->set($key, $rounds);
 
         return $this->json(['state' => 'checked', 'points' => $result['points'], 'max' => $result['max'], 'tasks' => $tasks]);
+    }
+
+    /**
+     * Open rounds of an element: round id => ['t' => created, 's' => sections].
+     */
+    private static function rounds(mixed $value): array
+    {
+        if (!\is_array($value)) {
+            return [];
+        }
+
+        return array_filter($value, static fn ($r, $k): bool => \is_string($k) && preg_match('/^[0-9a-f]{16}$/', $k) && \is_array($r) && isset($r['t'], $r['s']) && \is_array($r['s']), ARRAY_FILTER_USE_BOTH);
+    }
+
+    /**
+     * Result of a single task: which fields are right, but no solution, no way and no solution figure.
+     */
+    private function tryTask(array $sections, array $result, array $answers, string $id): array
+    {
+        if (!preg_match('/^s(\d+)t(\d+)$/', $id, $m) || !isset($sections[(int) $m[1]]['tasks'][(int) $m[2]])) {
+            return ['state' => 'error', 'error' => 'unavailable', 'message' => 'Diese Übung ist nicht verfügbar.'];
+        }
+
+        $task = $sections[(int) $m[1]]['tasks'][(int) $m[2]];
+        $r = $result['sections'][(int) $m[1]]['tasks'][(int) $m[2]];
+        $out = [
+            'state' => 'tried',
+            'task' => $id,
+            'points' => $r['points'],
+            'max' => $r['max'],
+            'correct' => $r['correct'],
+            'notes' => $r['notes'] ?? [],
+        ];
+
+        // Triangles: the given measures (already in the question) with the student's values
+        if ('triangle' === ($task['a']['type'] ?? '')) {
+            $out['given'] = self::given($task, $answers[$id] ?? null);
+        }
+
+        if ('points' === ($task['a']['type'] ?? '')) {
+            $out['wrongDir'] = isset($task['a']['wrongDirection']) && ($answers[$id] ?? null) === $task['a']['wrongDirection'];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Given measures of a triangle construction and what the student's triangle measures.
+     */
+    private static function given(array $task, mixed $answer): array
+    {
+        $measured = AnswerChecker::triangleMeasures(\is_array($answer) ? $answer : []);
+
+        return array_map(static function (array $g) use ($measured): array {
+            $angle = \in_array($g['k'], TriangleGeometry::ANGLES, true);
+
+            return [
+                'label' => TriangleGenerator::LABELS[$g['k']],
+                'v' => $g['v'],
+                'unit' => $angle ? '°' : ' cm',
+                'yours' => null === $measured ? null : round($measured[$g['k']], $angle ? 1 : 2),
+            ];
+        }, $task['a']['given']);
     }
 
     private function json(array $data, int $status = 200): JsonResponse

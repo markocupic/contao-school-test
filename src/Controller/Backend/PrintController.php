@@ -90,6 +90,7 @@ class PrintController
                             'points' => $this->renderBoard($task['a'], $given, $r['correct']),
                             'triangle' => $this->renderTriangle($task['a'], $given, $r['correct']),
                             'angles' => $task['a']['solSvg'].$this->renderAngles($task['a'], \is_array($given) ? $given : [], $r['correct']),
+                            'terms' => ($task['a']['svg'] ?? '').$this->renderTerms($task['a'], \is_array($given) ? $given : [], $r['correct']),
                             default => '',
                         },
                         'legend' => 'triangle' === $task['a']['type'] ? 'Lösung grün gestrichelt auf die Seite AB gelegt · Seiten: grün alle drei als Strecken gezeichnet, rot nicht' : ('points' === $task['a']['type'] ? 'Lösung grün gestrichelt'.(empty($task['a']['draw']['free']) ? '' : ', Kreise: '.(string) round((float) ($task['a']['tol'] ?? 0.6) * 5, 1).' mm Toleranz').' · gesetzte Punkte: grün richtig, rot falsch'.(empty($task['a']['draw']['ggb']) ? '' : ' · Strecken: grün richtig verbunden, rot falsch') : ''),
@@ -182,6 +183,30 @@ class PrintController
         }
 
         return '<div class="angans">'.implode(' · ', $out).'</div>';
+    }
+
+    /**
+     * Terms: every field with the student's answer, the solution next to wrong ones.
+     */
+    private function renderTerms(array $a, array $given, array $correct): string
+    {
+        $out = [];
+
+        foreach ($a['fields'] as $i => $f) {
+            $v = $a['v'][$i];
+            $raw = trim((string) ($given[$i] ?? ''));
+
+            if (isset($v['choice'])) {
+                $shown = '' === $raw ? '–' : ((int) $raw ? 'Produktterm' : 'Summenterm');
+            } else {
+                $shown = '' === $raw ? '–' : StringUtil::specialchars($raw).($f['unit'] ?? '');
+            }
+
+            $answer = !empty($correct[$i]) ? '<span class="okv">'.$shown.'</span>' : '<s>'.$shown.'</s> <b>'.$v['show'].'</b>';
+            $out[] = '<div>'.trim(($f['prompt'] ?? '').' '.$answer).'</div>';
+        }
+
+        return '<div class="angans">'.implode('', $out).'</div>';
     }
 
     private function renderGiven(array $a, mixed $given): string

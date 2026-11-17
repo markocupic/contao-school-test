@@ -15,6 +15,36 @@
     /* ---------- Languages: the student chooses before the test, German is the default ---------- */
 
     const LANGS = {de: 'Deutsch', fr: 'Français', it: 'Italiano', en: 'English'};
+
+    // sessionStorage: survives a reload, belongs to this tab only and is gone when the tab is closed
+    // (shared school computers). Full or blocked storage: try without the constructions, else give up.
+    const store = {
+        get(key) {
+            try {
+                return JSON.parse(window.sessionStorage.getItem(key) || 'null');
+            } catch (e) {
+                return null;
+            }
+        },
+        set(key, value) {
+            try {
+                window.sessionStorage.setItem(key, JSON.stringify(value));
+            } catch (e) {
+                try {
+                    window.sessionStorage.setItem(key, JSON.stringify(Object.assign({}, value, {ggb: {}})));
+                } catch (e2) {
+                    // Private mode or no space: the page works without
+                }
+            }
+        },
+        remove(key) {
+            try {
+                window.sessionStorage.removeItem(key);
+            } catch (e) {
+                // Not available
+            }
+        },
+    };
     const I18N = {
         de: {
             chooseMain: 'Was möchtest du üben?', chooseType: 'Thema', main_arithmetik: 'Arithmetik', main_algebra: 'Algebra', main_geometrie: 'Geometrie',
@@ -39,14 +69,18 @@
             check: 'Auswerten', again: 'Neue Übung', timeUp: 'Die Zeit ist abgelaufen.', checkError: 'Die Auswertung hat nicht geklappt.',
             fieldsRight: '{0} von {1} Feldern richtig.', right: 'Richtig.', solution: 'Lösung', scoreSmall: '{0} / {1} Punkte',
             practiceResult: '<strong>{0} von {1} Punkten ({2} %).</strong> Schau dir die Lösungswege der falschen Aufgaben an und starte dann eine neue Übung.',
+            tryBtn: 'Prüfen', checkAll: 'Übung auswerten', tryWrong: 'Noch nicht richtig.', tryAgain: 'Korrigiere und prüfe nochmals.',
+            tryHint: 'Mit «Prüfen» bei einer Aufgabe siehst du, ob deine Eingabe stimmt. Die Lösung bleibt verborgen: Du kannst korrigieren und nochmals prüfen. Erst «Übung auswerten» ganz unten zeigt alle Lösungen. Danach lassen sich die Eingaben nicht mehr ändern.',
             err_invalid_code: 'Diesen Code gibt es nicht. Prüfe deine Eingabe.', err_invalid_resume_code: 'Der Wiederaufnahme-Code stimmt nicht.',
             err_too_many_attempts: 'Zu viele falsche Versuche. Warte 15 Minuten oder melde dich bei deiner Lehrperson.',
+            err_seb_required: 'Dieser Test kann nur mit dem Safe Exam Browser gelöst werden.',
             err_unknown_type: 'Dieser Test kann nicht gestartet werden. Melde dich bei deiner Lehrperson.',
             geoOff: 'Bei schweren Aufgaben ist das Geodreieck nicht erlaubt.',
             geoShow: 'Geodreieck einblenden', geoHide: 'Geodreieck ausblenden', geoLeft: 'Geodreieck nach links drehen', geoRight: 'Geodreieck nach rechts drehen', geoHint: 'Am Geodreieck ziehen verschiebt es, am runden Griff drehst du es.',
             imagePoints: 'Bildpunkte', board: 'Zeichenfläche: Klicke auf einen Gitterpunkt, um den gewählten Bildpunkt zu setzen.', clearPoints: 'Alle Punkte entfernen', pointsRight: '{0} von {1} Bildpunkten richtig.', solutionDashed: 'Die Lösung ist grün gestrichelt eingezeichnet.', wrongDir: 'Du hast in die falsche Richtung gedreht.',
             err_expired: 'Die Übung ist abgelaufen. Starte eine neue Übung.', err_unavailable: 'Diese Übung ist nicht verfügbar.',
             helpHide: 'Hilfslinien ausblenden', helpShow: 'Hilfslinien einblenden', ggbHint: 'Klicke zuerst auf A′, B′ … und dann in der Zeichnung auf die Stelle, am besten auf einen Schnittpunkt. Einen gesetzten Bildpunkt kannst du mit dem Pfeil verschieben. Verbinde zum Schluss die Bildpunkte mit «Strecke» zur Bildfigur. Hilfslinien darfst du löschen oder ausblenden, die gesetzten Punkte bleiben.', edgesOk: 'Die Bildfigur ist richtig verbunden.', edgesBad: 'Die Bildpunkte sind nicht richtig mit Strecken verbunden.', ggbLoading: 'GeoGebra wird geladen …', ggbError: 'GeoGebra konnte nicht geladen werden.', ggbRetry: 'Nochmals versuchen',
+            opt_sum: 'Summenterm', opt_product: 'Produktterm', tag_sum: 'als Summe', tag_product: 'als Produkt', note_sum: 'Gleichwertig, aber noch nicht ohne Klammern und zusammengefasst.', note_product: 'Gleichwertig, aber noch nicht als Produkt oder nicht vollständig faktorisiert.',
             vertices: 'Ecken', triHint: 'Die ersten drei Punkte heissen A, B und C. Willst du einem anderen Punkt einen dieser Namen geben, klicke zuerst auf A, B oder C und dann auf den Punkt. Zeichne zum Schluss die drei Seiten als Strecken. Hilfslinien darfst du löschen oder ausblenden, die Ecken bleiben.', measuresRight: '{0} von {1} Massen stimmen:', yours: 'bei dir {0}', sidesOk: 'Die drei Seiten sind als Strecken gezeichnet.', sidesBad: 'Zeichne die drei Seiten als Strecken.', solutionTri: 'Die Lösung ist grün gestrichelt auf deine Seite AB gelegt.',
         },
         fr: {
@@ -72,14 +106,18 @@
             check: 'Corriger', again: 'Nouvel entraînement', timeUp: 'Le temps est écoulé.', checkError: 'La correction n’a pas fonctionné.',
             fieldsRight: '{0} cases justes sur {1}.', right: 'Juste.', solution: 'Solution', scoreSmall: '{0} / {1} points',
             practiceResult: '<strong>{0} points sur {1} ({2}&nbsp;%).</strong> Regarde la démarche des tâches fausses, puis commence un nouvel entraînement.',
+            tryBtn: 'Vérifier', checkAll: 'Corriger l’entraînement', tryWrong: 'Pas encore juste.', tryAgain: 'Corrige et vérifie encore.',
+            tryHint: 'Avec «&nbsp;Vérifier&nbsp;» à côté d’une tâche, tu vois si ta réponse est juste. La solution reste cachée&nbsp;: tu peux corriger et vérifier encore. Seul «&nbsp;Corriger l’entraînement&nbsp;» tout en bas montre toutes les solutions. Ensuite, les réponses ne peuvent plus être modifiées.',
             err_invalid_code: 'Ce code n’existe pas. Vérifie ta saisie.', err_invalid_resume_code: 'Le code de reprise est incorrect.',
             err_too_many_attempts: 'Trop d’essais erronés. Attends 15 minutes ou adresse-toi à ton enseignant·e.',
+            err_seb_required: 'Ce test ne peut être fait qu’avec le Safe Exam Browser.',
             err_unknown_type: 'Ce test ne peut pas commencer. Adresse-toi à ton enseignant·e.',
             geoOff: 'L’équerre n’est pas autorisée pour les tâches difficiles.',
             geoShow: 'Afficher l’équerre', geoHide: 'Masquer l’équerre', geoLeft: 'Tourner l’équerre vers la gauche', geoRight: 'Tourner l’équerre vers la droite', geoHint: 'Fais glisser l’équerre pour la déplacer, utilise la poignée ronde pour la tourner.',
             imagePoints: 'Points images', board: 'Surface de dessin&nbsp;: clique sur un point du quadrillage pour placer le point image choisi.', clearPoints: 'Supprimer tous les points', pointsRight: '{0} points images justes sur {1}.', solutionDashed: 'La solution est dessinée en vert pointillé.', wrongDir: 'Tu as tourné dans le mauvais sens.',
             err_expired: 'L’entraînement a expiré. Commence un nouvel entraînement.', err_unavailable: 'Cet entraînement n’est pas disponible.',
             helpHide: 'Masquer les lignes de construction', helpShow: 'Afficher les lignes de construction', ggbHint: 'Clique d’abord sur A′, B′ … puis dans le dessin à l’endroit voulu, de préférence sur un point d’intersection. Tu peux déplacer un point image placé avec la flèche. Pour finir, relie les points images avec «&nbsp;Segment&nbsp;» pour obtenir la figure image. Tu peux effacer ou masquer les lignes de construction, les points placés restent.', edgesOk: 'La figure image est correctement reliée.', edgesBad: 'Les points images ne sont pas correctement reliés par des segments.', ggbLoading: 'Chargement de GeoGebra …', ggbError: 'GeoGebra n’a pas pu être chargé.', ggbRetry: 'Réessayer',
+            opt_sum: 'Somme', opt_product: 'Produit', tag_sum: 'sous forme de somme', tag_product: 'sous forme de produit', note_sum: 'Équivalent, mais pas encore sans parenthèses et réduit.', note_product: 'Équivalent, mais pas encore sous forme de produit ou pas complètement factorisé.',
             vertices: 'Sommets', triHint: 'Les trois premiers points s’appellent A, B et C. Pour donner un de ces noms à un autre point, clique d’abord sur A, B ou C, puis sur le point. Pour finir, trace les trois côtés comme segments. Tu peux effacer ou masquer les lignes de construction, les sommets restent.', measuresRight: '{0} mesures sur {1} sont justes&nbsp;:', yours: 'chez toi {0}', sidesOk: 'Les trois côtés sont tracés comme segments.', sidesBad: 'Trace les trois côtés comme segments.', solutionTri: 'La solution est tracée en vert pointillé sur ton côté AB.',
         },
         it: {
@@ -105,14 +143,18 @@
             check: 'Correggere', again: 'Nuovo esercizio', timeUp: 'Il tempo è scaduto.', checkError: 'La correzione non è riuscita.',
             fieldsRight: '{0} caselle giuste su {1}.', right: 'Giusto.', solution: 'Soluzione', scoreSmall: '{0} / {1} punti',
             practiceResult: '<strong>{0} punti su {1} ({2} %).</strong> Guarda il procedimento degli esercizi sbagliati e poi inizia un nuovo esercizio.',
+            tryBtn: 'Verifica', checkAll: 'Correggi l’esercizio', tryWrong: 'Non ancora giusto.', tryAgain: 'Correggi e verifica di nuovo.',
+            tryHint: 'Con «Verifica» accanto a un esercizio vedi se la tua risposta è giusta. La soluzione resta nascosta: puoi correggere e verificare di nuovo. Solo «Correggi l’esercizio» in fondo mostra tutte le soluzioni. Dopo, le risposte non si possono più modificare.',
             err_invalid_code: 'Questo codice non esiste. Controlla l’inserimento.', err_invalid_resume_code: 'Il codice di ripresa non è corretto.',
             err_too_many_attempts: 'Troppi tentativi errati. Aspetta 15 minuti o rivolgiti al tuo docente.',
+            err_seb_required: 'Questo test si può svolgere solo con il Safe Exam Browser.',
             err_unknown_type: 'Questo test non può essere avviato. Rivolgiti al tuo docente.',
             geoOff: 'Per i compiti difficili la squadra non è permessa.',
             geoShow: 'Mostra la squadra', geoHide: 'Nascondi la squadra', geoLeft: 'Ruota la squadra a sinistra', geoRight: 'Ruota la squadra a destra', geoHint: 'Trascina la squadra per spostarla, usa la maniglia rotonda per ruotarla.',
             imagePoints: 'Punti immagine', board: 'Area di disegno: clicca su un punto della griglia per posizionare il punto immagine scelto.', clearPoints: 'Eliminare tutti i punti', pointsRight: '{0} punti immagine giusti su {1}.', solutionDashed: 'La soluzione è disegnata in verde tratteggiato.', wrongDir: 'Hai ruotato nella direzione sbagliata.',
             err_expired: 'L’esercizio è scaduto. Inizia un nuovo esercizio.', err_unavailable: 'Questo esercizio non è disponibile.',
             helpHide: 'Nascondi le linee di costruzione', helpShow: 'Mostra le linee di costruzione', ggbHint: 'Clicca prima su A′, B′ … e poi nel disegno nel punto giusto, possibilmente su un punto di intersezione. Puoi spostare un punto immagine già posizionato con la freccia. Alla fine collega i punti immagine con «Segmento» per ottenere la figura immagine. Puoi cancellare o nascondere le linee di costruzione, i punti posizionati restano.', edgesOk: 'La figura immagine è collegata correttamente.', edgesBad: 'I punti immagine non sono collegati correttamente con dei segmenti.', ggbLoading: 'Caricamento di GeoGebra …', ggbError: 'Non è stato possibile caricare GeoGebra.', ggbRetry: 'Riprova',
+            opt_sum: 'Somma', opt_product: 'Prodotto', tag_sum: 'come somma', tag_product: 'come prodotto', note_sum: 'Equivalente, ma non ancora senza parentesi e semplificato.', note_product: 'Equivalente, ma non ancora come prodotto o non scomposto completamente.',
             vertices: 'Vertici', triHint: 'I primi tre punti si chiamano A, B e C. Per dare uno di questi nomi a un altro punto, clicca prima su A, B o C e poi sul punto. Alla fine traccia i tre lati come segmenti. Puoi cancellare o nascondere le linee di costruzione, i vertici restano.', measuresRight: '{0} misure su {1} sono giuste:', yours: 'da te {0}', sidesOk: 'I tre lati sono tracciati come segmenti.', sidesBad: 'Traccia i tre lati come segmenti.', solutionTri: 'La soluzione è disegnata in verde tratteggiato sul tuo lato AB.',
         },
         en: {
@@ -138,14 +180,18 @@
             check: 'Check', again: 'New practice', timeUp: 'Time is up.', checkError: 'The check did not work.',
             fieldsRight: '{0} of {1} fields correct.', right: 'Correct.', solution: 'Solution', scoreSmall: '{0} / {1} points',
             practiceResult: '<strong>{0} of {1} points ({2} %).</strong> Look at the steps of the wrong tasks, then start a new practice.',
+            tryBtn: 'Check', checkAll: 'Finish and show solutions', tryWrong: 'Not right yet.', tryAgain: 'Correct it and check again.',
+            tryHint: 'Use «Check» next to a task to see whether your answer is right. The solution stays hidden, so you can correct it and check again. Only «Finish and show solutions» at the bottom shows all solutions. After that, the answers can no longer be changed.',
             err_invalid_code: 'This code does not exist. Check your entry.', err_invalid_resume_code: 'The resume code is wrong.',
             err_too_many_attempts: 'Too many wrong attempts. Wait 15 minutes or ask your teacher.',
+            err_seb_required: 'This test can only be taken with the Safe Exam Browser.',
             err_unknown_type: 'This test cannot be started. Ask your teacher.',
             geoOff: 'The set square is not allowed for hard tasks.',
             geoShow: 'Show the set square', geoHide: 'Hide the set square', geoLeft: 'Rotate the set square to the left', geoRight: 'Rotate the set square to the right', geoHint: 'Drag the set square to move it, use the round handle to rotate it.',
             imagePoints: 'Image points', board: 'Drawing area: click a grid point to place the selected image point.', clearPoints: 'Remove all points', pointsRight: '{0} of {1} image points correct.', solutionDashed: 'The solution is drawn as a dashed green line.', wrongDir: 'You rotated in the wrong direction.',
             err_expired: 'The practice has expired. Start a new practice.', err_unavailable: 'This practice is not available.',
             helpHide: 'Hide construction lines', helpShow: 'Show construction lines', ggbHint: 'First click A′, B′ … and then the spot in the drawing, ideally an intersection point. You can move a placed image point with the arrow tool. Finally, join the image points with “Segment” to form the image figure. You may delete or hide construction lines; the placed points stay.', edgesOk: 'The image figure is joined correctly.', edgesBad: 'The image points are not joined correctly with segments.', ggbLoading: 'Loading GeoGebra …', ggbError: 'GeoGebra could not be loaded.', ggbRetry: 'Try again',
+            opt_sum: 'Sum', opt_product: 'Product', tag_sum: 'as a sum', tag_product: 'as a product', note_sum: 'Equivalent, but not yet without brackets and simplified.', note_product: 'Equivalent, but not yet a product or not completely factorised.',
             vertices: 'Vertices', triHint: 'The first three points are called A, B and C. To give one of these names to another point, first click A, B or C and then the point. Finally draw the three sides as segments. You may delete or hide construction lines; the vertices stay.', measuresRight: '{0} of {1} measures are right:', yours: 'yours {0}', sidesOk: 'The three sides are drawn as segments.', sidesBad: 'Draw the three sides as segments.', solutionTri: 'The solution is drawn in dashed green on your side AB.',
         },
     };
@@ -168,6 +214,37 @@
 
         return 'fr' === lang || 'it' === lang ? t.replace('.', ',') : t;
     };
+
+    // Safe Exam Browser: with the modern WebView (macOS, iOS) SEB sends no header, the server then
+    // checks the Config Key hash of this page from the SEB JavaScript API
+    const sebInfo = () => {
+        const seb = window.SafeExamBrowser;
+
+        if (!seb) {
+            return null;
+        }
+
+        return {ck: String(seb.security?.configKey || ''), url: location.href.split('#')[0], v: String(seb.version || '')};
+    };
+
+    // SEB for macOS and iOS fills the keys only after this call (asynchronously)
+    const sebReady = new Promise((resolve) => {
+        try {
+            const update = window.SafeExamBrowser?.security?.updateKeys;
+
+            if (typeof update !== 'function') {
+                resolve();
+
+                return;
+            }
+
+            update.call(window.SafeExamBrowser.security, () => resolve());
+            setTimeout(resolve, 1500);
+        } catch (e) {
+            // Not in SEB or an older version
+            resolve();
+        }
+    });
 
     const errorText = (res, fallbackKey) => (res && res.error && I18N.de['err_' + res.error] ? tx('err_' + res.error) : tx(fallbackKey));
 
@@ -202,6 +279,8 @@
             const fields = a.fields.map((f, i) => `<label class="st-angin"><span>${esc(f.label)}&nbsp;=</span><input data-k="${t.id}" data-col="${i}" inputmode="decimal" autocomplete="off" aria-label="${esc(f.label)}"><span>${esc(f.unit)}</span></label>`).join('');
 
             return `<li class="st-task st-wide st-ang" data-task="${t.id}"><span class="st-nr">${ti + 1}</span><div class="st-body"><span class="st-q">${t.q}</span><div class="st-angfig">${a.svg}</div><div class="st-angins">${fields}</div></div></li>`;
+        } else if ('terms' === a.type) {
+            return termsHtml(t, ti);
         } else if ('points' === a.type || 'triangle' === a.type) {
             return `<li class="st-task st-wide st-geo${'triangle' === a.type ? ' st-tri' : ''}" data-task="${t.id}"><span class="st-nr">${ti + 1}</span><div class="st-body"><span class="st-q">${t.q}</span>${boardHtml(t)}</div></li>`;
         } else if ('table' === a.type) {
@@ -338,7 +417,120 @@
         return Array.from({length: n}, (_, i) => (Array.isArray(v) && Array.isArray(v[i]) && 2 === v[i].length && Number.isFinite(+v[i][0]) && Number.isFinite(+v[i][1]) && null !== v[i][0] && null !== v[i][1] && !Array.isArray(v[i][0]) ? [+v[i][0], +v[i][1]] : null));
     };
 
+    /* ---------- Terms: fields for terms and numbers, choices, multiplication cross ---------- */
+
+    // Typed term as it looks on paper: x^2 → x², * → ·
+    const fmtTerm = (v) => esc(v).replace(/\^\s*(\d)/g, '<sup>$1</sup>').replace(/\*/g, '·').replace(/-/g, '−');
+
+    function termsHtml(t, ti) {
+        const a = t.a;
+        const field = (f, i) => {
+            const tag = f.tag ? `<span class="st-ttag">${tx('tag_' + f.tag)}</span>` : '';
+
+            if ('choice' === f.kind) {
+                return `<div class="st-trow" data-row="${i}">${tag}<span class="st-tq">${f.prompt}</span><span class="st-choice" role="group"><button type="button" class="st-opt" data-pick="0">${tx('opt_sum')}</button><button type="button" class="st-opt" data-pick="1">${tx('opt_product')}</button></span><input type="hidden" data-k="${t.id}" data-col="${i}"></div>`;
+            }
+
+            const num = 'num' === f.kind;
+            const attrs = num ? 'inputmode="decimal"' : 'inputmode="text" autocapitalize="off" spellcheck="false"';
+
+            return `<div class="st-trow" data-row="${i}">${tag}<span class="st-tq">${f.prompt || ''}</span><span class="st-tin"><input class="${num ? 'st-tnum' : 'st-term'}" data-k="${t.id}" data-col="${i}" ${attrs} autocomplete="off" aria-label="${esc((f.prompt || '').replace(/<[^>]+>/g, ''))}">${f.unit ? `<span class="st-unit">${esc(f.unit)}</span>` : ''}</span>${num ? '' : '<span class="st-prev" aria-hidden="true"></span>'}</div>`;
+        };
+
+        let body;
+
+        if (a.kreuz) {
+            // Multiplication cross: given numbers, fields, the left headers repeat the top ones
+            const cell = (c) => {
+                if (undefined !== c.f) {
+                    return `<td class="st-kin"><input class="st-tnum" data-k="${t.id}" data-col="${c.f}" inputmode="decimal" autocomplete="off" aria-label="${tx('column', c.f + 1)}"></td>`;
+                }
+
+                return undefined !== c.m ? `<td class="st-kmir" data-mirror="${c.m}"></td>` : `<td>${esc(c.t)}</td>`;
+            };
+            const total = a.kreuz[3].total;
+            body = `<table class="st-kreuz">${[0, 1, 2].map((r) => `<tr>${a.kreuz[r].map(cell).join('')}</tr>`).join('')}</table>${field(a.fields[total], total)}`;
+        } else {
+            body = a.fields.map(field).join('');
+        }
+
+        const keys = a.fields.some((f) => 'term' === f.kind)
+            ? `<div class="st-keys">${[['²', 'x²'], ['³', 'x³'], ['(', '('], [')', ')']].map(([k, label]) => `<button type="button" class="st-key" data-key="${k}" tabindex="-1">${label}</button>`).join('')}</div>`
+            : '';
+
+        return `<li class="st-task st-wide st-terms" data-task="${t.id}"><span class="st-nr">${ti + 1}</span><div class="st-body"><span class="st-q">${t.q}</span>${a.svg ? `<div class="st-binfig-wrap">${a.svg}</div>` : ''}<div class="st-tfields">${body}</div>${keys}</div></li>`;
+    }
+
+    function mountTerms(root) {
+        root.querySelectorAll('.st-terms:not([data-mounted])').forEach((li) => {
+            li.dataset.mounted = '1';
+            let last = null;
+
+            // Preview of the typed term
+            li.querySelectorAll('input.st-term').forEach((inp) => {
+                const prev = inp.closest('.st-trow').querySelector('.st-prev');
+                const show = () => {
+                    prev.innerHTML = inp.value.trim() ? '= ' + fmtTerm(inp.value) : '';
+                };
+                inp.addEventListener('input', show);
+                inp.addEventListener('focus', () => {
+                    last = inp;
+                });
+                show();
+            });
+
+            // Keys for powers and brackets: into the field used last
+            li.querySelectorAll('[data-key]').forEach((b) => {
+                b.addEventListener('mousedown', (e) => e.preventDefault());
+                b.addEventListener('click', () => {
+                    const inp = last || li.querySelector('input.st-term');
+
+                    if (!inp || inp.disabled) {
+                        return;
+                    }
+
+                    const start = inp.selectionStart ?? inp.value.length;
+                    const end = inp.selectionEnd ?? inp.value.length;
+                    inp.value = inp.value.slice(0, start) + b.dataset.key + inp.value.slice(end);
+                    inp.focus();
+                    inp.setSelectionRange(start + 1, start + 1);
+                    inp.dispatchEvent(new Event('input', {bubbles: true}));
+                });
+            });
+
+            // Summenterm / Produktterm
+            li.querySelectorAll('.st-choice').forEach((group) => {
+                const inp = group.parentNode.querySelector('input[type="hidden"]');
+                const mark = () => group.querySelectorAll('[data-pick]').forEach((b) => {
+                    b.classList.toggle('on', b.dataset.pick === inp.value);
+                    b.setAttribute('aria-pressed', String(b.dataset.pick === inp.value));
+                });
+                group.querySelectorAll('[data-pick]').forEach((b) => b.addEventListener('click', () => {
+                    if (inp.disabled) {
+                        return;
+                    }
+
+                    inp.value = b.dataset.pick;
+                    mark();
+                    inp.dispatchEvent(new Event('input', {bubbles: true}));
+                }));
+                mark();
+            });
+
+            // Multiplication cross: the left headers show what is typed above
+            li.querySelectorAll('[data-mirror]').forEach((td) => {
+                const src = li.querySelector(`input[data-col="${td.dataset.mirror}"]`);
+                const show = () => {
+                    td.textContent = src.value;
+                };
+                src.addEventListener('input', show);
+                show();
+            });
+        });
+    }
+
     function mountBoards(root) {
+        mountTerms(root);
         root.querySelectorAll('.st-board:not([data-mounted])').forEach((el) => {
             el.dataset.mounted = '1';
             el.stBoard = el.classList.contains('st-ggb') ? createGgbBoard(el) : createBoard(el);
@@ -1152,7 +1344,8 @@
             });
 
             api.setRepaintingActive(true);
-            api.getBase64((file) => api.setBase64(file, listen));
+            // A construction saved in this tab (page reloaded) replaces the fresh one, helper lines included
+            api.getBase64((file) => api.setBase64(el.stRestore || file, listen));
         };
 
         const listen = () => {
@@ -1332,6 +1525,28 @@
         renderChips();
 
         return {
+            // The whole construction (helper lines included) for the browser storage
+            snapshot() {
+                if (result) {
+                    return null;
+                }
+
+                if (!ready) {
+                    return el.stRestore || null;
+                }
+
+                try {
+                    api.setRepaintingActive(false);
+                    hidden.forEach((name) => api.exists(name) && api.setVisible(name, true));
+                    const file = api.getBase64();
+                    hidden.forEach((name) => api.exists(name) && api.setVisible(name, false));
+                    api.setRepaintingActive(true);
+
+                    return 'string' === typeof file && file ? file : null;
+                } catch (e) {
+                    return null;
+                }
+            },
             // Practice: show the solution and mark the student's points
             showResult(img, correct, shape) {
                 result = {img, correct, shape};
@@ -1403,12 +1618,26 @@
 
         /* ---------- Server ---------- */
 
+        // This tab: code, token and GeoGebra constructions, so a reload does not throw the student out
+        const KEY = 'st-test:' + (api.start || '');
+
+        function remember() {
+            if (!st.code) {
+                return;
+            }
+
+            const prev = store.get(KEY);
+            store.set(KEY, {code: st.code, token: st.token, lang, ggb: ggbSnapshots(root, prev && prev.code === st.code ? prev.ggb : {})});
+        }
+
         async function post(action, data) {
+            await sebReady;
+
             const res = await fetch(api[action], {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
                 credentials: 'same-origin',
-                body: JSON.stringify(data),
+                body: JSON.stringify({...data, seb: sebInfo()}),
             });
 
             return res.json();
@@ -1416,7 +1645,7 @@
 
         // Survives page unload (tab closed, reload)
         function beacon(action, data) {
-            const body = JSON.stringify(data);
+            const body = JSON.stringify({...data, seb: sebInfo()});
 
             if (navigator.sendBeacon && navigator.sendBeacon(api[action], new Blob([body], {type: 'application/json'}))) {
                 return;
@@ -1587,6 +1816,7 @@
             stopClock();
             disarm();
             st.token = '';
+            store.remove(KEY);
             root.innerHTML = `
                 <div class="st-card st-finished">
                     <h2>${res.already ? tx('alreadyDone') : tx('handedIn')}</h2>
@@ -1636,9 +1866,17 @@
                 </div>`;
 
             fillAnswers();
+            // Constructions saved in this tab before a reload (same student)
+            const saved = store.get(KEY);
+
+            if (saved && saved.code === st.code) {
+                setRestore(root, saved.ggb);
+            }
+
             mountBoards(root);
             bindInputs();
             stopClock();
+            remember();
 
             if (timed) {
                 st.deadline = Date.now() + res.remaining * 1000;
@@ -1660,23 +1898,7 @@
         }
 
         function fillAnswers() {
-            root.querySelectorAll('.st-test input[data-k]').forEach((inp) => {
-                const v = st.answers[inp.dataset.k];
-
-                if (undefined === v || null === v) {
-                    return;
-                }
-
-                if (inp.dataset.pts) {
-                    inp.value = JSON.stringify(v);
-                } else if (inp.dataset.part) {
-                    inp.value = v[inp.dataset.part] ?? '';
-                } else if (undefined !== inp.dataset.col) {
-                    inp.value = v[inp.dataset.col] ?? '';
-                } else {
-                    inp.value = 'object' === typeof v ? '' : v;
-                }
-            });
+            fillInputs(root.querySelector('.st-test'), st.answers);
         }
 
         function bindInputs() {
@@ -1816,6 +2038,7 @@
             }
 
             clearTimeout(st.saveTimer);
+            remember();
             beacon('lock', {code: st.code, token: st.token, reason, answers: st.answers});
 
             if (st.lockOnLeave) {
@@ -1835,7 +2058,36 @@
         });
         window.addEventListener('pagehide', () => leave('pagehide'));
 
-        showLogin();
+        // Constructions and the token follow the answers into the tab's storage
+        let rememberTimer = null;
+        root.addEventListener('input', () => {
+            if (st.token) {
+                clearTimeout(rememberTimer);
+                rememberTimer = setTimeout(remember, 600);
+            }
+        });
+
+        // Page reloaded: a running test without lock goes on, otherwise the resume screen comes directly
+        const saved = store.get(KEY);
+
+        if (saved && /^\d{5}$/.test(String(saved.code || ''))) {
+            st.code = saved.code;
+            lang = LANGS[saved.lang] ? saved.lang : lang;
+            showLogin();
+            message('', tx('wait'));
+            post('continue', {code: st.code, token: String(saved.token || ''), lang}).then((res) => {
+                if ('error' === res.state) {
+                    store.remove(KEY);
+                    message('bad', esc(errorText(res, 'noConnection')));
+
+                    return;
+                }
+
+                handle(res);
+            }).catch(() => message('bad', tx('noConnection')));
+        } else {
+            showLogin();
+        }
     }
 
     function sectionsHtml(sections) {
@@ -1850,6 +2102,53 @@
                     <ol class="st-tasks${one ? ' st-one' : ''}">${sec.tasks.map((t, ti) => taskHtml(t, ti)).join('')}</ol>
                 </section>`;
         }).join('');
+    }
+
+    // Put saved answers back into the inputs (before the boards are mounted)
+    function fillInputs(root, answers) {
+        root.querySelectorAll('input[data-k]').forEach((inp) => {
+            const v = answers ? answers[inp.dataset.k] : undefined;
+
+            if (undefined === v || null === v) {
+                return;
+            }
+
+            if (inp.dataset.pts) {
+                inp.value = JSON.stringify(v);
+            } else if (inp.dataset.part) {
+                inp.value = v[inp.dataset.part] ?? '';
+            } else if (undefined !== inp.dataset.col) {
+                inp.value = v[inp.dataset.col] ?? '';
+            } else {
+                inp.value = 'object' === typeof v ? '' : v;
+            }
+        });
+    }
+
+    // GeoGebra constructions of the tasks, by task id
+    function ggbSnapshots(root, previous) {
+        const out = Object.assign({}, previous || {});
+
+        root.querySelectorAll('li[data-task] .st-ggb').forEach((el) => {
+            const file = el.stBoard && el.stBoard.snapshot ? el.stBoard.snapshot() : null;
+
+            if (file) {
+                out[el.closest('li[data-task]').dataset.task] = file;
+            }
+        });
+
+        return out;
+    }
+
+    // Constructions to restore, set before mountBoards()
+    function setRestore(root, files) {
+        root.querySelectorAll('li[data-task] .st-ggb').forEach((el) => {
+            const file = files ? files[el.closest('li[data-task]').dataset.task] : null;
+
+            if (file) {
+                el.stRestore = file;
+            }
+        });
     }
 
     // Read all answers from the inputs
@@ -1885,6 +2184,32 @@
         let clock = null;
         let deadline = 0;
         let busy = false;
+        let finished = false;
+        // The round of this tab: tasks, answers, constructions, check results (sessionStorage)
+        const KEY = 'st-practice:' + cfg.element;
+        let state = null;
+        let persistTimer = null;
+
+        const persist = () => {
+            clearTimeout(persistTimer);
+
+            if (!state) {
+                return;
+            }
+
+            if (!finished) {
+                state.answers = collectAnswers(root);
+            }
+
+            state.ggb = ggbSnapshots(root, state.ggb);
+            store.set(KEY, state);
+        };
+
+        const forget = () => {
+            clearTimeout(persistTimer);
+            state = null;
+            store.remove(KEY);
+        };
 
         const post = async (action, data) => {
             const res = await fetch(cfg.urls[action], {
@@ -2027,7 +2352,7 @@
             }
         }
 
-        function showTasks(res) {
+        function showTasks(res, saved = null) {
             const total = res.sections.reduce((s, sec) => s + sec.tasks.reduce((a, t) => a + t.points, 0), 0);
             const timed = null !== res.remaining && undefined !== res.remaining;
             root.innerHTML = `
@@ -2036,16 +2361,26 @@
                         <div><h2>${tx('practiceTitle', esc(label()))}</h2><div>${tx('points', total)}${timed ? ` · ${tx('minutes', res.timeLimit)}` : ''}</div></div>
                         <div class="st-status">${timed ? '<div class="st-clock" role="timer"></div>' : ''}<div class="st-result"></div></div>
                     </div>
+                    <div class="st-row st-toprow"><button type="button" class="st-link" data-act="choose">${tx('otherChoice')}</button></div>
+                    <p class="st-tryhint">${tx('tryHint')}</p>
                     ${sectionsHtml(res.sections)}
                     <div class="st-submit">
                         <div class="st-row">
-                            <button type="button" class="st-btn" data-act="check">${tx('check')}</button>
+                            <button type="button" class="st-btn" data-act="check">${tx('checkAll')}</button>
                             <button type="button" class="st-btn st-btn2" data-act="again" hidden>${tx('again')}</button>
                             <button type="button" class="st-link" data-act="choose">${tx('otherChoice')}</button>
                         </div>
                     </div>
                     <div class="st-msg" aria-live="polite"></div>
                 </div>`;
+            finished = false;
+            state = saved || {round: res.round, choice: Object.assign({}, choice), lang, res, answers: {}, ggb: {}, tried: {}, result: null, deadline: 0};
+
+            if (saved) {
+                fillInputs(root, saved.answers);
+                setRestore(root, saved.ggb);
+            }
+
             mountBoards(root);
             root.querySelectorAll('input[data-k]').forEach((inp) => inp.addEventListener('keydown', (e) => {
                 if ('Enter' === e.key) {
@@ -2063,14 +2398,44 @@
                     inp.parentNode.querySelector('[data-part="d"]')?.focus();
                 }
             }));
+            // Check a single task: right or wrong per field, no solution
+            root.querySelectorAll('li[data-task]').forEach((li) => {
+                li.querySelector('.st-body').insertAdjacentHTML('beforeend', `<div class="st-tryrow"><button type="button" class="st-btn st-btn2 st-trybtn" data-try="${esc(li.dataset.task)}">${tx('tryBtn')}</button><span class="st-tryfb" aria-live="polite"></span></div>`);
+            });
+            root.querySelectorAll('[data-try]').forEach((b) => b.addEventListener('click', () => tryTask(b.dataset.try)));
             root.querySelector('[data-act="check"]').addEventListener('click', check);
             root.querySelector('[data-act="again"]').addEventListener('click', start);
-            root.querySelector('[data-act="choose"]').addEventListener('click', showStart);
-            root.querySelector('input[data-k]:not([type="hidden"])')?.focus({preventScroll: true});
+            root.querySelectorAll('[data-act="choose"]').forEach((b) => b.addEventListener('click', () => {
+                forget();
+                showStart();
+            }));
+            if (!saved) {
+                root.querySelector('input[data-k]:not([type="hidden"])')?.focus({preventScroll: true});
+            }
+
             stop();
 
+            if (saved && saved.result) {
+                // Already evaluated before the reload: solutions, everything locked
+                showResult(saved.result, true);
+
+                return;
+            }
+
+            Object.entries(state.tried || {}).forEach(([id, r]) => {
+                const li = root.querySelector(`li[data-task="${id}"]`);
+
+                if (li) {
+                    showTry(li, r);
+                }
+            });
+            persist();
+
             if (timed) {
-                deadline = Date.now() + res.remaining * 1000;
+                // The clock goes on across a reload
+                state.deadline = state.deadline || Date.now() + res.remaining * 1000;
+                deadline = state.deadline;
+                persist();
                 const tick = () => {
                     const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
                     const el = root.querySelector('.st-clock');
@@ -2091,8 +2456,116 @@
             }
         }
 
+        // Input boxes of a task that can be marked per field
+        const fieldBox = (li, inp) => inp.closest('td.st-kin') || inp.closest('.st-trow') || inp.closest('label.st-angin') || inp.closest('label') || inp.closest('td');
+
+        function clearTry(li) {
+            if (state && state.tried) {
+                delete state.tried[li.dataset.task];
+            }
+
+            li.classList.remove('st-try-ok', 'st-try-bad');
+            li.querySelectorAll('.st-trymark').forEach((el) => el.classList.remove('st-trymark', 'st-cell-ok', 'st-cell-bad'));
+            li.querySelectorAll('.st-trynote').forEach((el) => el.remove());
+            const fb = li.querySelector('.st-tryfb');
+
+            if (fb) {
+                fb.innerHTML = '';
+            }
+        }
+
+        // The server no longer has the round (session over): only a new practice helps
+        function expired(res) {
+            if (res && 'expired' === res.error) {
+                stop();
+                forget();
+                root.querySelectorAll('[data-try], [data-act="check"]').forEach((b) => {
+                    b.hidden = true;
+                });
+                root.querySelector('[data-act="again"]').hidden = false;
+            }
+        }
+
+        async function tryTask(id) {
+            const li = root.querySelector(`li[data-task="${id}"]`);
+
+            if (!li || busy || finished) {
+                return;
+            }
+
+            busy = true;
+            const btn = li.querySelector('[data-try]');
+            btn.disabled = true;
+
+            try {
+                const res = await post('try', {answers: collectAnswers(root), task: id, lang, round: state ? state.round : ''});
+
+                if ('tried' !== res.state) {
+                    expired(res);
+                    msg('bad', esc(errorText(res, 'checkError')));
+
+                    return;
+                }
+
+                showTry(li, res);
+            } catch (e) {
+                msg('bad', tx('noConnection'));
+            } finally {
+                busy = false;
+                btn.disabled = finished;
+            }
+        }
+
+        function showTry(li, r) {
+            clearTry(li);
+            const ok = r.points === r.max;
+            const fields = li.classList.contains('st-wide') && !li.classList.contains('st-geo');
+            let head;
+
+            if (fields) {
+                li.querySelectorAll('input[data-col]').forEach((inp) => {
+                    const col = inp.dataset.col;
+
+                    if (undefined === r.correct[col]) {
+                        return;
+                    }
+
+                    const box = fieldBox(li, inp);
+
+                    if (box && !box.classList.contains('st-trymark')) {
+                        box.classList.add('st-trymark', r.correct[col] ? 'st-cell-ok' : 'st-cell-bad');
+
+                        if (!r.correct[col] && r.notes && r.notes[col]) {
+                            box.insertAdjacentHTML('beforeend', `<div class="st-trynote st-note">${tx('note_' + r.notes[col])}</div>`);
+                        }
+                    }
+                });
+                head = ok ? tx('right') : `${tx('fieldsRight', r.points, r.max)} ${tx('tryAgain')}`;
+            } else if (li.classList.contains('st-tri')) {
+                const last = r.correct.length - 1;
+                const list = (r.given || []).map((g, i) => `${g.label} = ${fmtNum(g.v)}${g.unit} ${r.correct[i] ? '✓' : '✗'}${null === g.yours || r.correct[i] ? '' : ` (${tx('yours', fmtNum(g.yours) + g.unit)})`}`).join(', ');
+                head = ok ? tx('right') : `${tx('measuresRight', r.correct.slice(0, last).filter(Boolean).length, last)} ${list}. ${tx(r.correct[last] ? 'sidesOk' : 'sidesBad')} ${tx('tryAgain')}`;
+            } else if (li.classList.contains('st-geo')) {
+                const ggb = li.querySelector('.st-ggb');
+                const m = ggb ? r.correct.length - 1 : r.correct.length;
+                const right = ggb ? `${tx('pointsRight', r.correct.slice(0, m).filter(Boolean).length, m)} ${tx(r.correct[m] ? 'edgesOk' : 'edgesBad')}` : tx('pointsRight', r.points, r.max);
+                head = ok ? tx('right') : `${right}${r.wrongDir ? ' ' + tx('wrongDir') : ''} ${tx('tryAgain')}`;
+            } else {
+                head = ok ? tx('right') : `${tx('tryWrong')} ${tx('tryAgain')}`;
+            }
+
+            li.classList.add(ok ? 'st-try-ok' : 'st-try-bad');
+            li.querySelector('.st-tryfb').innerHTML = head;
+
+            if (state) {
+                state.tried = state.tried || {};
+                state.tried[li.dataset.task] = r;
+                persist();
+            }
+        }
+
         async function check() {
-            if (busy) {
+            if (busy || finished) {
                 return;
             }
 
@@ -2100,9 +2573,11 @@
             stop();
 
             try {
-                const res = await post('check', {answers: collectAnswers(root), lang});
+                persist();
+                const res = await post('check', {answers: collectAnswers(root), lang, round: state ? state.round : ''});
 
                 if ('checked' !== res.state) {
+                    expired(res);
                     msg('bad', esc(errorText(res, 'checkError')));
 
                     return;
@@ -2116,10 +2591,27 @@
             }
         }
 
-        function showResult(res) {
-            root.querySelectorAll('input[data-k]').forEach((inp) => {
+        function showResult(res, restored = false) {
+            // Final: solutions are shown, nothing can be changed any more
+            finished = true;
+
+            if (state) {
+                state.result = res;
+                state.tried = {};
+                persist();
+            }
+
+            root.querySelectorAll('li[data-task]').forEach((li) => {
+                clearTry(li);
+                li.querySelector('.st-tryrow')?.remove();
+                li.querySelectorAll('button:not([data-help-lines])').forEach((b) => {
+                    b.disabled = true;
+                });
+            });
+            root.querySelectorAll('input[data-k], .st-tfields input, .st-tfields textarea').forEach((inp) => {
                 inp.disabled = true;
             });
+            root.querySelector('.st-tryhint')?.remove();
 
             Object.entries(res.tasks).forEach(([k, r]) => {
                 const li = root.querySelector(`[data-task="${k}"]`);
@@ -2132,7 +2624,7 @@
                 li.classList.add(ok ? 'st-ok' : 'st-bad');
 
                 // Table: mark each cell, show the solution under wrong ones
-                Object.entries(li.classList.contains('st-ang') ? {} : r.cells || {}).forEach(([col, show]) => {
+                Object.entries(li.classList.contains('st-ang') || li.classList.contains('st-terms') ? {} : r.cells || {}).forEach(([col, show]) => {
                     const inp = li.querySelector(`input[data-col="${col}"]`);
 
                     if (!inp) {
@@ -2167,6 +2659,22 @@
                         }
                     });
                     head = ok ? tx('right') : tx('fieldsRight', r.points, r.max);
+                } else if (li.classList.contains('st-terms')) {
+                    // Every field marked, the solution and a note on the form next to wrong ones
+                    li.querySelectorAll('.st-choice button, .st-key').forEach((b) => {
+                        b.disabled = true;
+                    });
+                    li.querySelectorAll('input[data-col]').forEach((inp) => {
+                        const col = inp.dataset.col;
+                        const box = inp.closest('td.st-kin') || inp.closest('.st-trow');
+                        box.classList.add(r.correct[col] ? 'st-cell-ok' : 'st-cell-bad');
+
+                        if (!r.correct[col]) {
+                            const note = r.notes && r.notes[col] ? ` <span class="st-note">${tx('note_' + r.notes[col])}</span>` : '';
+                            box.insertAdjacentHTML('beforeend', `<div class="st-sol">${r.cells && r.cells[col] ? r.cells[col] : ''}${note}</div>`);
+                        }
+                    });
+                    head = ok ? tx('right') : tx('fieldsRight', r.points, r.max);
                 } else if (li.classList.contains('st-tri')) {
                     // Triangle: every given measure with the student's value, then the sides
                     li.querySelector('.st-board')?.stBoard?.showResult([], r.correct, r.shape);
@@ -2193,9 +2701,37 @@
             root.querySelector('[data-act="check"]').hidden = true;
             root.querySelector('[data-act="again"]').hidden = false;
             msg(pct >= 80 ? 'ok' : pct >= 50 ? 'warn' : 'bad', tx('practiceResult', res.points, res.max, pct));
-            root.querySelector('.st-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
+
+            if (!restored) {
+                root.querySelector('.st-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
         }
 
-        showStart();
+        // A changed answer is no longer checked; the round is saved in this tab
+        root.addEventListener('input', (e) => {
+            const li = e.target.closest && e.target.closest('li[data-task]');
+
+            if (li && !finished) {
+                clearTry(li);
+            }
+
+            if (state && !finished) {
+                clearTimeout(persistTimer);
+                persistTimer = setTimeout(persist, 500);
+            }
+        });
+        window.addEventListener('pagehide', () => state && !finished && persist());
+        document.addEventListener('visibilitychange', () => 'hidden' === document.visibilityState && state && !finished && persist());
+
+        // Page reloaded: back into the round of this tab
+        const saved = store.get(KEY);
+
+        if (saved && saved.round && saved.res && Array.isArray(saved.res.sections)) {
+            lang = LANGS[saved.lang] ? saved.lang : lang;
+            Object.assign(choice, saved.choice || {});
+            showTasks(saved.res, saved);
+        } else {
+            showStart();
+        }
     }
 })();

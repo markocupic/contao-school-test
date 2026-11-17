@@ -52,6 +52,20 @@ Jeder gesuchte Winkel gibt einen Punkt. Beim Üben und auf dem Auswertungsblatt 
 
 Vierter Testtyp: **Lineare Gleichungen** in zehn Stufen, von «x + a = b» bis zu Binomen mit Koeffizienten. Die Kinder geben x als ganze Zahl oder Bruch ein (z. B. `-3/4`, ungekürzt gilt auch). Punkte: 1 (Stufe 1–3), 2 (Stufe 4–7), 3 (Stufe 8–10). Schwierigkeit: Leicht = nur ganzzahlige Lösungen, Mittel = auch Brüche, Anspruchsvoller = meistens Brüche. Beim Üben zeigt der Lösungsweg jede Umformung («| − 3x», «| : 4»).
 
+Sechster Testtyp: **Produkte von Binomen** (Algebra)
+
+| Bereich | Aufgaben |
+|---|---|
+| Rechteckfiguren: Fläche und Umfang | blaue Figur mit Massen a, b oder Zahlen: A und u berechnen oder als Term angeben, Seitenlänge x aus A oder u |
+| Geschickt rechnen | 19 · 21 = 400 − 1, 29² = (30 − 1)², Malkreuz für (p + q)² |
+| Terme am Rechteck | Rechteck mit Teilflächen: Fläche als Summe und als Produkt |
+| Ausmultiplizieren | binomische Formeln, auch mit Dezimalzahlen und Brüchen |
+| Produkt und Summe: faktorisieren | Summen- oder Produktterm erkennen, ausklammern, binomische Formeln rückwärts, Aufspalten, vollständig faktorisieren |
+
+Leicht = Grundanforderungen, Anspruchsvoller = Zusatzanforderungen, Mittel mischt Aufgabe für Aufgabe beides. Jedes Feld gibt einen Punkt. Terme werden auf dem Server gelesen (`Task/Term/TermParser`): Hochzahlen mit ^ oder ², Mal-Punkte dürfen fehlen, Dezimalkomma geht auch. Gewertet wird, ob die Eingabe gleichwertig ist und die verlangte Form hat (ohne Klammern und zusammengefasst, als Produkt, vollständig faktorisiert). Ist sie gleichwertig, aber in der falschen Form, sagt die Rückmeldung beim Üben das.
+
+Neues Feld in `tl_st_test`: `binomialTopics` (nach dem Update `contao:migrate`).
+
 Fünfter Testtyp: **Dreieckskonstruktionen** mit GeoGebra
 
 | Bereich | Gegeben |
@@ -75,7 +89,7 @@ Neues Feld in `tl_st_test`: `triangleKinds` (nach dem Update `contao:migrate`).
 3. **Codeblatt** (Symbol in der Testliste): Karten mit Name und Code zum Ausschneiden.
 4. **Test freigeben** (Häkchen «Test freigeben»).
 5. **Frontend**: Inhaltselement «Online-Test (Schule)» auf einer Seite einfügen. Die Schüler geben ihren Code ein und lösen den Test. Antworten werden laufend gespeichert.
-6. **Üben** (optional): Inhaltselement «Online-Test üben» einfügen, ohne Einstellungen. Die Schülerinnen und Schüler wählen ohne Code zuerst, was sie üben möchten (den Testtyp), dann einen Bereich (Kopfrechnen, Bruchrechnen, Bruch · Prozent · Dezimal, Prozent-Tabellen, Schätzaufgaben) oder «Alle Bereiche» und die Schwierigkeit Leicht (Level 1–2), Mittel (3–4) oder Anspruchsvoller (5–6). Immer neue Zufallsaufgaben; nach «Auswerten» stehen bei jeder Aufgabe Lösung und Lösungsweg. Nichts wird gespeichert.
+6. **Üben** (optional): Inhaltselement «Online-Test üben» einfügen, ohne Einstellungen. Die Schülerinnen und Schüler wählen ohne Code zuerst, was sie üben möchten (den Testtyp), dann einen Bereich (Kopfrechnen, Bruchrechnen, Bruch · Prozent · Dezimal, Prozent-Tabellen, Schätzaufgaben) oder «Alle Bereiche» und die Schwierigkeit Leicht (Level 1–2), Mittel (3–4) oder Anspruchsvoller (5–6). Immer neue Zufallsaufgaben. Mit «Prüfen» bei einer Aufgabe sieht das Kind, welche Felder stimmen (grün/rot), aber nicht die Lösung, und kann beliebig oft korrigieren und nochmals prüfen. Erst «Übung auswerten» ganz unten zeigt bei jeder Aufgabe Lösung und Lösungsweg; danach sind alle Eingaben und Zeichnungen gesperrt. «Andere Auswahl» steht oberhalb und unterhalb der Aufgaben. Beim Neuladen bleibt die Übung erhalten (Aufgaben, Eingaben, Prüfergebnisse, GeoGebra-Konstruktionen, Uhr, auch eine ausgewertete Übung) – gespeichert nur im Tab (`sessionStorage`). Mehrere Tabs können gleichzeitig verschiedene Übungen offen haben (bis 8 Runden pro Inhaltselement und Session). Auf dem Server wird nichts dauerhaft gespeichert.
 7. **Auswertung** (Symbol in der Testliste): Klassenübersicht und pro Schülerin und Schüler ein Blatt mit allen Aufgaben, Antworten, Lösungen, Punkten und Note.
 
 ## Regeln im Frontend
@@ -83,10 +97,20 @@ Neues Feld in `tl_st_test`: `triangleKinds` (nach dem Update `contao:migrate`).
 - **Gleiche Aufgaben für alle** (Standard): Die Aufgaben werden beim ersten Start einmal pro Test erzeugt. Solange niemand gestartet hat, erzeugt jedes Speichern des Tests neue Aufgaben. Ohne Häkchen erhält jedes Kind eigene Zufallsaufgaben.
 - Lösungen werden nur auf dem Server gespeichert und korrigiert, sie gelangen nie in den Browser.
 - **Sperre**: Wechselt ein Kind im Browser die Seite (anderer Tab, Fenster minimiert, neu laden, wegnavigieren), wird der Test gesperrt. Ein Klick in die Adressleiste oder in ein anderes Programm sperrt nicht. Weiter geht es nur mit Schülercode + Wiederaufnahme-Code der Lehrperson. Die Antworten bleiben erhalten. Die Anzahl Sperren steht auf der Auswertung. Abschaltbar pro Test.
+- **Seite neu laden**: Der Browser merkt sich im Tab (`sessionStorage`, weg beim Schliessen des Tabs) Schülercode, Sitzungsschlüssel und die GeoGebra-Konstruktionen samt Hilfslinien. Ohne Sperre geht der Test nach dem Neuladen direkt weiter (Aktion `continue`, der Server prüft den Sitzungsschlüssel). Mit Sperre erscheint direkt die Eingabe des Wiederaufnahme-Codes, danach sind Antworten und Konstruktionen wieder da.
 - **Zeit**: Optional. Die Uhr läuft nur, solange der Test offen ist (nicht während einer Sperre). Ist die Zeit um, wird automatisch abgegeben.
 - **Abgeschlossene Tests** können nicht nochmals gestartet werden. Das Kind sieht nach der Abgabe seine Punktzahl (nicht die Note).
 - Ein Test kann in der Teilnahmen-Liste auf «Offen» zurückgesetzt werden: Aufgaben und Antworten werden gelöscht, der Test beginnt neu.
 - Nach 15 falschen Codes pro IP-Adresse wird 15 Minuten gesperrt.
+
+## Safe Exam Browser
+
+Pro Test: **Nur mit dem Safe Exam Browser** (bei neuen Tests eingeschaltet, bestehende Tests bleiben nach dem Update ausgeschaltet). Der Server prüft dann bei jedem Schritt (Starten, Fortsetzen, Speichern, Sperren, Abgeben), ob die Anfrage aus dem SEB kommt. In jedem anderen Browser erscheint nach der Code-Eingabe: «Dieser Test kann nur mit dem Safe Exam Browser gelöst werden.» (übersetzt in fr/it/en). Die Übungen sind nicht betroffen.
+
+- **Mit Config Key** (empfohlen): Im SEB-Konfigurationswerkzeug den *Config Key* kopieren und im Test eintragen. SEB schickt bei jeder Anfrage den Header `X-SafeExamBrowser-ConfigKeyHash` = SHA256(URL + Config Key). SEB für macOS und iOS kann keine Header senden; dann liest das Script denselben Wert über die SEB-JavaScript-API (`SafeExamBrowser.security.configKey`) und schickt ihn mit. Beides lässt sich ohne die passende Konfiguration nicht fälschen. In der Konfiguration «Send Browser Exam Key / Config Key» aktivieren. Wird die Konfiguration geändert, ändert sich der Config Key.
+- **Ohne Config Key**: Es wird nur geprüft, ob sich der Browser als SEB ausgibt (Header, JavaScript-API oder User-Agent `SEB/…`). Das genügt gegen versehentliches Öffnen im normalen Browser, lässt sich aber fälschen.
+
+Nach dem Update `vendor/bin/contao-console contao:migrate` ausführen (neue Felder `acceptSebBrowserOnly`, `sebConfigKey`).
 
 ## Sprachen
 

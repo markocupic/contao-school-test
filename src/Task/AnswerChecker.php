@@ -33,6 +33,7 @@ final class AnswerChecker
             'points' => $this->checkPoints($a, \is_array($answer) ? $answer : []),
             'angles' => $this->checkAngles($a, \is_array($answer) ? $answer : []),
             'triangle' => $this->checkTriangle($a, \is_array($answer) ? $answer : []),
+            'terms' => $this->checkTerms($a, \is_array($answer) ? $answer : []),
             'rat' => $this->checkRational($a, $answer, (int) ($task['points'] ?? 1)),
             default => throw new \InvalidArgumentException(\sprintf('Unknown answer type "%s".', $a['type'])),
         };
@@ -201,6 +202,35 @@ final class AnswerChecker
         }
 
         return $this->result($correct);
+    }
+
+    /**
+     * Terms and numbers: equivalent to the solution and in the required form; choices.
+     * Notes: field => form, if the answer is equivalent but not in the required form.
+     */
+    private function checkTerms(array $a, array $raw): array
+    {
+        $parser = new Term\TermParser();
+        $correct = [];
+        $notes = [];
+
+        foreach ($a['v'] as $i => $v) {
+            $given = $raw[$i] ?? null;
+
+            if (isset($v['choice'])) {
+                $correct[$i] = \is_scalar($given) && '' !== (string) $given && (int) $given === $v['choice'];
+                continue;
+            }
+
+            $r = $parser->check(\is_scalar($given) ? (string) $given : null, $v['ans'], $v['form'], $v['factors']);
+            $correct[$i] = $r['ok'];
+
+            if ($r['equivalent'] && !$r['ok']) {
+                $notes[$i] = 'sum' === $v['form'] ? 'sum' : 'product';
+            }
+        }
+
+        return [...$this->result($correct), 'notes' => $notes];
     }
 
     /**

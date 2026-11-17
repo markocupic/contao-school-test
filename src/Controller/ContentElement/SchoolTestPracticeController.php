@@ -53,6 +53,7 @@ class SchoolTestPracticeController extends AbstractContentElementController
             'types' => $types,
             'urls' => [
                 'new' => $this->generateUrl('markocupic_school_test_practice_api', ['action' => 'new']),
+                'try' => $this->generateUrl('markocupic_school_test_practice_api', ['action' => 'try']),
                 'check' => $this->generateUrl('markocupic_school_test_practice_api', ['action' => 'check']),
             ],
         ]);

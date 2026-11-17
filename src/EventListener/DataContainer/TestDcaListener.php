@@ -47,7 +47,7 @@ class TestDcaListener
         foreach ($this->testTypes->all() as $alias => $type) {
             $GLOBALS['TL_DCA']['tl_st_test']['palettes'][$alias] = '{title_legend},title,subject,type;{class_legend},class;'
                 .$type->getPaletteFields().',sameTasks'
-                .';{grade_legend},gradeStep,pointsForSix;{time_legend},timeLimit;{security_legend},lockOnLeave,resumeCode;{codesheet_legend},codeSheetNote;{publish_legend},published';
+                .';{grade_legend},gradeStep,pointsForSix;{time_legend},timeLimit;{security_legend},lockOnLeave,resumeCode;{seb_legend},acceptSebBrowserOnly,sebConfigKey;{codesheet_legend},codeSheetNote;{publish_legend},published';
         }
     }
 
@@ -76,6 +76,21 @@ class TestDcaListener
         }
 
         $this->synchronizer->sync((int) $dc->id);
+    }
+
+    /**
+     * Config Key of the SEB configuration: 64 hexadecimal characters (stored in lower case) or empty.
+     */
+    #[AsCallback(table: 'tl_st_test', target: 'fields.sebConfigKey.save')]
+    public function saveSebConfigKey(mixed $value): string
+    {
+        $value = strtolower(trim((string) $value));
+
+        if ('' !== $value && !preg_match('/^[0-9a-f]{64}$/', $value)) {
+            throw new \RuntimeException('Der Config Key besteht aus 64 Zeichen 0–9 und a–f. Du findest ihn im SEB-Konfigurationswerkzeug unter «Config Key».');
+        }
+
+        return $value;
     }
 
     /**

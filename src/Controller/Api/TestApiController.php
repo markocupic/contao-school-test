@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Markocupic\ContaoSchoolTest\Controller\Api;
 
+use Markocupic\ContaoSchoolTest\Participation\SebVerifier;
 use Markocupic\ContaoSchoolTest\Participation\TestSession;
 use Markocupic\ContaoSchoolTest\Task\TaskTranslator;
 use Psr\Cache\CacheItemPoolInterface;
@@ -27,7 +28,7 @@ use Symfony\Component\Routing\Attribute\Route;
  * a random token that only the device which started (or resumed) the test knows.
  */
 #[AsController]
-#[Route('/_school_test/{action}', name: 'markocupic_school_test_api', requirements: ['action' => 'start|resume|save|lock|submit'], defaults: ['_scope' => 'frontend', '_token_check' => false], methods: ['POST'])]
+#[Route('/_school_test/{action}', name: 'markocupic_school_test_api', requirements: ['action' => 'start|resume|continue|save|lock|submit'], defaults: ['_scope' => 'frontend', '_token_check' => false], methods: ['POST'])]
 final class TestApiController
 {
     /**
@@ -40,6 +41,7 @@ final class TestApiController
     public function __construct(
         private readonly TestSession $session,
         private readonly CacheItemPoolInterface $cache,
+        private readonly SebVerifier $seb,
     ) {
     }
 
@@ -55,13 +57,21 @@ final class TestApiController
         $token = (string) ($data['token'] ?? '');
         $lang = TaskTranslator::normalize($data['lang'] ?? null);
 
-        if (\in_array($action, ['start', 'resume'], true) && $this->isBlocked($request)) {
+        if (\in_array($action, ['start', 'resume', 'continue'], true) && $this->isBlocked($request)) {
             return $this->json(['state' => 'error', 'error' => 'too_many_attempts', 'message' => 'Zu viele falsche Versuche. Warte 15 Minuten oder melde dich bei deiner Lehrperson.'], 429);
+        }
+
+        // Tests for the Safe Exam Browser only: no other browser can start, save or submit
+        $seb = $this->session->sebSettings($code);
+
+        if ($seb && $seb['only'] && !$this->seb->isSeb($request, $seb['configKey'], \is_array($data['seb'] ?? null) ? $data['seb'] : null)) {
+            return $this->json(['state' => 'error', 'error' => 'seb_required', 'message' => 'Dieser Test kann nur mit dem Safe Exam Browser gelöst werden.'], 403);
         }
 
         $result = match ($action) {
             'start' => $this->session->start($code, $lang),
             'resume' => $this->session->resume($code, (string) ($data['resumeCode'] ?? ''), $lang),
+            'continue' => $this->session->continue($code, $token, $lang),
             'save' => $this->session->save($code, $token, $data['answers'] ?? []),
             'lock' => $this->session->lock($code, $token, (string) ($data['reason'] ?? 'left'), $data['answers'] ?? null),
             'submit' => $this->session->submit($code, $token, $data['answers'] ?? []),

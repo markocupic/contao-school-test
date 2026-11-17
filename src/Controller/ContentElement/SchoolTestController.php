@@ -34,7 +34,7 @@ class SchoolTestController extends AbstractContentElementController
     {
         $urls = [];
 
-        foreach (['start', 'resume', 'save', 'lock', 'submit'] as $action) {
+        foreach (['start', 'resume', 'continue', 'save', 'lock', 'submit'] as $action) {
             $urls[$action] = $this->generateUrl('markocupic_school_test_api', ['action' => $action]);
         }
 

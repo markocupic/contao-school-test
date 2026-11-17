@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Markocupic\ContaoSchoolTest\Task;
 
 use Markocupic\ContaoSchoolTest\Task\Angle\AngleTexts;
+use Markocupic\ContaoSchoolTest\Task\Binomial\BinomialTexts;
 use Markocupic\ContaoSchoolTest\Task\Equation\EquationTexts;
 use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleTexts;
 
@@ -342,12 +343,24 @@ final class TaskTranslator
             return $text;
         }
 
-        return self::TEXTS[$text][$i] ?? AngleTexts::TITLES[$text][$i] ?? EquationTexts::TITLES[$text][$i] ?? TriangleTexts::TITLES[$text][$i] ?? $this->phrase($text, $i) ?? $text;
+        return self::TEXTS[$text][$i] ?? AngleTexts::TITLES[$text][$i] ?? EquationTexts::TITLES[$text][$i] ?? TriangleTexts::TITLES[$text][$i] ?? BinomialTexts::TITLES[$text][$i] ?? $this->phrase($text, $i) ?? $text;
     }
 
     /**
      * Units in a suffix, a table cell or a solution ("12&nbsp;Fr.").
      */
+    /**
+     * Decimal comma in French and Italian, only in the text between the HTML tags.
+     */
+    public function decimals(string $html, string $lang): string
+    {
+        if ('fr' !== $lang && 'it' !== $lang) {
+            return $html;
+        }
+
+        return preg_replace_callback('/(?<=^|>)([^<]+)/', static fn (array $m): string => preg_replace('/(\d)\.(\d)/', '$1,$2', $m[1]) ?? $m[1], $html) ?? $html;
+    }
+
     public function units(string $html, string $lang): string
     {
         $i = $this->index($lang);
@@ -410,7 +423,7 @@ final class TaskTranslator
         }
 
         $compiled = [];
-        $templates = AngleTexts::PHRASES + EquationTexts::PHRASES + TriangleTexts::PHRASES;
+        $templates = AngleTexts::PHRASES + EquationTexts::PHRASES + TriangleTexts::PHRASES + BinomialTexts::PHRASES;
 
         // Most literal text first: "bei {1} und {2}" before "bei {1}"
         uksort($templates, static fn (string $a, string $b): int => mb_strlen(preg_replace('/\{\d+\}/', '', $b)) <=> mb_strlen(preg_replace('/\{\d+\}/', '', $a)));
@@ -431,7 +444,7 @@ final class TaskTranslator
                 }
             }
 
-            $compiled['#^'.$regex.'$#su'] = [$translations, $groups, isset(TriangleTexts::PHRASES[$tpl])];
+            $compiled['#^'.$regex.'$#su'] = [$translations, $groups, isset(TriangleTexts::PHRASES[$tpl]) || isset(BinomialTexts::PHRASES[$tpl])];
         }
 
         return $compiled;

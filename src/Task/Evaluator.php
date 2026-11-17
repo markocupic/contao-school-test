@@ -169,6 +169,7 @@ final class Evaluator
                     'angles' => \is_array($v) ? array_map($str, array_intersect_key($v, $task['a']['v'])) : [],
                     'points' => self::pointsAnswer($task['a'], $v),
                     'triangle' => self::triangleAnswer($v),
+                    'terms' => \is_array($v) ? array_map(static fn (mixed $x): string => mb_substr(\is_scalar($x) ? trim((string) $x) : '', 0, 120), array_intersect_key($v, $task['a']['v'])) : [],
                     default => '',
                 };
             }

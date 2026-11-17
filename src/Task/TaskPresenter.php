@@ -19,7 +19,7 @@ namespace Markocupic\ContaoSchoolTest\Task;
  */
 final class TaskPresenter
 {
-    private const PUBLIC_ANSWER_KEYS = ['type', 'suffix', 'est', 'noWhole', 'mode', 'name', 'draw', 'fields', 'svg'];
+    private const PUBLIC_ANSWER_KEYS = ['type', 'suffix', 'est', 'noWhole', 'mode', 'name', 'draw', 'fields', 'svg', 'kreuz'];
 
     private readonly TaskTranslator $translator;
 
@@ -48,6 +48,11 @@ final class TaskPresenter
 
                 if (isset($a['name'])) {
                     $a['name'] = $t->text((string) $a['name'], $lang);
+                }
+
+                // Terms: decimal comma in the prompts (French, Italian)
+                if ('terms' === $task['a']['type']) {
+                    $a['fields'] = array_map(static fn (array $f): array => isset($f['prompt']) ? ['prompt' => $t->decimals((string) $f['prompt'], $lang)] + $f : $f, $a['fields']);
                 }
 
                 if ('table' === $task['a']['type']) {

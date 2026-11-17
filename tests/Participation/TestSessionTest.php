@@ -46,6 +46,11 @@ class TestSessionTest extends TestCase
         $code = $codes[0];
 
         $this->assertSame('error', $session->start('99999')['state']);
+        $this->assertNull($session->sebSettings('99999'));
+        $this->assertSame(['only' => false, 'configKey' => ''], $session->sebSettings($code));
+        $c->update('tl_st_test', ['acceptSebBrowserOnly' => 1, 'sebConfigKey' => str_repeat('a', 64)], ['id' => 1]);
+        $this->assertSame(['only' => true, 'configKey' => str_repeat('a', 64)], $session->sebSettings($code));
+        $c->update('tl_st_test', ['acceptSebBrowserOnly' => 0, 'sebConfigKey' => ''], ['id' => 1]);
 
         $r = $session->start($code);
         $this->assertSame('running', $r['state']);
@@ -70,6 +75,23 @@ class TestSessionTest extends TestCase
         $r = $session->resume($code, 'abc234');
         $this->assertSame('running', $r['state']);
         $this->assertSame('99999', $r['answers']['s0t0']);
+
+        // Reload: with the token of this tab the test goes on, without it the resume code is needed
+        $this->assertSame('running', $session->continue($code, $r['token'], 'it')['state']);
+        $this->assertSame('it', $c->fetchOne('SELECT lang FROM tl_st_participation WHERE code = ?', [$code]));
+        $this->assertSame('99999', $session->continue($code, $r['token'])['answers']['s0t0']);
+        $this->assertSame('resume_required', $session->continue($code, 'wrong')['state']);
+        $this->assertSame('error', $session->continue('99999', $r['token'])['state']);
+
+        // Without lock on leave a reload (pagehide) keeps the test running
+        $c->update('tl_st_test', ['lockOnLeave' => 0], ['id' => 1]);
+        $this->assertSame('running', $session->lock($code, $r['token'], 'pagehide', $answers)['state']);
+        $this->assertSame('running', $session->continue($code, $r['token'])['state']);
+        $c->update('tl_st_test', ['lockOnLeave' => 1], ['id' => 1]);
+        // With lock on leave the reload locks it
+        $this->assertSame('locked', $session->lock($code, $r['token'], 'pagehide', $answers)['state']);
+        $this->assertSame('resume_required', $session->continue($code, $r['token'])['state']);
+        $r = $session->resume($code, 'abc234');
 
         $f = $session->submit($code, $r['token'], $answers);
         $this->assertSame('finished', $f['state']);
@@ -122,7 +144,7 @@ class TestSessionTest extends TestCase
     {
         $c = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
         $c->executeStatement('CREATE TABLE tl_st_student (id INTEGER PRIMARY KEY, pid INT, tstamp INT DEFAULT 0, firstname TEXT, lastname TEXT)');
-        $c->executeStatement("CREATE TABLE tl_st_test (id INTEGER PRIMARY KEY, tstamp INT DEFAULT 0, title TEXT, type TEXT, class INT, difficulty TEXT, tasksPerArea INT, gradeStep TEXT, pointsForSix INT DEFAULT 0, timeLimit INT DEFAULT 0, lockOnLeave INT DEFAULT 1, resumeCode TEXT, codeSheetNote TEXT DEFAULT '', published INT DEFAULT 0, sameTasks INT DEFAULT 1, tasks TEXT)");
+        $c->executeStatement("CREATE TABLE tl_st_test (id INTEGER PRIMARY KEY, tstamp INT DEFAULT 0, title TEXT, type TEXT, class INT, difficulty TEXT, tasksPerArea INT, gradeStep TEXT, pointsForSix INT DEFAULT 0, timeLimit INT DEFAULT 0, lockOnLeave INT DEFAULT 1, acceptSebBrowserOnly INT DEFAULT 0, sebConfigKey TEXT DEFAULT '', resumeCode TEXT, codeSheetNote TEXT DEFAULT '', published INT DEFAULT 0, sameTasks INT DEFAULT 1, tasks TEXT)");
         $c->executeStatement("CREATE TABLE tl_st_participation (id INTEGER PRIMARY KEY, pid INT, tstamp INT DEFAULT 0, student INT, studentName TEXT DEFAULT '', code TEXT UNIQUE, status TEXT DEFAULT 'open', token TEXT DEFAULT '', tasks TEXT, answers TEXT, points INT DEFAULT 0, maxPoints INT DEFAULT 0, grade TEXT DEFAULT '', lockCount INT DEFAULT 0, runningSince INT DEFAULT 0, usedSeconds INT DEFAULT 0, lang TEXT DEFAULT 'de', startedAt INT DEFAULT 0, finishedAt INT DEFAULT 0, log TEXT)");
 
         foreach ([['L&eacute;a', 'Muster'], ['X', 'Y&#40;2&#41;'], ['Noah', 'Beispiel'], ['Mia', 'Test']] as [$first, $last]) {
