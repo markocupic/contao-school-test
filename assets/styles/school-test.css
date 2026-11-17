@@ -14,7 +14,7 @@
 
 .school-test .st-card,
 .school-test .st-test { display: flex; flex-direction: column; gap: 12px; }
-.school-test .st-card { border: 1px solid var(--st-line); border-radius: 14px; padding: 22px; background: #fff; }
+.school-test .st-card { border: 1px solid var(--st-line); border-radius: 14px; padding: 26px 28px; background: #fff; }
 .school-test h2 { margin: 0; }
 .school-test p { margin: 0; }
 .school-test .st-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
@@ -105,12 +105,14 @@
 .school-test .st-langbtn.on { border-color: var(--st-accent); background: var(--st-accent); color: #fff; font-weight: 600; }
 
 /* Practice mode */
-.school-test .st-choose { display: flex; flex-direction: column; gap: 6px; }
+.school-test .st-choose { display: flex; flex-direction: column; gap: 8px; }
 .school-test .st-chooselabel { font-weight: 700; margin-top: 4px; }
+.school-test .st-choose .st-chooselabel { margin-top: 18px; }
+.school-test .st-choose .st-chooselabel:first-child { margin-top: 4px; }
 .school-test .st-options { display: flex; flex-wrap: wrap; gap: 6px; }
 .school-test .st-opt { font: inherit; padding: 7px 14px; border: 2px solid var(--st-line); border-radius: 10px; background: #fff; color: inherit; cursor: pointer; }
 .school-test .st-opt.on { border-color: var(--st-accent); background: var(--st-accent); color: #fff; font-weight: 600; }
-.school-test .st-mainnav { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--st-line); }
+.school-test .st-mainnav { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 12px; padding-bottom: 20px; border-bottom: 1px solid var(--st-line); }
 .school-test .st-main { font-weight: 600; }
 .school-test .st-main:disabled { opacity: .45; cursor: not-allowed; }
 .school-test .st-optnum { min-width: 3em; text-align: center; }
@@ -231,9 +233,10 @@
 /* Practice: check single tasks without solution */
 .school-test .st-toprow { margin: 0 0 10px; }
 .school-test .st-tryhint { font-size: .88rem; color: var(--st-muted, #667085); margin: 0 0 12px; }
-.school-test .st-tryrow { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 6px 0 2px; }
-.school-test .st-trybtn { padding: 4px 14px; font-size: .88rem; }
-.school-test .st-tryfb { font-size: .88rem; line-height: 1.45; }
+/* «Prüfen» always at the right edge of the task, the feedback to its left */
+.school-test .st-tryrow { flex-basis: 100%; display: flex; flex-direction: row-reverse; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 6px 0 2px; }
+.school-test .st-trybtn { padding: 4px 14px; font-size: .88rem; white-space: nowrap; flex-shrink: 0; }
+.school-test .st-tryfb { font-size: .88rem; line-height: 1.45; text-align: right; }
 .school-test .st-try-ok { background: linear-gradient(90deg, #e2f4e9, transparent 70%); }
 .school-test .st-try-bad { background: linear-gradient(90deg, #fbe6e5, transparent 70%); }
 .school-test .st-try-ok .st-tryfb { color: var(--st-ok); font-weight: 700; }
@@ -244,4 +247,13 @@
 
 /* After the final check the drawings can no longer be changed */
 .school-test .st-board-done .st-svg, .school-test .st-board-done .st-ggb-app, .school-test .st-board-done .st-geotools { pointer-events: none; }
-.school-test .st-task:not(.st-wide) .st-tryrow { flex-basis: auto; margin: 0 0 0 4px; }
+.school-test .st-task:not(.st-wide) .st-tryrow { flex: 1 1 14em; margin: 0 0 0 4px; }
+
+/* Practice: more air between the parts */
+.school-test .st-practice > .st-lang { margin-bottom: 4px; }
+.school-test .st-practice > h2 { margin-top: 4px; }
+.school-test .st-practice > h2 + p { max-width: 68ch; margin-bottom: 10px; }
+.school-test .st-practice > .st-choose + .st-row { margin-top: 22px; }
+.school-test .st-practice > .st-msg:empty { display: none; }
+.school-test .st-practice > .st-toprow { margin: 2px 0 4px; }
+.school-test .st-practice > .st-tryhint { margin-bottom: 10px; }
