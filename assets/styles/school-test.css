@@ -257,3 +257,8 @@
 .school-test .st-practice > .st-msg:empty { display: none; }
 .school-test .st-practice > .st-toprow { margin: 2px 0 4px; }
 .school-test .st-practice > .st-tryhint { margin-bottom: 10px; }
+
+/* Symmetry cards: "no symmetry" chosen */
+.school-test .st-chip-none.set { background: #fef3c7; border-color: #e08a1e; color: #8a4b00; }
+.school-test .st-symsvg { display: block; width: 100%; max-width: 440px; height: auto; margin-top: 6px; cursor: crosshair; touch-action: manipulation; user-select: none; }
+.school-test .st-board-done .st-symsvg { cursor: default; }

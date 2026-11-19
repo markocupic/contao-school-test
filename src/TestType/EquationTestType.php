@@ -35,7 +35,7 @@ final class EquationTestType implements PracticeTestTypeInterface
         'klammern' => ['Klammern auflösen', [5]],
         'brueche' => ['Gleichungen mit Brüchen', [6, 7, 8]],
         'binome' => ['Binome', [9, 10]],
-        'gemischt' => ['Gemischt', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
+        'gemischt' => ['Alle Bereiche gemischt', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]],
     ];
 
     private readonly EquationGenerator $generator;

@@ -24,6 +24,7 @@ use Markocupic\ContaoSchoolTest\Participation\ParticipationSynchronizer;
 use Markocupic\ContaoSchoolTest\Task\AnswerChecker;
 use Markocupic\ContaoSchoolTest\Task\Evaluator;
 use Markocupic\ContaoSchoolTest\Task\Geometry\BoardSvg;
+use Markocupic\ContaoSchoolTest\Task\Geometry\SymmetryGenerator;
 use Markocupic\ContaoSchoolTest\Task\SolutionRenderer;
 use Markocupic\ContaoSchoolTest\Task\TaskPresenter;
 use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleGenerator;
@@ -89,11 +90,12 @@ class PrintController
                         'figure' => match ($task['a']['type']) {
                             'points' => $this->renderBoard($task['a'], $given, $r['correct']),
                             'triangle' => $this->renderTriangle($task['a'], $given, $r['correct']),
+                            'symmetry' => SymmetryGenerator::svg($task['a'], Evaluator::symmetryAnswer($given), $r['correct']),
                             'angles' => $task['a']['solSvg'].$this->renderAngles($task['a'], \is_array($given) ? $given : [], $r['correct']),
                             'terms' => ($task['a']['svg'] ?? '').$this->renderTerms($task['a'], \is_array($given) ? $given : [], $r['correct']),
                             default => '',
                         },
-                        'legend' => 'triangle' === $task['a']['type'] ? 'Lösung grün gestrichelt auf die Seite AB gelegt · Seiten: grün alle drei als Strecken gezeichnet, rot nicht' : ('points' === $task['a']['type'] ? 'Lösung grün gestrichelt'.(empty($task['a']['draw']['free']) ? '' : ', Kreise: '.(string) round((float) ($task['a']['tol'] ?? 0.6) * 5, 1).' mm Toleranz').' · gesetzte Punkte: grün richtig, rot falsch'.(empty($task['a']['draw']['ggb']) ? '' : ' · Strecken: grün richtig verbunden, rot falsch') : ''),
+                        'legend' => 'symmetry' === $task['a']['type'] ? 'Lösung grün gestrichelt (Achsen) und grüner Kreis (Zentrum) · Achsen und Z des Kindes: grün richtig, rot falsch' : ('triangle' === $task['a']['type'] ? 'Lösung grün gestrichelt auf die Seite AB gelegt · Seiten: grün alle drei als Strecken gezeichnet, rot nicht' : ('points' === $task['a']['type'] ? 'Lösung grün gestrichelt'.(empty($task['a']['draw']['free']) ? '' : ', Kreise: '.(string) round((float) ($task['a']['tol'] ?? 0.6) * 5, 1).' mm Toleranz').' · gesetzte Punkte: grün richtig, rot falsch'.(empty($task['a']['draw']['ggb']) ? '' : ' · Strecken: grün richtig verbunden, rot falsch') : '')),
                         'table' => 'table' === $task['a']['type'] ? $this->renderTable($task['a'], \is_array($given) ? $given : [], $r['correct']) : '',
                         'given' => $this->renderGiven($task['a'], $given),
                         'solution' => $this->solutions->solution($task['a']),

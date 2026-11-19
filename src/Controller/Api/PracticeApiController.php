@@ -154,6 +154,11 @@ final class PracticeApiController
                     $tasks[$id]['given'] = self::given($task, $answers[$id] ?? null);
                 }
 
+                // Symmetry cards: the axes and the centre for the board
+                if ('symmetry' === ($task['a']['type'] ?? '')) {
+                    $tasks[$id]['sym'] = ['axes' => $task['a']['axes'], 'center' => $task['a']['center']];
+                }
+
                 // Drawing tasks: the solution points for the board, and a hint for rotations in the wrong direction
                 if ('points' === ($task['a']['type'] ?? '')) {
                     $tasks[$id]['img'] = $task['a']['img'];

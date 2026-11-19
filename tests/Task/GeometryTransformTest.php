@@ -29,7 +29,8 @@ class GeometryTransformTest extends TestCase
         $generator = new TransformGenerator();
         mt_srand(3);
 
-        foreach (TransformGenerator::KINDS as $kind) {
+        // Symmetry cards: SymmetryTest
+        foreach (array_diff(TransformGenerator::KINDS, ['symmetrie']) as $kind) {
             foreach (TransformGenerator::LEVELS as $level) {
                 for ($i = 0; $i < 150; ++$i) {
                     $task = $generator->build($kind, $level);
@@ -113,7 +114,7 @@ class GeometryTransformTest extends TestCase
     {
         $type = new GeometryTransformTestType();
         $areas = array_column($type->generate(['difficulty' => 'medium', 'transformKinds' => '', 'tasksPerKind' => 1]), 'area');
-        $this->assertSame(['achse', 'punkt', 'drehung', 'verschiebung'], $areas);
+        $this->assertSame(['achse', 'punkt', 'drehung', 'verschiebung', 'symmetrie'], $areas);
 
         // Earlier constructions on the own board are now the GeoGebra ones
         $legacy = $type->generate(['difficulty' => 'easy', 'transformKinds' => serialize(['achse_frei']), 'tasksPerKind' => 1]);

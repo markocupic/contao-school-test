@@ -43,6 +43,12 @@ final class SolutionRenderer
             'terms' => implode(', ', array_map(static fn (array $f, array $v): string => trim(($f['prompt'] ?? '').' '.$v['show']), $a['fields'], $a['v'])),
             'triangle' => implode(', ', array_map(static fn (array $g): string => (new Triangle\TriangleGenerator())->measure($g['k'], (float) $g['v']), $a['given'])),
             'points' => implode(', ', array_map(static fn (array $p, int $i): string => \chr(65 + $i).'′ ('.Util::fmt($p[0]).'|'.Util::fmt($p[1]).')', $a['img'], array_keys($a['img']))),
+            'symmetry' => match (true) {
+                $a['axes'] && null !== $a['center'] => 'achsen- und punktsymmetrisch, '.\count($a['axes']).' '.(1 === \count($a['axes']) ? 'Achse' : 'Achsen'),
+                (bool) $a['axes'] => 'nur achsensymmetrisch, '.\count($a['axes']).' '.(1 === \count($a['axes']) ? 'Achse' : 'Achsen'),
+                null !== $a['center'] => 'nur punktsymmetrisch',
+                default => 'weder achsen- noch punktsymmetrisch',
+            },
             default => '',
         };
     }

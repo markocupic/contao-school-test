@@ -26,12 +26,14 @@ final class AngleTestType implements PracticeTestTypeInterface
     public const TITLES = [
         'scheitel' => 'Scheitel- und Nebenwinkel',
         'parallel' => 'Stufenwinkel an Parallelen',
+        'transversalen' => 'Parallelen und zwei Geraden',
         'dreieck' => 'Dreieck',
         'viereck' => 'Viereck',
         'vieleck' => 'Vieleck',
-        'kombi' => 'Kombiniert',
-        'profi' => 'Profi',
-        'gemischt' => 'Gemischt',
+        'figuren' => 'Figuren mit Diagonalen und Höhen',
+        'kombi' => 'Mehrere Winkel pro Aufgabe',
+        'profi' => 'Profi: gleichschenklige und gleichseitige Dreiecke',
+        'gemischt' => 'Alle Bereiche gemischt',
     ];
 
     public const INSTRUCTION = 'Berechne die gesuchten Winkel. Die Skizzen sind nicht massstabsgetreu: rechnen, nicht messen!';

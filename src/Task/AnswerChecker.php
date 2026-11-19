@@ -33,6 +33,7 @@ final class AnswerChecker
             'points' => $this->checkPoints($a, \is_array($answer) ? $answer : []),
             'angles' => $this->checkAngles($a, \is_array($answer) ? $answer : []),
             'triangle' => $this->checkTriangle($a, \is_array($answer) ? $answer : []),
+            'symmetry' => $this->checkSymmetry($a, \is_array($answer) ? $answer : []),
             'terms' => $this->checkTerms($a, \is_array($answer) ? $answer : []),
             'rat' => $this->checkRational($a, $answer, (int) ($task['points'] ?? 1)),
             default => throw new \InvalidArgumentException(\sprintf('Unknown answer type "%s".', $a['type'])),
@@ -352,5 +353,56 @@ final class AnswerChecker
     private function result(array $correct): array
     {
         return ['points' => \count(array_filter($correct)), 'max' => \count($correct), 'correct' => $correct];
+    }
+
+    /**
+     * Symmetry card: [axes right, centre right]. Every axis must be drawn once, no other line
+     * counts as an axis; the centre must be set exactly when the picture is point symmetric.
+     * Nothing drawn and "keine Symmetrie" not chosen: no answer.
+     */
+    private function checkSymmetry(array $a, array $answer): array
+    {
+        $z = $answer['z'] ?? null;
+        $axes = $answer['axes'] ?? [];
+
+        if (null === $z && !$axes && empty($answer['none'])) {
+            return ['points' => 0, 'max' => 2, 'correct' => [false, false]];
+        }
+
+        $tol = (float) ($a['tol'] ?? 0.3);
+        $maxAngle = (float) ($a['angle'] ?? 3);
+        $left = $axes;
+        $axesOk = \count($axes) === \count($a['axes']);
+
+        foreach ($a['axes'] as [$p, $d]) {
+            $hit = null;
+
+            foreach ($left as $k => $l) {
+                $cos = abs($d[0] * $l[2] + $d[1] * $l[3]);
+                $angle = rad2deg(acos(min(1, $cos)));
+                // Distance of the expected axis point from the drawn line
+                $dist = abs(($p[0] - $l[0]) * $l[3] - ($p[1] - $l[1]) * $l[2]);
+
+                if ($angle <= $maxAngle && $dist <= $tol) {
+                    $hit = $k;
+
+                    break;
+                }
+            }
+
+            if (null === $hit) {
+                $axesOk = false;
+
+                break;
+            }
+
+            unset($left[$hit]);
+        }
+
+        $c = $a['center'];
+        $centerOk = null === $c ? null === $z : (null !== $z && hypot($z[0] - $c[0], $z[1] - $c[1]) <= $tol);
+        $correct = [$axesOk, $centerOk];
+
+        return ['points' => \count(array_filter($correct)), 'max' => 2, 'correct' => $correct];
     }
 }

@@ -17,6 +17,7 @@ namespace Markocupic\ContaoSchoolTest\Task;
 use Markocupic\ContaoSchoolTest\Task\Angle\AngleTexts;
 use Markocupic\ContaoSchoolTest\Task\Binomial\BinomialTexts;
 use Markocupic\ContaoSchoolTest\Task\Equation\EquationTexts;
+use Markocupic\ContaoSchoolTest\Task\Geometry\SymmetryTexts;
 use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleTexts;
 
 /**
@@ -152,6 +153,7 @@ final class TaskTranslator
         'Drehung' => ['Rotation', 'Rotazione', 'Rotation'],
         'Verschiebung' => ['Translation', 'Traslazione', 'Translation'],
         'Gemischt' => ['Mélangé', 'Misto', 'Mixed'],
+        'Alle Bereiche gemischt' => ['Tous les domaines mélangés', 'Tutti i campi misti', 'All areas mixed'],
         'Achsenspiegelung mit GeoGebra' => ['Symétrie axiale avec GeoGebra', 'Simmetria assiale con GeoGebra', 'Reflection in a line with GeoGebra'],
         'Punktspiegelung mit GeoGebra' => ['Symétrie centrale avec GeoGebra', 'Simmetria centrale con GeoGebra', 'Point reflection with GeoGebra'],
         'Setze die Bildpunkte auf die Gitterpunkte. Ein Klick auf einen gesetzten Punkt entfernt ihn.' => ['Place les points images sur les points du quadrillage. Un clic sur un point placé le supprime.', 'Posiziona i punti immagine sui punti della griglia. Un clic su un punto già posizionato lo elimina.', 'Place the image points on the grid points. Clicking a placed point removes it.'],
@@ -343,7 +345,7 @@ final class TaskTranslator
             return $text;
         }
 
-        return self::TEXTS[$text][$i] ?? AngleTexts::TITLES[$text][$i] ?? EquationTexts::TITLES[$text][$i] ?? TriangleTexts::TITLES[$text][$i] ?? BinomialTexts::TITLES[$text][$i] ?? $this->phrase($text, $i) ?? $text;
+        return self::TEXTS[$text][$i] ?? AngleTexts::TITLES[$text][$i] ?? EquationTexts::TITLES[$text][$i] ?? TriangleTexts::TITLES[$text][$i] ?? BinomialTexts::TITLES[$text][$i] ?? SymmetryTexts::TEXTS[$text][$i] ?? $this->phrase($text, $i) ?? $text;
     }
 
     /**
@@ -423,7 +425,7 @@ final class TaskTranslator
         }
 
         $compiled = [];
-        $templates = AngleTexts::PHRASES + EquationTexts::PHRASES + TriangleTexts::PHRASES + BinomialTexts::PHRASES;
+        $templates = AngleTexts::PHRASES + EquationTexts::PHRASES + TriangleTexts::PHRASES + BinomialTexts::PHRASES + SymmetryTexts::PHRASES;
 
         // Most literal text first: "bei {1} und {2}" before "bei {1}"
         uksort($templates, static fn (string $a, string $b): int => mb_strlen(preg_replace('/\{\d+\}/', '', $b)) <=> mb_strlen(preg_replace('/\{\d+\}/', '', $a)));

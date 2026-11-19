@@ -30,7 +30,7 @@ final class BinomialTestType implements PracticeTestTypeInterface
         'rechteckmodell' => 'Terme am Rechteck',
         'ausmultiplizieren' => 'Ausmultiplizieren',
         'faktorisieren' => 'Produkt und Summe: faktorisieren',
-        'gemischt' => 'Gemischt',
+        'gemischt' => 'Alle Bereiche gemischt',
     ];
 
     /**

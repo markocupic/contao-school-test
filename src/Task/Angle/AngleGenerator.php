@@ -15,7 +15,8 @@ use Markocupic\ContaoSchoolTest\Task\Util;
 
 /**
  * Angle tasks (port of the "Winkel-Trainer"): vertical and adjacent angles, corresponding
- * angles at parallels, triangles, quadrilaterals, polygons and combined tasks.
+ * angles at parallels, triangles, quadrilaterals, polygons and combined tasks. Parallels
+ * cut by two intersecting lines and figures with diagonals and heights: AngleFigureTasks.
  *
  * A task holds the sketch as SVG (without and with solution) and one answer field per
  * unknown angle. Texts are German, the translator turns them into fr/it/en with the
@@ -23,7 +24,9 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  */
 final class AngleGenerator
 {
-    public const KINDS = ['scheitel', 'parallel', 'dreieck', 'viereck', 'vieleck', 'kombi', 'profi'];
+    use AngleFigureTasks;
+
+    public const KINDS = ['scheitel', 'parallel', 'transversalen', 'dreieck', 'viereck', 'vieleck', 'figuren', 'kombi', 'profi'];
 
     public const W = 640;
 
@@ -40,9 +43,11 @@ final class AngleGenerator
         $t = match ($kind) {
             'scheitel' => $this->genScheitel(),
             'parallel' => $this->genParallel(),
+            'transversalen' => $this->genTransversal(),
             'dreieck' => $this->genTriangle(),
             'viereck' => $this->genQuad(),
             'vieleck' => $this->genPoly(),
+            'figuren' => $this->genFigure(),
             'kombi' => $this->genCombined(),
             default => $this->genProfi(),
         };

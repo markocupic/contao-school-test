@@ -32,7 +32,7 @@ final class TriangleTestType implements PracticeTestTypeInterface
         'hoehe' => 'Mit Höhe',
         'winkelhalbierende' => 'Mit Winkelhalbierender',
         'schwerelinie' => 'Mit Schwerelinie',
-        'gemischt' => 'Gemischt',
+        'gemischt' => 'Alle Bereiche gemischt',
     ];
 
     /**

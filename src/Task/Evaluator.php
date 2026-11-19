@@ -91,6 +91,43 @@ final class Evaluator
     }
 
     /**
+     * Symmetry card: the centre Z, the lines drawn as axes (point and unit direction) and
+     * "keine Symmetrie". From the browser: [Z, segments, [[x, y, dx, dy], …], none].
+     *
+     * @return array{z: array{0: float, 1: float}|null, axes: list<array{0: float, 1: float, 2: float, 3: float}>, none: bool}
+     */
+    public static function symmetryAnswer(mixed $v): array
+    {
+        // Already stored answer {z, axes, none}
+        if (\is_array($v) && \array_key_exists('axes', $v)) {
+            $v = [$v['z'] ?? null, [], $v['axes'] ?? [], !empty($v['none'])];
+        }
+
+        $z = self::gridPoints($v, 1, [10, 10], true)[0];
+        $raw = \is_array($v) && \is_array($v[2] ?? null) ? \array_slice($v[2], 0, 12) : [];
+        $axes = [];
+
+        foreach ($raw as $l) {
+            if (!\is_array($l) || 4 !== \count(array_filter(\array_slice($l, 0, 4), is_numeric(...)))) {
+                continue;
+            }
+
+            [$x, $y, $dx, $dy] = array_map('floatval', \array_slice(array_values($l), 0, 4));
+            $len = hypot($dx, $dy);
+
+            if ($len < 1e-9 || abs($x) > 100 || abs($y) > 100) {
+                continue;
+            }
+
+            $axes[] = [round($x, 4), round($y, 4), round($dx / $len, 6), round($dy / $len, 6)];
+        }
+
+        $none = \is_array($v) && !empty($v[3]) && null === $z && !$axes;
+
+        return ['z' => $z, 'axes' => $axes, 'none' => $none];
+    }
+
+    /**
      * Image points; with GeoGebra followed by the segments between them (one more list element).
      */
     public static function pointsAnswer(array $a, mixed $v): array
@@ -169,6 +206,7 @@ final class Evaluator
                     'angles' => \is_array($v) ? array_map($str, array_intersect_key($v, $task['a']['v'])) : [],
                     'points' => self::pointsAnswer($task['a'], $v),
                     'triangle' => self::triangleAnswer($v),
+                    'symmetry' => self::symmetryAnswer($v),
                     'terms' => \is_array($v) ? array_map(static fn (mixed $x): string => mb_substr(\is_scalar($x) ? trim((string) $x) : '', 0, 120), array_intersect_key($v, $task['a']['v'])) : [],
                     default => '',
                 };

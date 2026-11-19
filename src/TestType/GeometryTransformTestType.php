@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Markocupic\ContaoSchoolTest\TestType;
 
+use Markocupic\ContaoSchoolTest\Task\Geometry\SymmetryTexts;
 use Markocupic\ContaoSchoolTest\Task\Geometry\TransformGenerator;
 use Markocupic\ContaoSchoolTest\Task\TaskTranslator;
 use Markocupic\ContaoSchoolTest\Task\Util;
@@ -33,7 +34,8 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
         'verschiebung' => 'Verschiebung',
         'achse_ggb' => 'Achsenspiegelung mit GeoGebra',
         'punkt_ggb' => 'Punktspiegelung mit GeoGebra',
-        'gemischt' => 'Gemischt',
+        'symmetrie' => SymmetryTexts::TITLE,
+        'gemischt' => 'Alle Bereiche gemischt',
     ];
 
     /**
@@ -59,7 +61,7 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
 
     public function getLabel(): string
     {
-        return 'Spiegeln, Drehen, Verschieben (Achsen- und Punktspiegelung, Drehung, Verschiebung)';
+        return 'Spiegeln, Drehen, Verschieben (Achsen- und Punktspiegelung, Drehung, Verschiebung, Symmetrie)';
     }
 
     public function getPaletteFields(): string
@@ -121,8 +123,10 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
         $topic = TransformGenerator::LEGACY_KINDS[$topic] ?? $topic;
         $kind = \in_array($topic, TransformGenerator::KINDS, true) ? $topic : 'achse';
 
-        // Constructions take longer: two per round
-        return [$this->section($kind, $this->many($kind, $difficulty, isset(TransformGenerator::FREE_KINDS[$kind]) ? 2 : 4), $difficulty)];
+        // Constructions take longer: two per round, symmetry cards three
+        $count = 'symmetrie' === $kind ? 3 : (isset(TransformGenerator::FREE_KINDS[$kind]) ? 2 : 4);
+
+        return [$this->section($kind, $this->many($kind, $difficulty, $count), $difficulty)];
     }
 
     private function many(string $kind, string $difficulty, int $count): array
@@ -144,7 +148,11 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
 
     private function section(string $kind, array $tasks, string $difficulty = 'medium'): array
     {
-        $instruction = isset(TransformGenerator::FREE_KINDS[$kind]) ? sprintf(self::INSTRUCTION_GGB, TransformGenerator::toleranceMm($difficulty)) : self::INSTRUCTION;
+        $instruction = match (true) {
+            'symmetrie' === $kind => SymmetryTexts::INSTRUCTION,
+            isset(TransformGenerator::FREE_KINDS[$kind]) => sprintf(self::INSTRUCTION_GGB, TransformGenerator::toleranceMm($difficulty)),
+            default => self::INSTRUCTION,
+        };
 
         return ['area' => $kind, 'title' => self::TITLES[$kind], 'instruction' => $instruction, 'tasks' => $tasks];
     }

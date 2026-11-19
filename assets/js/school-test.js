@@ -70,6 +70,8 @@
             fieldsRight: '{0} von {1} Feldern richtig.', right: 'Richtig.', solution: 'Lösung', scoreSmall: '{0} / {1} Punkte',
             practiceResult: '<strong>{0} von {1} Punkten ({2} %).</strong> Schau dir die Lösungswege der falschen Aufgaben an und starte dann eine neue Übung.',
             tryBtn: 'Prüfen', checkAll: 'Übung auswerten', tryWrong: 'Noch nicht richtig.', tryAgain: 'Korrigiere und prüfe nochmals.',
+            symCenter: 'Symmetriezentrum', symNone: 'Keine Symmetrie', symClear: 'Alles löschen', symAxis: 'Achse', symUndo: 'Rückgängig', symAxesOk: 'Symmetrieachsen richtig.', symAxesBad: 'Symmetrieachsen nicht richtig (Achse fehlt, zu viele oder schief).', symCenterOk: 'Symmetriezentrum richtig.', symCenterBad: 'Symmetriezentrum nicht richtig.', symSolution: 'Die Lösung ist grün eingezeichnet.',
+            symHint: 'Achse: Klicke auf zwei Punkte der Symmetrieachse, sie geht dann durch die ganze Karte. Z: Klicke auf das Symmetriezentrum. Hat das Bild keine Symmetrie, klicke auf «Keine Symmetrie». Ungefähr genügt.',
             tryHint: 'Mit «Prüfen» bei einer Aufgabe siehst du, ob deine Eingabe stimmt. Die Lösung bleibt verborgen: Du kannst korrigieren und nochmals prüfen. Erst «Übung auswerten» ganz unten zeigt alle Lösungen. Danach lassen sich die Eingaben nicht mehr ändern.',
             err_invalid_code: 'Diesen Code gibt es nicht. Prüfe deine Eingabe.', err_invalid_resume_code: 'Der Wiederaufnahme-Code stimmt nicht.',
             err_too_many_attempts: 'Zu viele falsche Versuche. Warte 15 Minuten oder melde dich bei deiner Lehrperson.',
@@ -107,6 +109,8 @@
             fieldsRight: '{0} cases justes sur {1}.', right: 'Juste.', solution: 'Solution', scoreSmall: '{0} / {1} points',
             practiceResult: '<strong>{0} points sur {1} ({2}&nbsp;%).</strong> Regarde la démarche des tâches fausses, puis commence un nouvel entraînement.',
             tryBtn: 'Vérifier', checkAll: 'Corriger l’entraînement', tryWrong: 'Pas encore juste.', tryAgain: 'Corrige et vérifie encore.',
+            symCenter: 'Centre de symétrie', symNone: 'Aucune symétrie', symClear: 'Tout effacer', symAxis: 'Axe', symUndo: 'Annuler', symAxesOk: 'Axes de symétrie justes.', symAxesBad: 'Axes de symétrie faux (axe manquant, en trop ou incliné).', symCenterOk: 'Centre de symétrie juste.', symCenterBad: 'Centre de symétrie faux.', symSolution: 'La solution est dessinée en vert.',
+            symHint: 'Axe&nbsp;: clique sur deux points de l’axe de symétrie, il traverse alors toute la carte. Z&nbsp;: clique sur le centre de symétrie. Si l’image n’a aucune symétrie, clique sur «&nbsp;Aucune symétrie&nbsp;». À peu près suffit.',
             tryHint: 'Avec «&nbsp;Vérifier&nbsp;» à côté d’une tâche, tu vois si ta réponse est juste. La solution reste cachée&nbsp;: tu peux corriger et vérifier encore. Seul «&nbsp;Corriger l’entraînement&nbsp;» tout en bas montre toutes les solutions. Ensuite, les réponses ne peuvent plus être modifiées.',
             err_invalid_code: 'Ce code n’existe pas. Vérifie ta saisie.', err_invalid_resume_code: 'Le code de reprise est incorrect.',
             err_too_many_attempts: 'Trop d’essais erronés. Attends 15 minutes ou adresse-toi à ton enseignant·e.',
@@ -144,6 +148,8 @@
             fieldsRight: '{0} caselle giuste su {1}.', right: 'Giusto.', solution: 'Soluzione', scoreSmall: '{0} / {1} punti',
             practiceResult: '<strong>{0} punti su {1} ({2} %).</strong> Guarda il procedimento degli esercizi sbagliati e poi inizia un nuovo esercizio.',
             tryBtn: 'Verifica', checkAll: 'Correggi l’esercizio', tryWrong: 'Non ancora giusto.', tryAgain: 'Correggi e verifica di nuovo.',
+            symCenter: 'Centro di simmetria', symNone: 'Nessuna simmetria', symClear: 'Cancella tutto', symAxis: 'Asse', symUndo: 'Annulla', symAxesOk: 'Assi di simmetria giusti.', symAxesBad: 'Assi di simmetria sbagliati (asse mancante, in più o inclinato).', symCenterOk: 'Centro di simmetria giusto.', symCenterBad: 'Centro di simmetria sbagliato.', symSolution: 'La soluzione è disegnata in verde.',
+            symHint: 'Asse: clicca su due punti dell’asse di simmetria, che attraversa poi tutta la carta. Z: clicca sul centro di simmetria. Se l’immagine non ha simmetria, clicca su «Nessuna simmetria». Basta all’incirca.',
             tryHint: 'Con «Verifica» accanto a un esercizio vedi se la tua risposta è giusta. La soluzione resta nascosta: puoi correggere e verificare di nuovo. Solo «Correggi l’esercizio» in fondo mostra tutte le soluzioni. Dopo, le risposte non si possono più modificare.',
             err_invalid_code: 'Questo codice non esiste. Controlla l’inserimento.', err_invalid_resume_code: 'Il codice di ripresa non è corretto.',
             err_too_many_attempts: 'Troppi tentativi errati. Aspetta 15 minuti o rivolgiti al tuo docente.',
@@ -181,6 +187,8 @@
             fieldsRight: '{0} of {1} fields correct.', right: 'Correct.', solution: 'Solution', scoreSmall: '{0} / {1} points',
             practiceResult: '<strong>{0} of {1} points ({2} %).</strong> Look at the steps of the wrong tasks, then start a new practice.',
             tryBtn: 'Check', checkAll: 'Finish and show solutions', tryWrong: 'Not right yet.', tryAgain: 'Correct it and check again.',
+            symCenter: 'Centre of symmetry', symNone: 'No symmetry', symClear: 'Delete all', symAxis: 'Axis', symUndo: 'Undo', symAxesOk: 'Axes of symmetry right.', symAxesBad: 'Axes of symmetry wrong (an axis missing, too many or tilted).', symCenterOk: 'Centre of symmetry right.', symCenterBad: 'Centre of symmetry wrong.', symSolution: 'The solution is drawn in green.',
+            symHint: 'Axis: click two points of the axis of symmetry; it then crosses the whole card. Z: click the centre of symmetry. If the picture has no symmetry, click “No symmetry”. Roughly is enough.',
             tryHint: 'Use «Check» next to a task to see whether your answer is right. The solution stays hidden, so you can correct it and check again. Only «Finish and show solutions» at the bottom shows all solutions. After that, the answers can no longer be changed.',
             err_invalid_code: 'This code does not exist. Check your entry.', err_invalid_resume_code: 'The resume code is wrong.',
             err_too_many_attempts: 'Too many wrong attempts. Wait 15 minutes or ask your teacher.',
@@ -281,8 +289,8 @@
             return `<li class="st-task st-wide st-ang" data-task="${t.id}"><span class="st-nr">${ti + 1}</span><div class="st-body"><span class="st-q">${t.q}</span><div class="st-angfig">${a.svg}</div><div class="st-angins">${fields}</div></div></li>`;
         } else if ('terms' === a.type) {
             return termsHtml(t, ti);
-        } else if ('points' === a.type || 'triangle' === a.type) {
-            return `<li class="st-task st-wide st-geo${'triangle' === a.type ? ' st-tri' : ''}" data-task="${t.id}"><span class="st-nr">${ti + 1}</span><div class="st-body"><span class="st-q">${t.q}</span>${boardHtml(t)}</div></li>`;
+        } else if ('points' === a.type || 'triangle' === a.type || 'symmetry' === a.type) {
+            return `<li class="st-task st-wide st-geo${'triangle' === a.type ? ' st-tri' : ''}${'symmetry' === a.type ? ' st-sym' : ''}" data-task="${t.id}"><span class="st-nr">${ti + 1}</span><div class="st-body"><span class="st-q">${t.q}</span>${boardHtml(t)}</div></li>`;
         } else if ('table' === a.type) {
             const cell = (c, i, row) => {
                 if (c.ref) {
@@ -313,6 +321,16 @@
         // Image points A′, B′, …; triangle constructions: the vertices A, B, C
         const names = t.a.draw.names || null;
         const chips = Array.from({length: n}, (_, i) => `<button type="button" class="st-chip" data-chip="${i}">${names ? esc(names[i]) : LETTERS[i] + PRIME}</button>`).join('');
+
+        // Symmetry card: axes as lines, the centre Z, or "no symmetry"
+        if (t.a.draw.sym) {
+            return `<div class="st-board st-symboard" data-draw="${esc(JSON.stringify(t.a.draw))}">
+                <div class="st-chips" role="group" aria-label="${tx('symCenter')}"><button type="button" class="st-chip" data-sym-mode="axis" aria-pressed="true">${tx('symAxis')}</button><button type="button" class="st-chip" data-sym-mode="z" aria-pressed="false">Z</button><button type="button" class="st-chip st-chip-none" data-sym-none aria-pressed="false">${tx('symNone')}</button><button type="button" class="st-link" data-sym-undo>${tx('symUndo')}</button><button type="button" class="st-link st-clear" data-clear>${tx('symClear')}</button></div>
+                <div class="st-geo-hint">${tx('symHint')}</div>
+                <svg class="st-symsvg" role="img" aria-label="${esc(tx('symCenter'))}"></svg>
+                <input type="hidden" data-k="${t.id}" data-pts="1" data-edges="1" data-sym="1">
+            </div>`;
+        }
 
         // Construction (without squares): GeoGebra instead of the own board
         if (t.a.draw.free) {
@@ -533,8 +551,232 @@
         mountTerms(root);
         root.querySelectorAll('.st-board:not([data-mounted])').forEach((el) => {
             el.dataset.mounted = '1';
-            el.stBoard = el.classList.contains('st-ggb') ? createGgbBoard(el) : createBoard(el);
+            el.stBoard = el.classList.contains('st-symboard') ? createSymBoard(el) : (el.classList.contains('st-ggb') ? createGgbBoard(el) : createBoard(el));
         });
+    }
+
+    /* ---------- Symmetry card: draw axes (two clicks) and the centre Z ---------- */
+
+    function createSymBoard(el) {
+        const d = JSON.parse(el.dataset.draw);
+        const N = d.grid[0];
+        const S = 40;
+        const P = 14;
+        const X = (x) => +(P + x * S).toFixed(1);
+        const Y = (y) => +(P + (N - y) * S).toFixed(1);
+        const svg = el.querySelector('.st-symsvg');
+        const input = el.querySelector('input[data-sym]');
+        const modeBtns = [...el.querySelectorAll('[data-sym-mode]')];
+        const noneBtn = el.querySelector('[data-sym-none]');
+        const undoBtn = el.querySelector('[data-sym-undo]');
+        const clearBtn = el.querySelector('[data-clear]');
+        const saved = parseSym(input.value);
+        let z = parsePoints(input.value, 1)[0];
+        let axes = saved.axes;
+        let none = saved.none;
+        let mode = 'axis';
+        let start = null;
+        let hover = null;
+        let result = null;
+        const history = [];
+        const r3 = (v) => +v.toFixed(3);
+
+        svg.setAttribute('viewBox', `0 0 ${N * S + 2 * P} ${N * S + 2 * P}`);
+
+        // Pointer position in card units (y up)
+        const at = (e) => {
+            const r = svg.getBoundingClientRect();
+            const k = (N * S + 2 * P) / r.width;
+
+            return [((e.clientX - r.left) * k - P) / S, N - ((e.clientY - r.top) * k - P) / S];
+        };
+
+        // The line through p with direction u, cut to the card
+        const across = (p, u) => {
+            let t0 = -1e9;
+            let t1 = 1e9;
+
+            for (const k of [0, 1]) {
+                if (Math.abs(u[k]) < 1e-9) {
+                    if (p[k] < 0 || p[k] > N) {
+                        return null;
+                    }
+                } else {
+                    const a = (0 - p[k]) / u[k];
+                    const b = (N - p[k]) / u[k];
+                    t0 = Math.max(t0, Math.min(a, b));
+                    t1 = Math.min(t1, Math.max(a, b));
+                }
+            }
+
+            return t0 < t1 ? [[p[0] + t0 * u[0], p[1] + t0 * u[1]], [p[0] + t1 * u[0], p[1] + t1 * u[1]]] : null;
+        };
+
+        const line = (p, u, attr) => {
+            const seg = across(p, u);
+
+            return seg ? `<line x1="${X(seg[0][0])}" y1="${Y(seg[0][1])}" x2="${X(seg[1][0])}" y2="${Y(seg[1][1])}" ${attr}/>` : '';
+        };
+
+        const save = () => {
+            input.value = JSON.stringify([z, [], axes, none]);
+            input.dispatchEvent(new Event('input', {bubbles: true}));
+        };
+
+        // Every change can be undone
+        const change = (fn) => {
+            history.push(JSON.stringify([z, axes, none]));
+            fn();
+            start = null;
+            save();
+            render();
+        };
+
+        const render = () => {
+            const ok = '#1a7f43';
+            const bad = '#c42b2b';
+            let s = `<rect x="${P}" y="${P}" width="${N * S}" height="${N * S}" fill="#fff" stroke="#333" stroke-width="1.5"/>`;
+
+            d.shapes.forEach((sh) => {
+                s += `<polygon points="${sh.p.map((q) => `${X(q[0])},${Y(q[1])}`).join(' ')}" fill="${sh.f ? '#bdbdbd' : '#fff'}" stroke="#333" stroke-width="1.4" stroke-linejoin="round"/>`;
+            });
+
+            if (result) {
+                result.sym.axes.forEach(([p, u]) => {
+                    s += line(p, u, `stroke="${ok}" stroke-width="2.5" stroke-dasharray="9 6"`);
+                });
+
+                if (result.sym.center) {
+                    s += `<circle cx="${X(result.sym.center[0])}" cy="${Y(result.sym.center[1])}" r="9" fill="none" stroke="${ok}" stroke-width="2.5"/>`;
+                }
+            }
+
+            const col = result ? (result.correct[0] ? ok : bad) : '#1d3f8f';
+            axes.forEach((l) => {
+                s += line([l[0], l[1]], [l[2], l[3]], `stroke="${col}" stroke-width="2.5" stroke-linecap="round"`);
+            });
+
+            if (start && !result) {
+                if (hover && Math.hypot(hover[0] - start[0], hover[1] - start[1]) > 0.05) {
+                    const len = Math.hypot(hover[0] - start[0], hover[1] - start[1]);
+                    s += line(start, [(hover[0] - start[0]) / len, (hover[1] - start[1]) / len], 'stroke="#1d3f8f" stroke-width="2" stroke-dasharray="6 5" opacity=".7"');
+                }
+
+                s += `<circle cx="${X(start[0])}" cy="${Y(start[1])}" r="5" fill="#1d3f8f"/>`;
+            }
+
+            if (z) {
+                const c = result ? (result.correct[1] ? ok : bad) : '#e08a1e';
+                s += `<circle cx="${X(z[0])}" cy="${Y(z[1])}" r="6" fill="${c}" stroke="#fff" stroke-width="2"/><text x="${X(z[0]) + 10}" y="${Y(z[1]) - 9}" font-size="17" font-weight="700" fill="${c}">Z</text>`;
+            }
+
+            svg.innerHTML = s;
+            modeBtns.forEach((b) => {
+                b.classList.toggle('on', b.dataset.symMode === mode && !result);
+                b.setAttribute('aria-pressed', String(b.dataset.symMode === mode));
+                b.disabled = !!result;
+            });
+            noneBtn.classList.toggle('set', none);
+            noneBtn.setAttribute('aria-pressed', String(none));
+            [noneBtn, undoBtn, clearBtn].forEach((b) => {
+                b.disabled = !!result;
+            });
+            undoBtn.hidden = !history.length || !!result;
+        };
+
+        svg.addEventListener('pointermove', (e) => {
+            if (start && !result) {
+                hover = at(e);
+                render();
+            }
+        });
+
+        svg.addEventListener('click', (e) => {
+            if (result) {
+                return;
+            }
+
+            const p = at(e);
+
+            if (p[0] < -0.2 || p[0] > N + 0.2 || p[1] < -0.2 || p[1] > N + 0.2) {
+                return;
+            }
+
+            if ('z' === mode) {
+                change(() => {
+                    z = [r3(p[0]), r3(p[1])];
+                    none = false;
+                });
+
+                return;
+            }
+
+            // First click: a point of the axis; second click: the axis through both points
+            if (!start) {
+                start = p;
+                hover = p;
+                render();
+
+                return;
+            }
+
+            const len = Math.hypot(p[0] - start[0], p[1] - start[1]);
+
+            if (len < 0.3) {
+                start = null;
+                render();
+
+                return;
+            }
+
+            const a = start;
+            change(() => {
+                axes = [...axes, [+a[0].toFixed(4), +a[1].toFixed(4), +((p[0] - a[0]) / len).toFixed(6), +((p[1] - a[1]) / len).toFixed(6)]].slice(0, 8);
+                none = false;
+            });
+        });
+
+        modeBtns.forEach((b) => b.addEventListener('click', () => {
+            mode = b.dataset.symMode;
+            start = null;
+            render();
+        }));
+
+        noneBtn.addEventListener('click', () => change(() => {
+            none = !none;
+
+            if (none) {
+                z = null;
+                axes = [];
+            }
+        }));
+
+        undoBtn.addEventListener('click', () => {
+            if (!history.length || result) {
+                return;
+            }
+
+            [z, axes, none] = JSON.parse(history.pop());
+            start = null;
+            save();
+            render();
+        });
+
+        clearBtn.addEventListener('click', () => change(() => {
+            z = null;
+            axes = [];
+            none = false;
+        }));
+
+        render();
+
+        return {
+            showResult(img, correct, sym) {
+                result = {correct, sym: sym || {axes: [], center: null}};
+                el.classList.add('st-board-done');
+                render();
+            },
+        };
     }
 
     function createBoard(el) {
@@ -1562,7 +1804,15 @@
     }
 
     // Filled means: a value in the input, for drawings at least one point
-    const isFilled = (inp) => (inp.dataset.pts ? parsePoints(inp.value, +inp.dataset.pts).some(Boolean) : '' !== inp.value.trim());
+    const isFilled = (inp) => {
+        if (inp.dataset.sym) {
+            const sym = parseSym(inp.value);
+
+            return parsePoints(inp.value, 1).some(Boolean) || sym.axes.length > 0 || sym.none;
+        }
+
+        return inp.dataset.pts ? parsePoints(inp.value, +inp.dataset.pts).some(Boolean) : '' !== inp.value.trim();
+    };
 
     // Value of one input for the answers object
     const inputValue = (inp) => {
@@ -1572,9 +1822,31 @@
 
         const pts = parsePoints(inp.value, +inp.dataset.pts);
 
+        // Symmetry: [Z, segments, axes, none]
+        if (inp.dataset.sym) {
+            const sym = parseSym(inp.value);
+
+            return [...pts, [], sym.axes, sym.none];
+        }
+
         // GeoGebra: the segments between the image points follow the points
         return inp.dataset.edges ? [...pts, parseEdges(inp.value, +inp.dataset.pts)] : pts;
     };
+
+    // Symmetry card: the lines drawn as axes [x, y, dx, dy] and "no symmetry"
+    function parseSym(value) {
+        let v = [];
+
+        try {
+            v = JSON.parse(value || '[]');
+        } catch (e) {
+            v = [];
+        }
+
+        const axes = Array.isArray(v) && Array.isArray(v[2]) ? v[2].filter((l) => Array.isArray(l) && 4 === l.length && l.every((x) => Number.isFinite(+x))).map((l) => l.map(Number)) : [];
+
+        return {axes, none: Array.isArray(v) && true === v[3]};
+    }
 
     function parseEdges(value, n) {
         let v = [];
@@ -1840,7 +2112,7 @@
             const sections = st.sections.map((sec, si) => {
                 const pts = sec.tasks.reduce((s, t) => s + t.points, 0);
                 total += pts;
-                const one = sec.tasks.some((t) => ['table', 'points', 'angles'].includes(t.a.type));
+                const one = sec.tasks.some((t) => ['table', 'points', 'angles', 'symmetry'].includes(t.a.type));
 
                 return `
                     <section class="st-section">
@@ -2093,7 +2365,7 @@
     function sectionsHtml(sections) {
         return sections.map((sec, si) => {
             const pts = sec.tasks.reduce((s, t) => s + t.points, 0);
-            const one = sec.tasks.some((t) => ['table', 'points', 'angles'].includes(t.a.type));
+            const one = sec.tasks.some((t) => ['table', 'points', 'angles', 'symmetry'].includes(t.a.type));
 
             return `
                 <section class="st-section">
@@ -2113,7 +2385,9 @@
                 return;
             }
 
-            if (inp.dataset.pts) {
+            if (inp.dataset.sym && !Array.isArray(v)) {
+                inp.value = JSON.stringify([v.z || null, [], v.axes || [], !!v.none]);
+            } else if (inp.dataset.pts) {
                 inp.value = JSON.stringify(v);
             } else if (inp.dataset.part) {
                 inp.value = v[inp.dataset.part] ?? '';
@@ -2541,6 +2815,8 @@
                     }
                 });
                 head = ok ? tx('right') : `${tx('fieldsRight', r.points, r.max)} ${tx('tryAgain')}`;
+            } else if (li.classList.contains('st-sym')) {
+                head = ok ? tx('right') : `${tx(r.correct[0] ? 'symAxesOk' : 'symAxesBad')} ${tx(r.correct[1] ? 'symCenterOk' : 'symCenterBad')} ${tx('tryAgain')}`;
             } else if (li.classList.contains('st-tri')) {
                 const last = r.correct.length - 1;
                 const list = (r.given || []).map((g, i) => `${g.label} = ${fmtNum(g.v)}${g.unit} ${r.correct[i] ? '✓' : '✗'}${null === g.yours || r.correct[i] ? '' : ` (${tx('yours', fmtNum(g.yours) + g.unit)})`}`).join(', ');
@@ -2675,6 +2951,10 @@
                         }
                     });
                     head = ok ? tx('right') : tx('fieldsRight', r.points, r.max);
+                } else if (li.classList.contains('st-sym')) {
+                    // Symmetry: the axes and the centre drawn in green
+                    li.querySelector('.st-board')?.stBoard?.showResult([], r.correct, r.sym);
+                    head = ok ? tx('right') : `${tx(r.correct[0] ? 'symAxesOk' : 'symAxesBad')} ${tx(r.correct[1] ? 'symCenterOk' : 'symCenterBad')} ${tx('symSolution')}`;
                 } else if (li.classList.contains('st-tri')) {
                     // Triangle: every given measure with the student's value, then the sides
                     li.querySelector('.st-board')?.stBoard?.showResult([], r.correct, r.shape);

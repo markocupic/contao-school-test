@@ -31,7 +31,7 @@ final class TransformGenerator
 
     public const H = 14;
 
-    public const KINDS = ['achse', 'punkt', 'drehung', 'verschiebung', 'achse_ggb', 'punkt_ggb'];
+    public const KINDS = ['achse', 'punkt', 'drehung', 'verschiebung', 'achse_ggb', 'punkt_ggb', 'symmetrie'];
 
     /**
      * Without squares: construction in GeoGebra. One square of the board is 5 mm
@@ -66,6 +66,11 @@ final class TransformGenerator
     public function build(string $kind, string $level): array
     {
         $kind = self::LEGACY_KINDS[$kind] ?? $kind;
+
+        // Symmetry cards: draw the axes and the centre
+        if ('symmetrie' === $kind) {
+            return (new SymmetryGenerator())->build($level);
+        }
 
         if (isset(self::FREE_KINDS[$kind])) {
             return $this->buildFree($kind, $level);

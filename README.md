@@ -23,6 +23,7 @@ Zweiter Testtyp: **Spiegeln, Drehen, Verschieben** auf Häuschenpapier (20 × 14
 | Drehung | um Z, 90°, 180° oder 270° im Gegenuhrzeigersinn |
 | Verschiebung | um den Pfeil v |
 | Achsen-/Punktspiegelung mit GeoGebra | Konstruktion ohne Häuschen in GeoGebra, Toleranz 4 / 3 / 1.5 mm je nach Schwierigkeit; einen Punkt mehr, wenn die Bildpunkte mit Strecken zur Bildfigur verbunden sind |
+| Symmetrie: Achsen und Zentrum einzeichnen | Karte mit grauen Figuren oder Kacheln: nur achsensymmetrisch, nur punktsymmetrisch, beides oder keines. Auf einem einfachen Zeichenfeld (ohne GeoGebra) jede Symmetrieachse mit zwei Klicks einzeichnen und das Zentrum Z mit einem Klick setzen, sonst «Keine Symmetrie»; «Rückgängig» und «Alles löschen». 1 Punkt für die Achsen (alle, keine zu viel), 1 Punkt für das Zentrum. Ungefähr genügt: Toleranz Leicht 0.6 / 8°, Mittel 0.5 / 6°, Anspruchsvoller 0.4 / 5° (Kartenbreite 10). Leicht: Bild in der Kartenmitte, Mittel: verschoben, Anspruchsvoller: verschoben und gedreht, auch vier Achsen |
 
 Im Backend wählst du Schwierigkeit, Abbildungsarten und Aufgaben pro Art. Die Kinder setzen die Bildpunkte A′, B′, … mit einem Klick auf die Gitterpunkte, ein Klick auf einen gesetzten Punkt entfernt ihn. Jeder richtige Bildpunkt gibt einen Punkt. Auf dem Auswertungsblatt erscheint jede Aufgabe als Zeichnung: Lösung grün gestrichelt, gesetzte Punkte grün oder rot.
 
@@ -42,9 +43,11 @@ Dritter Testtyp: **Winkel** mit Skizze zu jeder Aufgabe
 |---|---|
 | Scheitel- und Nebenwinkel | zwei oder drei Geraden durch einen Punkt |
 | Stufenwinkel an Parallelen | zwei oder drei Parallelen und eine Schnittgerade |
+| Parallelen und zwei Geraden | zwei oder drei Parallelen, geschnitten von zwei Geraden, die sich in S schneiden: gegeben ein Winkel an einer Parallele und einer bei S, gesucht drei Winkel (Dreieck PQS, Stufen-, Neben-, Scheitelwinkel) |
 | Dreieck | allgemein, gleichschenklig, rechtwinklig |
 | Viereck | Winkelsumme, Parallelogramm |
 | Vieleck | Winkelsumme, fehlender Winkel, regelmässiges n-Eck, Anzahl Ecken |
+| Figuren mit Diagonalen und Höhen | Trapez mit Diagonale, regelmässiges Fünfeck mit zwei Diagonalen (auch Winkel im Schnittpunkt), Parallelogramm mit Diagonale und Höhe, gleichschenkliges Dreieck mit Höhe |
 | Kombiniert | mehrere gesuchte Winkel pro Aufgabe (Aussenwinkel, Trapez, Parallelen) |
 | Profi | gleichschenklige und gleichseitige Dreiecke mit Parallelen |
 
