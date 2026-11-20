@@ -15,6 +15,12 @@ Encore
         to: 'css/[path][name].[hash:8].[ext]',
     })
 
+    // Page stylesheet for a standalone practice page (fixed name, for the page layout)
+    .copyFiles({
+        from: './assets/page',
+        to: 'page/[path][name].[ext]',
+    })
+
     // Backend icons keep their names (referenced in the DCA)
     .copyFiles({
         from: './assets/icons',

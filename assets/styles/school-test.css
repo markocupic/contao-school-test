@@ -280,6 +280,8 @@
     --st-muted: #5a63a8;
     --st-round: ui-rounded, "Arial Rounded MT Bold", "Nunito", "Segoe UI", system-ui, sans-serif;
     max-width: 980px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.45;
     padding: 22px;
     border-radius: 28px;
     color: var(--st-ink);
@@ -295,6 +297,8 @@
         radial-gradient(circle at 52% 99%, rgba(255, 255, 255, .55) 0 1.5px, transparent 2.5px),
         radial-gradient(circle at 104% 104%, #2b3a7a 0 90px, transparent 91px);
 }
+.school-test.st-space button,
+.school-test.st-space input { font-family: inherit; }
 .school-test.st-space .st-kicker { margin: 0; font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--st-muted); }
 .school-test.st-space h2 { font-family: var(--st-round); font-weight: 800; line-height: 1.1; }
 

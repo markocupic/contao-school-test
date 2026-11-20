@@ -1,0 +1,323 @@
+/*
+ * Mathe-Mission: page stylesheet for a standalone practice page
+ * (content element «Online-Test üben» alone on the page).
+ *
+ * Contao: Layout → «Zusätzliche <head>-Tags»:
+ * <link rel="stylesheet" href="/bundles/markocupiccontaoschooltest/page/mathe-mission.css">
+ *
+ * Space background over the whole page, the app centred and a little larger on wide screens.
+ * No web fonts, no images: everything is drawn with CSS.
+ */
+
+:root {
+    --mm-space: #0a0f2c;
+    --mm-sky: #121a3a;
+    --mm-glow: #2c3c86;
+    --mm-violet: #3b2a72;
+    --mm-sun: #ffd166;
+    --mm-text: #c9d1f5;
+    /* Planet: size and position */
+    --mm-pw: clamp(160px, 22vw, 360px);
+    --mm-pl: clamp(-140px, -6vw, -40px);
+    --mm-pb: clamp(-120px, -5vw, -30px);
+    color-scheme: dark;
+}
+
+/* No own background on html: the body background then covers the whole window */
+html {
+    min-height: 100%;
+}
+
+body {
+    position: relative;
+    display: flow-root;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    color: var(--mm-text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--mm-space);
+    background-image:
+        /* Two star layers in different tile sizes, so no grid is visible */
+        radial-gradient(circle at 45% 56%, rgba(255, 255, 255, .7) 0 1.4px, transparent 2.1px),
+        radial-gradient(circle at 51% 58%, rgba(255, 255, 255, .9) 0 1.4px, transparent 2.1px),
+        radial-gradient(circle at 62% 78%, rgba(255, 255, 255, .9) 0 1.4px, transparent 2.1px),
+        radial-gradient(circle at 31% 11%, rgba(255, 255, 255, .55) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 59% 40%, rgba(255, 255, 255, .7) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 62% 82%, rgba(255, 255, 255, .9) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 5% 86%, rgba(255, 255, 255, .55) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 77% 33%, rgba(167, 139, 250, .8) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 52% 63%, rgba(255, 209, 102, .75) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 66% 46%, rgba(255, 255, 255, .55) 0 1.4px, transparent 2.1px),
+        radial-gradient(circle at 98% 98%, rgba(255, 255, 255, .9) 0 1.2px, transparent 1.9px),
+        radial-gradient(circle at 32% 24%, rgba(255, 255, 255, .55) 0 1px, transparent 1.7px),
+        /* Nebulae */
+        radial-gradient(ellipse 60% 45% at 12% 0%, rgba(44, 60, 134, .75), transparent 70%),
+        radial-gradient(ellipse 55% 50% at 100% 100%, rgba(59, 42, 114, .8), transparent 70%),
+        radial-gradient(ellipse 40% 35% at 85% 20%, rgba(78, 205, 196, .12), transparent 70%),
+        linear-gradient(180deg, #0a0f2c 0%, #111947 55%, #0d1233 100%);
+    background-size:
+        620px 620px,
+        620px 620px,
+        620px 620px,
+        620px 620px,
+        620px 620px,
+        620px 620px,
+        620px 620px,
+        430px 430px,
+        430px 430px,
+        430px 430px,
+        430px 430px,
+        430px 430px,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%;
+    background-attachment: fixed;
+}
+
+/* Ringed planet bottom left, moon top right; behind the content, not clickable */
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 50%;
+}
+
+body::before {
+    left: var(--mm-pl);
+    bottom: var(--mm-pb);
+    width: var(--mm-pw);
+    aspect-ratio: 1;
+    background:
+        radial-gradient(circle at 70% 25%, rgba(255, 255, 255, .35), transparent 35%),
+        repeating-linear-gradient(-20deg, rgba(0, 0, 0, .08) 0 14px, transparent 14px 30px),
+        radial-gradient(circle at 35% 35%, #ffb08a, #ff8a5b 45%, #b9482a 100%);
+    box-shadow: 0 0 80px rgba(255, 138, 91, .35);
+    opacity: .85;
+}
+
+/* Ring of the planet */
+html::after {
+    content: "";
+    position: fixed;
+    z-index: 0;
+    left: calc(var(--mm-pl) - var(--mm-pw) * .35);
+    bottom: calc(var(--mm-pb) + var(--mm-pw) * .3);
+    width: calc(var(--mm-pw) * 1.7);
+    height: calc(var(--mm-pw) * .4);
+    border: 3px solid rgba(255, 209, 102, .55);
+    border-radius: 50%;
+    transform: rotate(-16deg);
+    pointer-events: none;
+    opacity: .85;
+}
+
+body::after {
+    right: clamp(16px, 5vw, 90px);
+    top: clamp(20px, 6vh, 70px);
+    width: clamp(46px, 6vw, 96px);
+    aspect-ratio: 1;
+    background:
+        radial-gradient(circle at 30% 35%, rgba(0, 0, 0, .14) 0 9%, transparent 10%),
+        radial-gradient(circle at 62% 62%, rgba(0, 0, 0, .12) 0 13%, transparent 14%),
+        radial-gradient(circle at 66% 28%, rgba(0, 0, 0, .1) 0 6%, transparent 7%),
+        radial-gradient(circle at 35% 30%, #fff6d9, #ffd166 55%, #c99a2e 100%);
+    box-shadow: 0 0 40px rgba(255, 209, 102, .35);
+    opacity: .9;
+}
+
+/* Contao layout: no fixed widths, floats or backgrounds around the app */
+#wrapper,
+#container,
+#main,
+#main > .inside,
+.mod_article {
+    position: relative;
+    z-index: 1;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    float: none;
+    background: none;
+}
+
+/* Contao: the app vertically centred in the window, the footer at the bottom */
+#wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+#container {
+    flex: 0 0 auto;
+}
+
+#header,
+#footer {
+    position: relative;
+    z-index: 1;
+    color: #8fa0e8;
+    background: none;
+}
+
+#footer {
+    padding: 18px 16px 28px;
+    text-align: center;
+    font-size: .85rem;
+}
+
+#header a,
+#footer a {
+    color: var(--mm-sun);
+}
+
+/* The app: centred, a glass panel on the page background */
+.school-test.st-space {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    width: min(1120px, calc(100% - 32px));
+    max-width: none;
+    margin: clamp(16px, 6vh, 72px) auto;
+    padding: clamp(14px, 2vw, 28px);
+    border-radius: clamp(20px, 2.4vw, 34px);
+    background-color: rgba(18, 26, 58, .55);
+    background-image: none;
+    box-shadow:
+        inset 0 0 0 1px rgba(143, 160, 232, .2),
+        0 30px 80px rgba(0, 0, 0, .45),
+        0 0 120px rgba(75, 91, 214, .18);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.school-test.st-space .st-card.st-practice {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .3);
+}
+
+/* Tiles a little taller, so the start page fills the panel */
+@media (min-width: 621px) {
+    .school-test.st-space .st-main {
+        min-height: 120px;
+        justify-content: flex-end;
+    }
+
+    .school-test.st-space .st-main:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .35);
+    }
+}
+
+/* Wide screens: larger text and tiles */
+@media (min-width: 1400px) {
+    .school-test.st-space {
+        width: min(1200px, calc(100% - 64px));
+        font-size: 1.0625rem;
+    }
+
+    .school-test.st-space .st-main {
+        min-height: 150px;
+        padding: 22px;
+    }
+
+    .school-test.st-space .st-main-name {
+        font-size: 1.35rem;
+    }
+
+    .school-test.st-space .st-intro {
+        font-size: 1.02rem;
+    }
+}
+
+@media (min-width: 1900px) {
+    .school-test.st-space {
+        width: 1400px;
+        font-size: 1.15rem;
+    }
+
+    .school-test.st-space .st-hero h2 {
+        font-size: 3.2rem;
+    }
+
+    .school-test.st-space .st-main {
+        min-height: 190px;
+        padding: 26px;
+    }
+
+    .school-test.st-space .st-main svg {
+        width: 34px;
+        height: 34px;
+    }
+
+    .school-test.st-space .st-main-name {
+        font-size: 1.6rem;
+    }
+
+    .school-test.st-space .st-main-sub {
+        font-size: .95rem;
+    }
+
+    .school-test.st-space .st-langbtn,
+    .school-test.st-space .st-stars {
+        font-size: 1.1rem;
+    }
+
+    .school-test.st-space .st-intro {
+        max-width: 70ch;
+        font-size: 1.15rem;
+    }
+}
+
+@media (min-width: 2400px) {
+    .school-test.st-space {
+        width: 1560px;
+        font-size: 1.25rem;
+    }
+}
+
+/* Small screens: the panel uses the whole width */
+@media (max-width: 620px) {
+    .school-test.st-space {
+        width: auto;
+        margin: 0;
+        padding: 10px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    body::after,
+    html::after {
+        opacity: .5;
+    }
+}
+
+/* The moon floats slowly, unless the visitor prefers less motion */
+@media (prefers-reduced-motion: no-preference) {
+    body::after {
+        animation: mm-float 9s ease-in-out infinite;
+    }
+
+    @keyframes mm-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(8px); }
+    }
+}
+
+@media print {
+    html,
+    body {
+        background: #fff;
+        color: #000;
+    }
+
+    html::after,
+    body::before,
+    body::after {
+        display: none;
+    }
+}
