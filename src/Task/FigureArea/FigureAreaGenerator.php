@@ -23,9 +23,15 @@ use Markocupic\ContaoSchoolTest\Task\Util;
 final class FigureAreaGenerator
 {
     use FigureAreaComposedTasks;
+    use FigureAreaCoordTasks;
     use FigureAreaWordTasks;
 
-    public const KINDS = ['dreieck', 'rechteck', 'parallelogramm', 'trapez', 'kreis', 'zusammengesetzt', 'pythagoras'];
+    public const KINDS = ['dreieck', 'rechteck', 'parallelogramm', 'trapez', 'kreis', 'zusammengesetzt', 'pythagoras', 'koordinaten'];
+
+    /**
+     * Figures with word problems.
+     */
+    public const WORD_KINDS = ['dreieck', 'rechteck', 'parallelogramm', 'trapez', 'kreis', 'zusammengesetzt', 'pythagoras'];
 
     public const LEVELS = ['easy', 'medium', 'hard'];
 
@@ -57,6 +63,7 @@ final class FigureAreaGenerator
     {
         $level = \in_array($level, self::LEVELS, true) ? $level : 'medium';
         $kind = \in_array($kind, self::KINDS, true) ? $kind : 'rechteck';
+        $word = $word && \in_array($kind, self::WORD_KINDS, true);
         $this->last = $kind.':'.($word ? 'text' : '');
 
         $t = $word ? $this->word($kind, $level) : match ($kind) {
@@ -66,6 +73,7 @@ final class FigureAreaGenerator
             'trapez' => $this->trapezoid($level),
             'kreis' => $this->circle($level),
             'zusammengesetzt' => $this->composed($level),
+            'koordinaten' => $this->coordTask($level),
             default => $this->pythagoras($level),
         };
 
@@ -1031,8 +1039,8 @@ final class FigureAreaGenerator
     {
         $variant = match ($level) {
             'easy' => $this->variant('zusammengesetzt', ['grid', 'lshape', 'house', 'tshape', 'stairs', 'arrow']),
-            'medium' => $this->variant('zusammengesetzt', ['frame', 'tunnel', 'notch', 'ushape', 'star', 'gridpoly', 'hall', 'workpiece', 'roundsquare', 'coordPoly']),
-            default => $this->variant('zusammengesetzt', ['quarter', 'track', 'holes', 'circleInSquare', 'squareInCircle', 'lens', 'semicut', 'roundsquare', 'coordArc']),
+            'medium' => $this->variant('zusammengesetzt', ['frame', 'tunnel', 'notch', 'ushape', 'star', 'gridpoly', 'hall', 'workpiece', 'roundsquare']),
+            default => $this->variant('zusammengesetzt', ['quarter', 'track', 'holes', 'circleInSquare', 'squareInCircle', 'lens', 'semicut', 'roundsquare']),
         };
         $unit = 'easy' === $level ? 'cm' : Util::pick(['cm', 'm']);
         $q = 'Berechne den Flächeninhalt A der farbigen Fläche.';

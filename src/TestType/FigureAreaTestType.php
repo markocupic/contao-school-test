@@ -17,7 +17,8 @@ use Markocupic\ContaoSchoolTest\Task\Util;
 
 /**
  * Flächenberechnung: triangle, rectangle and square, parallelogram and rhombus, trapezoid,
- * circle, composed figures and areas with Pythagoras, in three levels, with sketches.
+ * circle, composed figures, areas with Pythagoras and in the coordinate system, in three
+ * levels, with sketches.
  * Every fourth task of a figure is a word problem; "Textaufgaben" has word problems only.
  */
 final class FigureAreaTestType implements PracticeTestTypeInterface
@@ -32,6 +33,7 @@ final class FigureAreaTestType implements PracticeTestTypeInterface
         'kreis' => 'Kreis',
         'zusammengesetzt' => 'Zusammengesetzte Flächen',
         'pythagoras' => 'Flächen mit Pythagoras',
+        'koordinaten' => 'Im Koordinatensystem',
         'text' => 'Textaufgaben',
         'gemischt' => 'Alle Bereiche gemischt',
     ];
@@ -59,7 +61,7 @@ final class FigureAreaTestType implements PracticeTestTypeInterface
 
     public function getLabel(): string
     {
-        return 'Flächenberechnung (Dreieck, Rechteck, Parallelogramm, Trapez, Kreis, zusammengesetzte Flächen, Pythagoras, Textaufgaben)';
+        return 'Flächenberechnung (Dreieck, Rechteck, Parallelogramm, Trapez, Kreis, zusammengesetzte Flächen, Pythagoras, Koordinatensystem, Textaufgaben)';
     }
 
     public function getPaletteFields(): string
@@ -135,14 +137,14 @@ final class FigureAreaTestType implements PracticeTestTypeInterface
     {
         $tasks = [];
         $seen = [];
-        $figures = Util::shuffle(FigureAreaGenerator::KINDS);
+        $figures = Util::shuffle(FigureAreaGenerator::WORD_KINDS);
         $this->generator->resetVariants();
 
         for ($i = 0; \count($tasks) < $count && $i < $count * 30; ++$i) {
             $n = \count($tasks);
             $task = 'text' === $kind
                 ? $this->generator->build($figures[$n % \count($figures)], $level, true)
-                : $this->generator->build($kind, $level, 3 === $n % 4);
+                : $this->generator->build($kind, $level, 3 === $n % 4 && \in_array($kind, FigureAreaGenerator::WORD_KINDS, true));
 
             if (!isset($seen[$task['key']])) {
                 $seen[$task['key']] = true;

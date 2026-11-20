@@ -43,7 +43,7 @@ class FigureAreaTest extends TestCase
                         $this->assertSame('angles', $a['type']);
                         $this->assertSame(\count($a['fields']), $task['points']);
                         $this->assertStringStartsWith('<svg', $a['solSvg'], $info);
-                        $this->assertSame($word, '' === $a['svg'], $info);
+                        $this->assertSame($word && \in_array($kind, FigureAreaGenerator::WORD_KINDS, true), '' === $a['svg'], $info);
                         $this->assertStringNotContainsString('NAN', $a['solSvg'].$task['way'], $info);
                         $this->assertStringNotContainsString('INF', $a['solSvg'].$task['way'], $info);
 
@@ -150,6 +150,7 @@ class FigureAreaTest extends TestCase
         mt_srand(3);
 
         $this->assertCount(\count(FigureAreaTestType::KINDS), $type->generate([]));
+        $this->assertSame('In the coordinate system', $type->getPracticeTopics()['koordinaten']['en']);
 
         $sections = $type->generate(['areaKinds' => serialize(['kreis', 'text']), 'tasksPerKind' => 4, 'difficulty' => 'hard']);
         $this->assertCount(2, $sections);

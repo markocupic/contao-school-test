@@ -186,7 +186,7 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
         'areaKinds' => [
             'inputType' => 'checkbox',
             'exclude' => true,
-            'options' => ['dreieck', 'rechteck', 'parallelogramm', 'trapez', 'kreis', 'zusammengesetzt', 'pythagoras', 'text'],
+            'options' => ['dreieck', 'rechteck', 'parallelogramm', 'trapez', 'kreis', 'zusammengesetzt', 'pythagoras', 'koordinaten', 'text'],
             'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['areaKindsOptions'],
             'eval' => ['multiple' => true, 'tl_class' => 'clr'],
             'sql' => 'blob NULL',
