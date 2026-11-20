@@ -168,6 +168,16 @@ class FigureAreaTest extends TestCase
             $this->assertCount(4, $practice[0]['tasks'], $topic);
         }
 
+        // No variant twice in a round (the figures have at least three variants per level)
+        foreach (FigureAreaGenerator::KINDS as $kind) {
+            foreach (FigureAreaGenerator::LEVELS as $level) {
+                for ($i = 0; $i < 20; ++$i) {
+                    $variants = array_column($type->generatePractice($kind, $level)[0]['tasks'], 'variant');
+                    $this->assertCount(4, array_unique($variants), "$kind $level: ".implode(', ', $variants));
+                }
+            }
+        }
+
         $topics = $type->getPracticeTopics();
         $this->assertSame('Composite shapes', $topics['zusammengesetzt']['en']);
         $this->assertSame('Trapèze', $topics['trapez']['fr']);

@@ -136,6 +136,7 @@ final class FigureAreaTestType implements PracticeTestTypeInterface
         $tasks = [];
         $seen = [];
         $figures = Util::shuffle(FigureAreaGenerator::KINDS);
+        $this->generator->resetVariants();
 
         for ($i = 0; \count($tasks) < $count && $i < $count * 30; ++$i) {
             $n = \count($tasks);

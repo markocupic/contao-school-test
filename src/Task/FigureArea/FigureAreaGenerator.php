@@ -36,6 +36,13 @@ final class FigureAreaGenerator
 
     public const ROUND = [0.051, 0.0006];
 
+    /**
+     * Variants used in the current section: "kind:variant" => true.
+     */
+    private array $used = [];
+
+    private string $last = '';
+
     private const NBSP = "\u{00A0}";
 
     /**
@@ -50,6 +57,7 @@ final class FigureAreaGenerator
     {
         $level = \in_array($level, self::LEVELS, true) ? $level : 'medium';
         $kind = \in_array($kind, self::KINDS, true) ? $kind : 'rechteck';
+        $this->last = $kind.':'.($word ? 'text' : '');
 
         $t = $word ? $this->word($kind, $level) : match ($kind) {
             'dreieck' => $this->triangle($level),
@@ -88,10 +96,34 @@ final class FigureAreaGenerator
             'way' => '<ol class="st-steps">'.implode('', array_map(static fn (string $s): string => '<li>'.$s.'</li>', $t['steps'])).'</ol>',
             'points' => \count($fields),
             'area' => $kind,
+            // Server side only: figure and variant, e.g. "kreis:ring"
+            'variant' => $this->last,
         ];
     }
 
+    /**
+     * Forget the variants used so far: call at the start of a section, so a round has no
+     * variant twice (as long as there are enough variants).
+     */
+    public function resetVariants(): void
+    {
+        $this->used = [];
+    }
+
     /* ---------- Helpers ---------- */
+
+    /**
+     * A variant of the figure that was not used in this section yet; all used: any.
+     */
+    private function variant(string $kind, array $options): string
+    {
+        $free = array_values(array_filter($options, fn (string $o): bool => !isset($this->used[$kind.':'.$o])));
+        $variant = Util::pick($free ?: $options);
+        $this->used[$kind.':'.$variant] = true;
+        $this->last = $kind.':'.$variant;
+
+        return $variant;
+    }
 
     private static function n(float|int $x): string
     {
@@ -182,10 +214,14 @@ final class FigureAreaGenerator
     private function triangle(string $level): array
     {
         $variant = match ($level) {
-            'easy' => Util::pick(['gh', 'gh', 'right']),
-            'medium' => Util::pick(['inverse', 'obtuse', 'gh']),
-            default => Util::pick(['heights', 'units']),
+            'easy' => $this->variant('dreieck', ['gh', 'right', 'grid']),
+            'medium' => $this->variant('dreieck', ['inverse', 'obtuse', 'gh']),
+            default => $this->variant('dreieck', ['heights', 'units', 'obtuse']),
         };
+
+        if ('grid' === $variant) {
+            return $this->gridFigure('dreieck');
+        }
 
         if ('heights' === $variant) {
             return $this->triangleHeights();
@@ -351,9 +387,9 @@ final class FigureAreaGenerator
     private function rectangle(string $level): array
     {
         $variant = match ($level) {
-            'easy' => Util::pick(['rect', 'square', 'grid']),
-            'medium' => Util::pick(['fromA', 'fromU', 'squareU']),
-            default => Util::pick(['units', 'ratio', 'squareA']),
+            'easy' => $this->variant('rechteck', ['rect', 'square', 'grid']),
+            'medium' => $this->variant('rechteck', ['fromA', 'fromU', 'squareU']),
+            default => $this->variant('rechteck', ['units', 'ratio', 'squareA']),
         };
         $unit = self::unit($level);
 
@@ -526,10 +562,14 @@ final class FigureAreaGenerator
     private function parallelogram(string $level): array
     {
         $variant = match ($level) {
-            'easy' => Util::pick(['rhomboid', 'diagonals']),
-            'medium' => Util::pick(['inverse', 'rhombus', 'diagonalF']),
-            default => Util::pick(['heights', 'units']),
+            'easy' => $this->variant('parallelogramm', ['rhomboid', 'diagonals', 'grid']),
+            'medium' => $this->variant('parallelogramm', ['inverse', 'rhombus', 'diagonalF']),
+            default => $this->variant('parallelogramm', ['heights', 'units', 'diagonalF']),
         };
+
+        if ('grid' === $variant) {
+            return $this->gridFigure('parallelogramm');
+        }
         $unit = self::unit($level);
 
         if ('diagonals' === $variant || 'diagonalF' === $variant || 'units' === $variant) {
@@ -709,10 +749,14 @@ final class FigureAreaGenerator
     private function trapezoid(string $level): array
     {
         $variant = match ($level) {
-            'easy' => 'area',
-            'medium' => Util::pick(['area', 'inverseH', 'inverseC']),
-            default => Util::pick(['units', 'difference', 'midline']),
+            'easy' => $this->variant('trapez', ['area', 'grid', 'midline']),
+            'medium' => $this->variant('trapez', ['area', 'inverseH', 'inverseC']),
+            default => $this->variant('trapez', ['units', 'difference', 'midline']),
         };
+
+        if ('grid' === $variant) {
+            return $this->gridFigure('trapez');
+        }
         $unit = self::unit($level);
         $int = 'easy' === $level || 'difference' === $variant;
         $a = $int ? mt_rand(6, 16) : self::rs(5, 16);
@@ -844,9 +888,9 @@ final class FigureAreaGenerator
     private function circle(string $level): array
     {
         $variant = match ($level) {
-            'easy' => 'radius',
-            'medium' => Util::pick(['diameter', 'half', 'quarter', 'fromU']),
-            default => Util::pick(['ring', 'sector', 'fromA']),
+            'easy' => $this->variant('kreis', ['radius', 'diameter', 'quarter']),
+            'medium' => $this->variant('kreis', ['diameter', 'half', 'quarter', 'fromU']),
+            default => $this->variant('kreis', ['ring', 'sector', 'fromA']),
         };
         $unit = self::unit($level);
         $r = 'easy' === $level ? mt_rand(2, 12) : mt_rand(2, 20);
@@ -986,9 +1030,9 @@ final class FigureAreaGenerator
     private function composed(string $level): array
     {
         $variant = match ($level) {
-            'easy' => Util::pick(['grid', 'lshape', 'house', 'tshape', 'stairs', 'arrow']),
-            'medium' => Util::pick(['frame', 'tunnel', 'notch', 'ushape', 'star', 'gridpoly', 'hall', 'workpiece', 'roundsquare', 'coordPoly']),
-            default => Util::pick(['quarter', 'track', 'holes', 'circleInSquare', 'squareInCircle', 'lens', 'semicut', 'roundsquare', 'coordArc']),
+            'easy' => $this->variant('zusammengesetzt', ['grid', 'lshape', 'house', 'tshape', 'stairs', 'arrow']),
+            'medium' => $this->variant('zusammengesetzt', ['frame', 'tunnel', 'notch', 'ushape', 'star', 'gridpoly', 'hall', 'workpiece', 'roundsquare', 'coordPoly']),
+            default => $this->variant('zusammengesetzt', ['quarter', 'track', 'holes', 'circleInSquare', 'squareInCircle', 'lens', 'semicut', 'roundsquare', 'coordArc']),
         };
         $unit = 'easy' === $level ? 'cm' : Util::pick(['cm', 'm']);
         $q = 'Berechne den Flächeninhalt A der farbigen Fläche.';
@@ -1228,9 +1272,9 @@ final class FigureAreaGenerator
     private function pythagoras(string $level): array
     {
         $variant = match ($level) {
-            'easy' => 'right',
-            'medium' => Util::pick(['rectangle', 'isosceles', 'rhombus', 'pyHouse']),
-            default => Util::pick(['trapezoid', 'equilateral', 'rightTrapezoid', 'pyWorkpiece', 'pyWorkpiece']),
+            'easy' => $this->variant('pythagoras', ['right', 'rectangle', 'pyHouse']),
+            'medium' => $this->variant('pythagoras', ['rectangle', 'isosceles', 'rhombus', 'pyHouse']),
+            default => $this->variant('pythagoras', ['trapezoid', 'equilateral', 'rightTrapezoid', 'pyWorkpiece']),
         };
         $unit = Util::pick(['cm', 'cm', 'm']);
 

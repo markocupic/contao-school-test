@@ -452,10 +452,12 @@ trait FigureAreaComposedTasks
             'steps' => $steps,
             'svg' => (new FigureAreaSvg())
                 ->shape([['path', [['M', [0, 0]], ['L', [$x2 + $q, 0]], ['L', [$x2, $h]], ['L', [$x2, $h + $H]], ['L', [$x1, $h + $H]], ['L', [$x1, $h]], ['arc', [$p + $r, $h], $r, 0, -180]]]], 'green')
-                ->line([$p, 0], [$p, $h], 'sol', 's')
+                // The height of the left triangle is the height h of the figure
+                ->line([$p, 0], [$p, $h])
+                ->sideAsk([$p, $h], [$p, 0], 'h', $u($h), [$p + 1, 0], .62)
                 ->line([$x1, 0], [$x1, $h], 'sol', 's')
                 ->line([$x2, 0], [$x2, $h], 'sol', 's')
-                ->label([$p * .65, $h / 3], 'A₁', 'part', null, 0, 's')
+                ->label([$p * .3, $h / 6], 'A₁', 'part', null, 0, 's')
                 ->label([$p + $r, max(.2 * $h, ($h - $r) / 2)], 'A₂', 'part', null, 0, 's')
                 ->label([$x1 + $w / 2, ($h + $H) / 2], 'A₃', 'part', null, 0, 's')
                 ->label([$x2 + $q / 3, $h / 3], 'A₄', 'part', null, 0, 's')
@@ -467,8 +469,7 @@ trait FigureAreaComposedTasks
                 ->dim([$x1, 0], [$x2, 0], $u($w), -1)
                 ->dim([$x2, 0], [$x2 + $q, 0], $u($q), -1, 'given', 'b', 2)
                 ->dim([$x1, $h], [$x1, $h + $H], $u($H), 1)
-                ->dim([0, 0], [0, $h], 'h = ?', 1, 'ask', 'q')
-                ->dim([0, 0], [0, $h], 'h = '.$u($h), 1, 'sol', 's'),
+                ->right([$p, 0], [0, 0], [$p, $h]),
         ];
     }
 
@@ -523,6 +524,82 @@ trait FigureAreaComposedTasks
                 ->label([$x0 + $a / 3, $r + ($yL - $r) / 3], 'A₂', 'part', null, 0, 's')
                 ->label([$c + $r * .35, $r * .55], 'A₃', 'part', null, 0, 's')
                 ->label([$c + $r * .6, $r + ($yR - $r) / 3], 'A₄', 'part', null, 0, 's'),
+        ];
+    }
+
+    /**
+     * Triangle, parallelogram or trapezoid on squared paper (easy): the lengths are counted.
+     */
+    private function gridFigure(string $kind): array
+    {
+        $h = mt_rand(2, 6);
+        $svg = (new FigureAreaSvg())->grid(1);
+
+        if ('dreieck' === $kind) {
+            $g = mt_rand(4, 10);
+            $px = mt_rand(-1, $g + 1);
+            $A = $g * $h / 2;
+            $svg->shape([['poly', [[0, 0], [$g, 0], [$px, $h]]]], 'yellow')
+                ->line([$px, $h], [$px, 0], 'sol', 's')
+                ->side([0, 0], [$g, 0], 'g = '.self::u($g, 'cm'), [$px, $h], 'sol', 's')
+                ->side([$px, $h], [$px, 0], 'h = '.self::u($h, 'cm'), [$g, 0], 'sol', 's');
+
+            if ($px < 0 || $px > $g) {
+                $svg->line($px < 0 ? [0, 0] : [$g, 0], [$px, 0], 'thin', 's');
+            }
+
+            return [
+                'q' => 'Jedes Häuschen ist 1 cm lang. Berechne den Flächeninhalt A des Dreiecks.',
+                'fields' => [['A', 'cm²', $A, self::EXACT]],
+                'steps' => [
+                    self::p('Häuschen zählen: g = {0}, h = {1}.', self::u($g, 'cm'), self::u($h, 'cm')),
+                    'A = g · h : 2 = '.self::u($g, 'cm').' · '.self::u($h, 'cm').' : 2 = '.self::b(self::u($A, 'cm²')),
+                ],
+                'svg' => $svg,
+            ];
+        }
+
+        if ('parallelogramm' === $kind) {
+            $g = mt_rand(4, 9);
+            $sh = mt_rand(1, 4) * (Util::chance() ? 1 : -1);
+            $x0 = max(0, -$sh);
+            $A = $g * $h;
+            // The height inside the figure
+            $hx = $sh > 0 ? $x0 + $sh : $x0;
+            $svg->shape([['poly', [[$x0, 0], [$x0 + $g, 0], [$x0 + $g + $sh, $h], [$x0 + $sh, $h]]]], 'violet')
+                ->line([$hx, $h], [$hx, 0], 'sol', 's')
+                ->side([$x0, 0], [$x0 + $g, 0], 'g = '.self::u($g, 'cm'), [$x0, $h], 'sol', 's')
+                ->side([$hx, $h], [$hx, 0], 'h = '.self::u($h, 'cm'), [$hx + 1, 0], 'sol', 's');
+
+            return [
+                'q' => 'Jedes Häuschen ist 1 cm lang. Berechne den Flächeninhalt A des Parallelogramms.',
+                'fields' => [['A', 'cm²', $A, self::EXACT]],
+                'steps' => [
+                    self::p('Häuschen zählen: g = {0}, h = {1}.', self::u($g, 'cm'), self::u($h, 'cm')),
+                    'A = g · h = '.self::u($g, 'cm').' · '.self::u($h, 'cm').' = '.self::b(self::u($A, 'cm²')),
+                ],
+                'svg' => $svg,
+            ];
+        }
+
+        $a = mt_rand(6, 11);
+        $c = mt_rand(2, $a - 2);
+        $x1 = mt_rand(0, $a - $c);
+        $A = ($a + $c) * $h / 2;
+        $svg->shape([['poly', [[0, 0], [$a, 0], [$x1 + $c, $h], [$x1, $h]]]], 'green')
+            ->line([$x1, $h], [$x1, 0], 'sol', 's')
+            ->side([0, 0], [$a, 0], 'a = '.self::u($a, 'cm'), [$x1, $h], 'sol', 's')
+            ->side([$x1, $h], [$x1 + $c, $h], 'c = '.self::u($c, 'cm'), [0, 0], 'sol', 's')
+            ->side([$x1, $h], [$x1, 0], 'h = '.self::u($h, 'cm'), [$a, 0], 'sol', 's', .6);
+
+        return [
+            'q' => 'Jedes Häuschen ist 1 cm lang. Berechne den Flächeninhalt A des Trapezes.',
+            'fields' => [['A', 'cm²', $A, self::EXACT]],
+            'steps' => [
+                self::p('Häuschen zählen: a = {0}, c = {1}, h = {2}.', self::u($a, 'cm'), self::u($c, 'cm'), self::u($h, 'cm')),
+                'A = (a + c) : 2 · h = ('.self::u($a, 'cm').' + '.self::u($c, 'cm').') : 2 · '.self::u($h, 'cm').' = '.self::b(self::u($A, 'cm²')),
+            ],
+            'svg' => $svg,
         ];
     }
 }
