@@ -1897,6 +1897,7 @@
 
     function init(root) {
         let api;
+        root.classList.add('st-space');
 
         try {
             api = JSON.parse(root.dataset.schoolTest);

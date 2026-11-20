@@ -303,7 +303,7 @@
 .school-test.st-space h2 { font-family: var(--st-round); font-weight: 800; line-height: 1.1; }
 
 /* Choice: dark panel */
-.school-test.st-space .st-card.st-practice { background: var(--st-panel); color: #eef1ff; border: 0; border-radius: 24px; padding: 28px; gap: 18px; box-shadow: 0 20px 50px rgba(0, 0, 0, .35); }
+.school-test.st-space .st-card { background: var(--st-panel); color: #eef1ff; border: 0; border-radius: 24px; padding: 28px; gap: 18px; box-shadow: 0 20px 50px rgba(0, 0, 0, .35); }
 .school-test.st-space .st-topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
 .school-test.st-space .st-langbtn { border-color: #3d4f9a; background: transparent; color: #c9d1f5; font-weight: 700; }
 .school-test.st-space .st-langbtn.on { border-color: var(--st-sun); background: var(--st-sun); color: var(--st-sky); }
@@ -333,8 +333,30 @@
 .school-test.st-space .st-launch:active { transform: translateY(3px); box-shadow: 0 3px 0 var(--st-sun-dark); }
 .school-test.st-space button:focus-visible { outline-color: var(--st-sun); }
 
+/* Test: code, resume and result on the dark panel */
+.school-test.st-space .st-card h2 { color: #fff; font-size: clamp(1.6rem, 3.6vw, 2.2rem); }
+.school-test.st-space .st-card p { color: #c9d1f5; }
+.school-test.st-space .st-card strong { color: #fff; }
+.school-test.st-space .st-card .st-code { border: 2px solid #3d4f9a; border-radius: 14px; background: #fff; color: var(--st-ink); font-weight: 800; }
+.school-test.st-space .st-card .st-code:focus { border-color: var(--st-sun); box-shadow: 0 0 0 3px rgba(255, 209, 102, .35); }
+.school-test.st-space .st-card .st-btn { background: var(--st-sun); color: var(--st-sky); font-family: var(--st-round); font-weight: 800; font-size: 1.05rem; border-radius: 14px; box-shadow: 0 4px 0 var(--st-sun-dark); }
+.school-test.st-space .st-card .st-link { color: var(--st-sun); }
+.school-test.st-space .st-card .st-msg { background: var(--st-panel2); color: #eef1ff; }
+.school-test.st-space .st-card .st-msg.bad { background: #fbe6e5; color: var(--st-bad); }
+.school-test.st-space .st-card .st-msg.warn { background: #fff2d6; color: var(--st-warn); }
+.school-test.st-space .st-locked,
+.school-test.st-space .st-finished { border-left: 0; }
+.school-test.st-space .st-locked { box-shadow: inset 6px 0 0 #e05a52, 0 20px 50px rgba(0, 0, 0, .35); }
+.school-test.st-space .st-finished { box-shadow: inset 6px 0 0 #3fb57a, 0 20px 50px rgba(0, 0, 0, .35); }
+.school-test.st-space .st-score { color: #eef1ff; }
+.school-test.st-space .st-score span { color: var(--st-sun); font-family: var(--st-round); }
+.school-test.st-space .st-warnbox { border-radius: 14px; }
+.school-test.st-space .st-confirm { color: var(--st-ink); border-radius: 14px; }
+.school-test.st-space .st-submit .st-confirm .st-btn2 { color: var(--st-ink); border-color: var(--st-ink); }
+.school-test.st-space .st-test > .st-msg { border-radius: 14px; }
+
 /* Tasks: light card */
-.school-test.st-space .st-test.st-practice { background: #f6f7ff; border-radius: 24px; padding: 22px 26px 26px; gap: 14px; box-shadow: 0 20px 50px rgba(0, 0, 0, .35); }
+.school-test.st-space .st-test { background: #f6f7ff; border-radius: 24px; padding: 22px 26px 26px; gap: 14px; box-shadow: 0 20px 50px rgba(0, 0, 0, .35); }
 .school-test.st-space .st-head { border-bottom: 0; align-items: flex-start; padding-bottom: 6px; background: #f6f7ff; }
 .school-test.st-space .st-head h2 { font-size: 1.6rem; }
 .school-test.st-space .st-headpts { font-size: .88rem; color: var(--st-muted); }
@@ -382,7 +404,7 @@
 @media (max-width: 620px) {
     .school-test.st-space { padding: 12px; border-radius: 20px; }
     .school-test.st-space .st-card.st-practice,
-    .school-test.st-space .st-test.st-practice { padding: 18px; }
+    .school-test.st-space .st-test { padding: 18px; }
     .school-test.st-space .st-mainnav { grid-template-columns: minmax(0, 1fr); }
     .school-test.st-space .st-main { flex-direction: row; align-items: center; flex-wrap: wrap; column-gap: 12px; }
     .school-test.st-space .st-main-sub { flex-basis: 100%; }

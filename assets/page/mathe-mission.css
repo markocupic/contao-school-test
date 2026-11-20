@@ -96,25 +96,29 @@ html body::before {
     background:
         radial-gradient(circle at 70% 25%, rgba(255, 255, 255, .35), transparent 35%),
         repeating-linear-gradient(-20deg, rgba(0, 0, 0, .08) 0 14px, transparent 14px 30px),
-        radial-gradient(circle at 35% 35%, #ffb08a, #ff8a5b 45%, #b9482a 100%);
-    box-shadow: 0 0 80px rgba(255, 138, 91, .35);
-    opacity: .85;
+        radial-gradient(circle at 35% 35%, #f2a07c, #e57a50 45%, #a4402a 100%);
+    box-shadow: 0 0 80px rgba(255, 138, 91, .3);
 }
 
-/* Ring of the planet */
+/* Ring of the planet: the whole ring behind the planet, the front half once more in front of it */
+html::before,
 html::after {
     content: "";
     position: fixed;
     z-index: 0;
     left: calc(var(--mm-pl) - var(--mm-pw) * .35);
     bottom: calc(var(--mm-pb) + var(--mm-pw) * .3);
+    box-sizing: border-box;
     width: calc(var(--mm-pw) * 1.7);
     height: calc(var(--mm-pw) * .4);
-    border: 3px solid rgba(255, 209, 102, .55);
+    border: 3px solid rgba(255, 209, 102, .6);
     border-radius: 50%;
     transform: rotate(-16deg);
     pointer-events: none;
-    opacity: .85;
+}
+
+html::after {
+    clip-path: inset(50% 0 0 0);
 }
 
 html body::after {
@@ -293,6 +297,7 @@ html body .school-test.st-space .st-card.st-practice {
     }
 
     body::after,
+    html::before,
     html::after {
         opacity: .5;
     }
@@ -317,6 +322,7 @@ html body .school-test.st-space .st-card.st-practice {
         color: #000;
     }
 
+    html::before,
     html::after,
     body::before,
     body::after {

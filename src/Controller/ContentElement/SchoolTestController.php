@@ -40,6 +40,9 @@ class SchoolTestController extends AbstractContentElementController
 
         $template->set('api_urls', $urls);
 
+        // Own test page: the space background over the whole page
+        $template->set('page_style', (bool) $model->schoolTestPageStyle);
+
         return $template->getResponse();
     }
 }

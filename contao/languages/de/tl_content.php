@@ -12,4 +12,4 @@ declare(strict_types=1);
  * @link https://github.com/markocupic/contao-school-test
  */
 
-$GLOBALS['TL_LANG']['tl_content']['schoolTestPageStyle'] = ['Ganze Seite gestalten (eigene Übungsseite)', 'Weltraum-Hintergrund mit Planet und Mond über die ganze Seite, die Übung zentriert und auf grossen Bildschirmen grösser. Nur wählen, wenn die Übung allein auf der Seite steht.'];
+$GLOBALS['TL_LANG']['tl_content']['schoolTestPageStyle'] = ['Ganze Seite gestalten (eigene Seite)', 'Weltraum-Hintergrund mit Planet und Mond über die ganze Seite, Test oder Übung zentriert und auf grossen Bildschirmen grösser. Nur wählen, wenn das Element allein auf der Seite steht.'];

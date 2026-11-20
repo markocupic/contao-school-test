@@ -8,6 +8,11 @@
     {% add "school_test_css" to head %}
         <link rel="stylesheet" href="{{ asset('css/school-test.css', 'markocupic_contao_school_test') }}">
     {% endadd %}
+    {% if page_style %}
+        {% add "school_test_page_css" to head %}
+            <link rel="stylesheet" href="{{ asset('page/mathe-mission.css', 'markocupic_contao_school_test') }}">
+        {% endadd %}
+    {% endif %}
     {% add "school_test_js" to body %}
         <script src="{{ asset('js/school-test.js', 'markocupic_contao_school_test') }}" defer></script>
     {% endadd %}
