@@ -183,6 +183,14 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
             'eval' => ['multiple' => true, 'tl_class' => 'clr'],
             'sql' => 'blob NULL',
         ],
+        'areaKinds' => [
+            'inputType' => 'checkbox',
+            'exclude' => true,
+            'options' => ['dreieck', 'rechteck', 'parallelogramm', 'trapez', 'kreis', 'zusammengesetzt', 'pythagoras', 'text'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['areaKindsOptions'],
+            'eval' => ['multiple' => true, 'tl_class' => 'clr'],
+            'sql' => 'blob NULL',
+        ],
         'binomialTopics' => [
             'inputType' => 'checkbox',
             'exclude' => true,

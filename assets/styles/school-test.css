@@ -164,7 +164,8 @@
 .school-test .st-angins { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
 .school-test .st-angin { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 2px 4px; border-radius: 8px; }
 .school-test .st-angin span:first-child { font-weight: 700; }
-.school-test .st-angin input { width: 6ch; }
+.school-test .st-angin input { width: 7ch; }
+.school-test .st-angfig:empty { display: none; }
 .school-test .st-angin.st-cell-ok { background: #e2f4e9; }
 .school-test .st-angin.st-cell-bad { background: #fbe6e5; }
 .school-test .st-steps { margin: 4px 0 0; padding-left: 1.3em; }

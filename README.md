@@ -85,6 +85,22 @@ Das Kind konstruiert das Dreieck irgendwo auf dem Blatt (1 Einheit = 1 cm). Die 
 
 Neues Feld in `tl_st_test`: `triangleKinds` (nach dem Update `contao:migrate`).
 
+Siebter Testtyp: **Flächenberechnung** (Geometrie) mit farbigen, beschrifteten Skizzen, je drei Niveaus:
+
+| Bereich | Leicht | Mittel | Anspruchsvoller |
+|---|---|---|---|
+| Dreieck | Grundseite und Höhe, rechtwinklig | Höhe aus A, stumpfwinklig (Höhe aussen), Dezimalzahlen | zwei Höhen (h₂ aus A und b), gemischte Einheiten |
+| Rechteck und Quadrat | A und U, auch auf Häuschenpapier | Seite aus A oder U | gemischte Einheiten, Seitenverhältnis, Quadrat aus A |
+| Parallelogramm und Raute | g · h (schräge Seite als Ablenkung), Raute aus Diagonalen | h aus A, Raute mit Höhe, Diagonale aus A | zwei Höhen, Raute in dm² |
+| Trapez | a, c, h | h oder c aus A | gemischte Einheiten, a und c aus Unterschied, Mittellinie |
+| Kreis | A und U aus r | aus d, Halb- und Viertelkreis, r aus U | Kreisring, Sektor, r aus A |
+| Zusammengesetzte Flächen | L-Form (auch Häuschen), Haus | Rahmen, Rechteck mit Halbkreis, Kerbe | Quadrat minus Viertelkreis, Laufbahn, Löcher |
+| Flächen mit Pythagoras | rechtwinkliges Dreieck | Rechteck mit Diagonale, gleichschenkliges Dreieck, Raute | gleichschenkliges und rechtwinkliges Trapez, gleichseitiges Dreieck |
+
+Jede vierte Aufgabe eines Bereichs ist eine **Textaufgabe** (Segel, Parkett, Platten, Grundstück mit Preis, Pizza, Wand mit Farbe, Bildschirm, Giebel …), der Bereich «Textaufgaben» hat nur solche. Textaufgaben zeigen keine Skizze, die Lösung schon. Jeder gesuchte Wert gibt einen Punkt. Werte ohne π und Wurzeln müssen genau stimmen; Ergebnisse mit π oder Wurzeln werden auf eine Dezimale gerundet, π ≈ 3.14 gilt auch, ebenso Folgefehler aus einem gerundeten Zwischenresultat. Beim Üben zeigt die Lösung die Skizze mit den Werten (zusammengesetzte Flächen mit der Zerlegung A₁, A₂) und den Lösungsweg.
+
+Neues Feld in `tl_st_test`: `areaKinds` (nach dem Update `contao:migrate`).
+
 ## Ablauf
 
 1. **Klassen** (Backend › Schultests › Klassen): Klasse anlegen, Schülerinnen und Schüler erfassen.

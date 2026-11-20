@@ -293,7 +293,8 @@ final class AnswerChecker
      * @return array{points: int, max: int, correct: list<bool>}
      */
     /**
-     * One field per unknown angle (or the number of corners).
+     * One field per unknown angle (or the number of corners). Areas: one field per value,
+     * each with its own tolerance [absolute, relative].
      */
     private function checkAngles(array $a, array $raw): array
     {
@@ -301,7 +302,8 @@ final class AnswerChecker
 
         foreach ($a['v'] as $i => $v) {
             $x = self::parseNumber(\is_string($raw[$i] ?? null) ? str_replace('°', '', $raw[$i]) : ($raw[$i] ?? null));
-            $correct[$i] = null !== $x && abs($x - (float) $v) < 0.01;
+            $tol = isset($a['tol'][$i]) ? (float) $a['tol'][$i][0] + (float) $a['tol'][$i][1] * abs((float) $v) : 0.01;
+            $correct[$i] = null !== $x && abs($x - (float) $v) < $tol + 1e-9;
         }
 
         return $this->result($correct);

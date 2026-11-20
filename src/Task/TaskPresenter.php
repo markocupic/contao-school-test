@@ -55,6 +55,12 @@ final class TaskPresenter
                     $a['fields'] = array_map(static fn (array $f): array => isset($f['prompt']) ? ['prompt' => $t->decimals((string) $f['prompt'], $lang)] + $f : $f, $a['fields']);
                 }
 
+                // Angles and areas: field names and units translated, decimal comma in the sketch
+                if ('angles' === $task['a']['type']) {
+                    $a['fields'] = array_map(static fn (array $f): array => ['label' => $t->text((string) $f['label'], $lang), 'unit' => $t->units((string) $f['unit'], $lang)] + $f, $a['fields']);
+                    $a['svg'] = $t->decimals((string) ($a['svg'] ?? ''), $lang);
+                }
+
                 if ('table' === $task['a']['type']) {
                     $a['cols'] = array_map(
                         static fn (array $c): array => array_intersect_key($c, array_flip(['ref', 'ask', 'top', 'bot', 'unit'])),

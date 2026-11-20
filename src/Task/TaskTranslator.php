@@ -17,6 +17,7 @@ namespace Markocupic\ContaoSchoolTest\Task;
 use Markocupic\ContaoSchoolTest\Task\Angle\AngleTexts;
 use Markocupic\ContaoSchoolTest\Task\Binomial\BinomialTexts;
 use Markocupic\ContaoSchoolTest\Task\Equation\EquationTexts;
+use Markocupic\ContaoSchoolTest\Task\FigureArea\FigureAreaTexts;
 use Markocupic\ContaoSchoolTest\Task\Geometry\SymmetryTexts;
 use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleTexts;
 
@@ -243,10 +244,10 @@ final class TaskTranslator
      */
     private const UNITS = [
         // "40 Fr. Genau …": the dot also ends the sentence, keep it in English
-        '/(\d|&nbsp;|\s|^)Fr\.(?=\s+[A-ZÀ-Ý])/u' => ['$1fr.', '$1fr.', '$1CHF.'],
-        '/(\d|&nbsp;|\s|^)Fr\.(?![A-Za-zÀ-ÿ])/u' => ['$1fr.', '$1fr.', '$1CHF'],
-        '/(\d|&nbsp;|\s|^)Rp\.(?![A-Za-zÀ-ÿ])/u' => ['$1ct.', '$1ct.', '$1ct.'],
-        '/(\d|&nbsp;|\s|^)Liter\b/u' => ['$1litres', '$1litri', '$1litres'],
+        '/(\d|&nbsp;|\s|\x{00A0}|^)Fr\.(?=\s+[A-ZÀ-Ý])/u' => ['$1fr.', '$1fr.', '$1CHF.'],
+        '/(\d|&nbsp;|\s|\x{00A0}|^)Fr\.(?![A-Za-zÀ-ÿ])/u' => ['$1fr.', '$1fr.', '$1CHF'],
+        '/(\d|&nbsp;|\s|\x{00A0}|^)Rp\.(?![A-Za-zÀ-ÿ])/u' => ['$1ct.', '$1ct.', '$1ct.'],
+        '/(\d|&nbsp;|\s|\x{00A0}|^)Liter\b/u' => ['$1litres', '$1litri', '$1litres'],
     ];
 
     /**
@@ -345,7 +346,7 @@ final class TaskTranslator
             return $text;
         }
 
-        return self::TEXTS[$text][$i] ?? AngleTexts::TITLES[$text][$i] ?? EquationTexts::TITLES[$text][$i] ?? TriangleTexts::TITLES[$text][$i] ?? BinomialTexts::TITLES[$text][$i] ?? SymmetryTexts::TEXTS[$text][$i] ?? $this->phrase($text, $i) ?? $text;
+        return self::TEXTS[$text][$i] ?? AngleTexts::TITLES[$text][$i] ?? EquationTexts::TITLES[$text][$i] ?? TriangleTexts::TITLES[$text][$i] ?? BinomialTexts::TITLES[$text][$i] ?? SymmetryTexts::TEXTS[$text][$i] ?? FigureAreaTexts::TEXTS[$text][$i] ?? $this->phrase($text, $i) ?? $text;
     }
 
     /**
@@ -425,7 +426,7 @@ final class TaskTranslator
         }
 
         $compiled = [];
-        $templates = AngleTexts::PHRASES + EquationTexts::PHRASES + TriangleTexts::PHRASES + BinomialTexts::PHRASES + SymmetryTexts::PHRASES;
+        $templates = AngleTexts::PHRASES + EquationTexts::PHRASES + TriangleTexts::PHRASES + BinomialTexts::PHRASES + SymmetryTexts::PHRASES + FigureAreaTexts::PHRASES;
 
         // Most literal text first: "bei {1} und {2}" before "bei {1}"
         uksort($templates, static fn (string $a, string $b): int => mb_strlen(preg_replace('/\{\d+\}/', '', $b)) <=> mb_strlen(preg_replace('/\{\d+\}/', '', $a)));
@@ -446,7 +447,7 @@ final class TaskTranslator
                 }
             }
 
-            $compiled['#^'.$regex.'$#su'] = [$translations, $groups, isset(TriangleTexts::PHRASES[$tpl]) || isset(BinomialTexts::PHRASES[$tpl])];
+            $compiled['#^'.$regex.'$#su'] = [$translations, $groups, isset(TriangleTexts::PHRASES[$tpl]) || isset(BinomialTexts::PHRASES[$tpl]) || isset(FigureAreaTexts::PHRASES[$tpl])];
         }
 
         return $compiled;

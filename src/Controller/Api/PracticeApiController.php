@@ -143,9 +143,11 @@ final class PracticeApiController
                     $tasks[$id]['way'] = $this->translator->decimals($tasks[$id]['way'], $lang);
                 }
 
-                // Angles: the sketch with the solution
+                // Angles and areas: the sketch with the solution, decimal comma in French and Italian
                 if ('angles' === ($task['a']['type'] ?? '')) {
-                    $tasks[$id]['svg'] = $task['a']['solSvg'];
+                    $tasks[$id]['svg'] = $this->translator->decimals((string) $task['a']['solSvg'], $lang);
+                    $tasks[$id]['way'] = $this->translator->decimals($tasks[$id]['way'], $lang);
+                    $tasks[$id]['cells'] = array_map(fn (string $c): string => $this->translator->decimals($c, $lang), $tasks[$id]['cells']);
                 }
 
                 // Triangle constructions: the solution triangle and the measures of the student's triangle
