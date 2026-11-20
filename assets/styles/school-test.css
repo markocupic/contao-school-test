@@ -262,3 +262,123 @@
 .school-test .st-chip-none.set { background: #fef3c7; border-color: #e08a1e; color: #8a4b00; }
 .school-test .st-symsvg { display: block; width: 100%; max-width: 440px; height: auto; margin-top: 6px; cursor: crosshair; touch-action: manipulation; user-select: none; }
 .school-test .st-board-done .st-symsvg { cursor: default; }
+
+/*
+ * Practice: «Mathe-Mission». Dark night sky with stars, the choice on a dark panel, the
+ * tasks on a light card. Colours can be adjusted with the custom properties. No web fonts
+ * are loaded (data protection): rounded system fonts first, then the site's font.
+ */
+.school-test.st-space {
+    --st-accent: #4b5bd6;
+    --st-sky: #121a3a;
+    --st-panel: #1c2752;
+    --st-panel2: #26336a;
+    --st-sun: #ffd166;
+    --st-sun-dark: #c99a2e;
+    --st-ink: #1b2147;
+    --st-muted: #5a63a8;
+    --st-round: ui-rounded, "Arial Rounded MT Bold", "Nunito", "Segoe UI", system-ui, sans-serif;
+    max-width: 980px;
+    padding: 22px;
+    border-radius: 28px;
+    color: var(--st-ink);
+    background-color: var(--st-sky);
+    background-image:
+        radial-gradient(circle at 7% 6%, rgba(255, 255, 255, .8) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 23% 2%, rgba(255, 255, 255, .55) 0 1px, transparent 2px),
+        radial-gradient(circle at 41% 5%, rgba(255, 255, 255, .7) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 63% 2.5%, rgba(255, 255, 255, .55) 0 1px, transparent 2px),
+        radial-gradient(circle at 82% 7%, rgba(255, 255, 255, .7) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 96% 3%, rgba(255, 255, 255, .5) 0 1px, transparent 2px),
+        radial-gradient(circle at 3% 97%, rgba(255, 255, 255, .6) 0 1px, transparent 2px),
+        radial-gradient(circle at 52% 99%, rgba(255, 255, 255, .55) 0 1.5px, transparent 2.5px),
+        radial-gradient(circle at 104% 104%, #2b3a7a 0 90px, transparent 91px);
+}
+.school-test.st-space .st-kicker { margin: 0; font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--st-muted); }
+.school-test.st-space h2 { font-family: var(--st-round); font-weight: 800; line-height: 1.1; }
+
+/* Choice: dark panel */
+.school-test.st-space .st-card.st-practice { background: var(--st-panel); color: #eef1ff; border: 0; border-radius: 24px; padding: 28px; gap: 18px; box-shadow: 0 20px 50px rgba(0, 0, 0, .35); }
+.school-test.st-space .st-topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.school-test.st-space .st-langbtn { border-color: #3d4f9a; background: transparent; color: #c9d1f5; font-weight: 700; }
+.school-test.st-space .st-langbtn.on { border-color: var(--st-sun); background: var(--st-sun); color: var(--st-sky); }
+.school-test.st-space .st-stars { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; color: var(--st-sun); }
+.school-test.st-space .st-hero { display: flex; flex-direction: column; gap: 4px; }
+.school-test.st-space .st-card .st-kicker { color: #8fa0e8; }
+.school-test.st-space .st-hero h2 { color: #fff; font-size: clamp(1.8rem, 4.2vw, 2.6rem); }
+.school-test.st-space .st-intro { margin-top: 6px; color: #c9d1f5; font-size: .95rem; max-width: 62ch; }
+.school-test.st-space .st-mainnav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 4px 0 0; padding: 0; border: 0; }
+.school-test.st-space .st-main { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; border: 3px solid transparent; border-radius: 20px; text-align: left; transition: transform .15s ease, box-shadow .15s ease; }
+.school-test.st-space .st-main svg { margin-bottom: 4px; }
+.school-test.st-space .st-main-name { font-family: var(--st-round); font-size: 1.15rem; font-weight: 800; }
+.school-test.st-space .st-main-sub { font-size: .8rem; font-weight: 700; }
+.school-test.st-space .st-main-arithmetik,
+.school-test.st-space .st-main-arithmetik.on { background: #ff8a5b; color: #2a1200; }
+.school-test.st-space .st-main-algebra,
+.school-test.st-space .st-main-algebra.on { background: #4ecdc4; color: #06302d; }
+.school-test.st-space .st-main-geometrie,
+.school-test.st-space .st-main-geometrie.on { background: #a78bfa; color: #1f0f4d; }
+.school-test.st-space .st-main:not(:disabled):hover { transform: translateY(-2px); }
+.school-test.st-space .st-main.on { border-color: var(--st-sun); transform: translateY(-3px); box-shadow: 0 8px 0 rgba(0, 0, 0, .3); }
+.school-test.st-space .st-card .st-chooselabel { color: #c9d1f5; font-weight: 800; }
+.school-test.st-space .st-card .st-opt:not(.st-main) { border: 2px solid transparent; border-radius: 14px; padding: 9px 14px; background: var(--st-panel2); color: #eef1ff; font-weight: 700; }
+.school-test.st-space .st-card .st-opt:not(.st-main).on { background: var(--st-sun); color: var(--st-sky); }
+.school-test.st-space .st-card .st-opt:not(.st-main):hover { border-color: #3d4f9a; }
+.school-test.st-space .st-launch { display: inline-flex; align-items: center; justify-content: center; gap: 10px; flex: 1; padding: 14px 26px; border-radius: 18px; background: var(--st-sun); color: var(--st-sky); font-family: var(--st-round); font-size: 1.3rem; font-weight: 800; box-shadow: 0 6px 0 var(--st-sun-dark); }
+.school-test.st-space .st-launch:active { transform: translateY(3px); box-shadow: 0 3px 0 var(--st-sun-dark); }
+.school-test.st-space button:focus-visible { outline-color: var(--st-sun); }
+
+/* Tasks: light card */
+.school-test.st-space .st-test.st-practice { background: #f6f7ff; border-radius: 24px; padding: 22px 26px 26px; gap: 14px; box-shadow: 0 20px 50px rgba(0, 0, 0, .35); }
+.school-test.st-space .st-head { border-bottom: 0; align-items: flex-start; padding-bottom: 6px; background: #f6f7ff; }
+.school-test.st-space .st-head h2 { font-size: 1.6rem; }
+.school-test.st-space .st-headpts { font-size: .88rem; color: var(--st-muted); }
+.school-test.st-space .st-status { gap: 6px; }
+.school-test.st-space .st-progress { display: flex; align-items: center; gap: 12px; }
+.school-test.st-space .st-track { --st-p: 0%; position: relative; flex: 1; height: 14px; border-radius: 999px; background: #dfe3fb; }
+.school-test.st-space .st-fill { position: absolute; left: 0; top: 0; bottom: 0; width: var(--st-p); border-radius: 999px; background: #ff8a5b; transition: width .4s ease; }
+.school-test.st-space .st-rocket { position: absolute; top: 50%; left: var(--st-p); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--st-ink); color: var(--st-sun); transform: translate(-50%, -50%); transition: left .4s ease; box-shadow: 0 0 0 3px #f6f7ff; }
+.school-test.st-space .st-rocket svg { width: 22px; height: 22px; }
+.school-test.st-space .st-progress { padding: 8px 0; }
+.school-test.st-space .st-count { font-weight: 800; white-space: nowrap; }
+.school-test.st-space .st-roundstars { display: inline-flex; align-items: center; gap: 4px; font-weight: 800; color: #8a5a00; white-space: nowrap; }
+.school-test.st-space .st-roundstars svg { color: #f4b740; }
+.school-test.st-space .st-tryhint { color: var(--st-muted); }
+.school-test.st-space .st-section h3 { border-bottom: 0; margin-top: 8px; font-family: var(--st-round); }
+.school-test.st-space .st-letter { background: var(--st-ink); border-radius: 8px; }
+.school-test.st-space .st-instr { color: var(--st-muted); font-style: normal; }
+.school-test.st-space .st-tasks { gap: 10px; }
+.school-test.st-space .st-task { padding: 10px 14px; border: 2px solid #dfe3fb; border-radius: 18px; background: #fff; }
+.school-test.st-space .st-nr { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 34px; height: 34px; min-width: 34px; border-radius: 50%; background: #dfe3fb; font-weight: 800; }
+.school-test.st-space .st-wide .st-nr { align-self: flex-start; margin-top: 4px; }
+.school-test.st-space .st-num input,
+.school-test.st-space .st-frac input,
+.school-test.st-space .st-in input,
+.school-test.st-space .st-angin input { border: 2px solid #c3c9f0; border-radius: 12px; background: #fff; font-weight: 800; }
+.school-test.st-space .st-num input { width: 8ch; padding: 6px 8px; font-size: 1.08rem; }
+.school-test.st-space input:focus { border-color: var(--st-accent); box-shadow: 0 0 0 3px rgba(75, 91, 214, .2); }
+.school-test.st-space .st-trybtn { border: 0; border-radius: 12px; background: var(--st-accent); color: #fff; font-weight: 800; padding: 8px 18px; }
+.school-test.st-space .st-task.st-try-ok,
+.school-test.st-space .st-task.st-ok { background: #e6f7ee; background-image: none; border-color: #3fb57a; }
+.school-test.st-space .st-task.st-try-ok .st-nr,
+.school-test.st-space .st-task.st-ok .st-nr { background: #3fb57a; color: #fff; }
+.school-test.st-space .st-task.st-try-bad { background: #fff3e8; background-image: none; border-color: #f08a3c; }
+.school-test.st-space .st-task.st-try-bad .st-nr { background: #f08a3c; color: #fff; }
+.school-test.st-space .st-task.st-bad { background: #fdeceb; background-image: none; border-color: #e05a52; }
+.school-test.st-space .st-task.st-bad .st-nr { background: #e05a52; color: #fff; }
+.school-test.st-space .st-try-bad .st-tryfb { color: #a14d0b; }
+.school-test.st-space .st-submit { margin-top: 8px; padding: 14px 18px; border-radius: 18px; background: var(--st-panel); color: #eef1ff; align-items: stretch; }
+.school-test.st-space .st-submit .st-row { justify-content: flex-end; }
+.school-test.st-space .st-landing { margin-right: auto; font-weight: 700; }
+.school-test.st-space .st-submit .st-btn { background: var(--st-sun); color: var(--st-sky); font-family: var(--st-round); font-weight: 800; font-size: 1.1rem; border-radius: 14px; box-shadow: 0 4px 0 var(--st-sun-dark); }
+.school-test.st-space .st-submit .st-btn2 { background: transparent; color: var(--st-sun); border: 2px solid var(--st-sun); box-shadow: none; }
+.school-test.st-space .st-submit .st-link { color: var(--st-sun); }
+
+@media (max-width: 620px) {
+    .school-test.st-space { padding: 12px; border-radius: 20px; }
+    .school-test.st-space .st-card.st-practice,
+    .school-test.st-space .st-test.st-practice { padding: 18px; }
+    .school-test.st-space .st-mainnav { grid-template-columns: minmax(0, 1fr); }
+    .school-test.st-space .st-main { flex-direction: row; align-items: center; flex-wrap: wrap; column-gap: 12px; }
+    .school-test.st-space .st-main-sub { flex-basis: 100%; }
+}

@@ -49,6 +49,7 @@
         de: {
             chooseMain: 'Was möchtest du üben?', chooseType: 'Thema', main_arithmetik: 'Arithmetik', main_algebra: 'Algebra', main_geometrie: 'Geometrie',
             chooseArea: 'Bereich', chooseLevel: 'Schwierigkeit', easy: 'Leicht', medium: 'Mittel', hard: 'Anspruchsvoller',
+            missionKicker: 'Mathe-Mission', missionTitle: 'Wohin fliegst du heute?', missionStart: 'Mission starten', sub_arithmetik: 'Planet der Zahlen', sub_algebra: 'Mond der Gleichungen', sub_geometrie: 'Formen-Galaxie', stars: '{0} Sterne', starsOne: '1 Stern', starsRound: 'Sterne in dieser Übung', progress: 'Fortschritt', landing: 'Noch {0} Aufgaben bis zur Landung', landingOne: 'Noch 1 Aufgabe bis zur Landung', landed: 'Alles ausgefüllt: bereit zur Landung!', landedDone: 'Gelandet!',
             practiceHead: 'Üben', practiceIntro2: 'Wähle aus, was du üben möchtest, und die Schwierigkeit. Bei jedem Start gibt es neue Aufgaben. Nichts wird gespeichert und es gibt keine Note. Nach dem Auswerten siehst du zu jeder Aufgabe die Lösung und den Lösungsweg.', otherChoice: 'Andere Auswahl',
             language: 'Sprache', startTitle: 'Test starten', enterCode: 'Gib deinen fünfstelligen Code ein.', code: 'Code', start: 'Starten',
             codeFive: 'Der Code hat fünf Ziffern.', wait: 'Einen Moment …', noConnection: 'Keine Verbindung zum Server. Versuche es nochmals.',
@@ -88,6 +89,7 @@
         fr: {
             chooseMain: 'Que veux-tu travailler ?', chooseType: 'Thème', main_arithmetik: 'Arithmétique', main_algebra: 'Algèbre', main_geometrie: 'Géométrie',
             chooseArea: 'Domaine', chooseLevel: 'Difficulté', easy: 'Facile', medium: 'Moyen', hard: 'Exigeant',
+            missionKicker: 'Mission maths', missionTitle: 'Où voles-tu aujourd’hui&nbsp;?', missionStart: 'Lancer la mission', sub_arithmetik: 'Planète des nombres', sub_algebra: 'Lune des équations', sub_geometrie: 'Galaxie des formes', stars: '{0} étoiles', starsOne: '1 étoile', starsRound: 'Étoiles de cet entraînement', progress: 'Progression', landing: 'Encore {0} tâches avant l’atterrissage', landingOne: 'Encore 1 tâche avant l’atterrissage', landed: 'Tout est rempli&nbsp;: prêt pour l’atterrissage&nbsp;!', landedDone: 'Atterri&nbsp;!',
             practiceHead: 'S’entraîner', practiceIntro2: 'Choisis ce que tu veux travailler et la difficulté. À chaque départ, tu reçois de nouvelles tâches. Rien n’est enregistré et il n’y a pas de note. Après la correction, tu vois la solution et la démarche de chaque tâche.', otherChoice: 'Autre choix',
             language: 'Langue', startTitle: 'Commencer le test', enterCode: 'Saisis ton code à cinq chiffres.', code: 'Code', start: 'Commencer',
             codeFive: 'Le code comporte cinq chiffres.', wait: 'Un instant …', noConnection: 'Pas de connexion au serveur. Réessaie.',
@@ -127,6 +129,7 @@
         it: {
             chooseMain: 'Cosa vuoi esercitare?', chooseType: 'Tema', main_arithmetik: 'Aritmetica', main_algebra: 'Algebra', main_geometrie: 'Geometria',
             chooseArea: 'Campo', chooseLevel: 'Difficoltà', easy: 'Facile', medium: 'Medio', hard: 'Impegnativo',
+            missionKicker: 'Missione matematica', missionTitle: 'Dove voli oggi?', missionStart: 'Avvia la missione', sub_arithmetik: 'Pianeta dei numeri', sub_algebra: 'Luna delle equazioni', sub_geometrie: 'Galassia delle forme', stars: '{0} stelle', starsOne: '1 stella', starsRound: 'Stelle di questo esercizio', progress: 'Avanzamento', landing: 'Ancora {0} esercizi prima dell’atterraggio', landingOne: 'Ancora 1 esercizio prima dell’atterraggio', landed: 'Tutto compilato: pronti all’atterraggio!', landedDone: 'Atterrati!',
             practiceHead: 'Esercitarsi', practiceIntro2: 'Scegli cosa vuoi esercitare e la difficoltà. A ogni avvio ricevi nuovi esercizi. Non viene salvato nulla e non c’è nessun voto. Dopo la correzione vedi la soluzione e il procedimento di ogni esercizio.', otherChoice: 'Altra scelta',
             language: 'Lingua', startTitle: 'Iniziare il test', enterCode: 'Inserisci il tuo codice di cinque cifre.', code: 'Codice', start: 'Iniziare',
             codeFive: 'Il codice ha cinque cifre.', wait: 'Un momento …', noConnection: 'Nessuna connessione al server. Riprova.',
@@ -166,6 +169,7 @@
         en: {
             chooseMain: 'What do you want to practise?', chooseType: 'Topic', main_arithmetik: 'Arithmetic', main_algebra: 'Algebra', main_geometrie: 'Geometry',
             chooseArea: 'Area', chooseLevel: 'Difficulty', easy: 'Easy', medium: 'Medium', hard: 'Challenging',
+            missionKicker: 'Maths mission', missionTitle: 'Where are you flying today?', missionStart: 'Start the mission', sub_arithmetik: 'Planet of numbers', sub_algebra: 'Moon of equations', sub_geometrie: 'Shape galaxy', stars: '{0} stars', starsOne: '1 star', starsRound: 'Stars in this practice', progress: 'Progress', landing: '{0} tasks left until landing', landingOne: '1 task left until landing', landed: 'All filled in: ready to land!', landedDone: 'Landed!',
             practiceHead: 'Practice', practiceIntro2: 'Choose what you want to practise and the difficulty. Every start gives you new tasks. Nothing is saved and there is no grade. After checking you see the solution and the steps for every task.', otherChoice: 'Change selection',
             language: 'Language', startTitle: 'Start the test', enterCode: 'Enter your five-digit code.', code: 'Code', start: 'Start',
             codeFive: 'The code has five digits.', wait: 'One moment …', noConnection: 'No connection to the server. Please try again.',
@@ -255,6 +259,33 @@
     });
 
     const errorText = (res, fallbackKey) => (res && res.error && I18N.de['err_' + res.error] ? tx('err_' + res.error) : tx(fallbackKey));
+
+    // Icons of the practice screen (stroke SVG, decorative)
+    const ICON = {
+        star: '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z"/></svg>',
+        rocket: '<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24"><path d="M5 12c2.5-3.6 7-5.5 13-5.5 1.8 0 3.5 2.5 3.5 5.5s-1.7 5.5-3.5 5.5C12 17.5 7.5 15.6 5 12z" fill="currentColor"/><path d="M8.5 8.2L6 4.5h3.6l3.2 2.8zM8.5 15.8L6 19.5h3.6l3.2-2.8z" fill="currentColor"/><circle cx="16" cy="12" r="1.9" fill="#1b2147"/><path d="M4.5 12L1 10v4z" fill="#ff8a5b"/></svg>',
+        arithmetik: '<svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+        algebra: '<svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h7M4 17h7M15 6l5 12M20 6l-5 12"/></svg>',
+        geometrie: '<svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M12 3l9 17H3z"/></svg>',
+    };
+
+    // Stars collected in this browser (one per task solved completely in an evaluated practice)
+    const stars = {
+        get() {
+            try {
+                return Math.max(0, parseInt(window.localStorage.getItem('st-stars') || '0', 10) || 0);
+            } catch (e) {
+                return 0;
+            }
+        },
+        add(n) {
+            try {
+                window.localStorage.setItem('st-stars', String(stars.get() + n));
+            } catch (e) {
+                // Not available: no stars
+            }
+        },
+    };
 
     function langPicker() {
         return `<div class="st-lang" role="group" aria-label="${tx('language')}">${Object.entries(LANGS).map(([k, name]) => `<button type="button" class="st-langbtn${k === lang ? ' on' : ''}" data-lang="${k}" lang="${k}" aria-pressed="${k === lang}">${name}</button>`).join('')}</div>`;
@@ -2459,6 +2490,8 @@
         let deadline = 0;
         let busy = false;
         let finished = false;
+        // Look of the practice element: «Mathe-Mission»
+        root.classList.add('st-space');
         // The round of this tab: tasks, answers, constructions, check results (sessionStorage)
         const KEY = 'st-practice:' + cfg.element;
         let state = null;
@@ -2540,7 +2573,7 @@
             const on = m === choice.main;
             const off = !typesOf(m).length;
 
-            return `<button type="button" class="st-opt st-main${on ? ' on' : ''}" data-main="${m}" aria-pressed="${on}"${off ? ' disabled' : ''}>${tx('main_' + m)}</button>`;
+            return `<button type="button" class="st-opt st-main st-main-${m}${on ? ' on' : ''}" data-main="${m}" aria-pressed="${on}"${off ? ' disabled' : ''}>${ICON[m]}<span class="st-main-name">${tx('main_' + m)}</span><span class="st-main-sub">${tx('sub_' + m)}</span></button>`;
         }).join('')}</nav>`;
 
         const bindMainNav = () => root.querySelectorAll('[data-main]').forEach((b) => b.addEventListener('click', () => {
@@ -2570,11 +2603,9 @@
 
             root.innerHTML = `
                 <div class="st-card st-practice">
-                    ${langPicker()}
+                    <div class="st-topbar">${langPicker()}<span class="st-stars">${ICON.star}${1 === stars.get() ? tx('starsOne') : tx('stars', stars.get())}</span></div>
+                    <div class="st-hero"><p class="st-kicker">${tx('missionKicker')}</p><h2>${tx('missionTitle')}</h2><p class="st-intro">${tx('practiceIntro2')}</p></div>
                     ${mainNav()}
-                    <h2>${tx('practiceHead')}</h2>
-                    <p>${tx('practiceIntro2')}</p>
-                    ${choice.main ? '' : `<p class="st-chooselabel">${tx('chooseMain')}</p>`}
                     <div class="st-choose">
                         ${choice.main ? `
                         <div class="st-chooselabel">${tx('chooseType')}</div>
@@ -2586,7 +2617,7 @@
                         <div class="st-chooselabel">${tx('chooseLevel')}</div>
                         <div class="st-options" role="group" aria-label="${tx('chooseLevel')}">${optionButtons(DIFFS.map((d) => [d, tx(d)]), 'diff', choice.difficulty)}</div>` : ''}
                     </div>
-                    ${type ? `<div class="st-row"><button type="button" class="st-btn" data-act="new">${tx('practiceStart')}</button></div>` : ''}
+                    ${type ? `<div class="st-row"><button type="button" class="st-btn st-launch" data-act="new">${ICON.rocket}${tx('missionStart')}</button></div>` : ''}
                     <div class="st-msg" aria-live="polite"></div>
                 </div>`;
             root.lang = lang;
@@ -2627,19 +2658,21 @@
         }
 
         function showTasks(res, saved = null) {
+            const main = (typeOf((saved && saved.choice && saved.choice.type) || choice.type) || {}).area || '';
             const total = res.sections.reduce((s, sec) => s + sec.tasks.reduce((a, t) => a + t.points, 0), 0);
             const timed = null !== res.remaining && undefined !== res.remaining;
             root.innerHTML = `
                 <div class="st-test st-practice">
                     <div class="st-head">
-                        <div><h2>${tx('practiceTitle', esc(label()))}</h2><div>${tx('points', total)}${timed ? ` · ${tx('minutes', res.timeLimit)}` : ''}</div></div>
-                        <div class="st-status">${timed ? '<div class="st-clock" role="timer"></div>' : ''}<div class="st-result"></div></div>
+                        <div><p class="st-kicker">${main ? `${tx('main_' + main)} · ${tx('sub_' + main)}` : tx('missionKicker')}</p><h2>${esc(label())}</h2><div class="st-headpts">${tx('points', total)}${timed ? ` · ${tx('minutes', res.timeLimit)}` : ''}</div></div>
+                        <div class="st-status">${timed ? '<div class="st-clock" role="timer"></div>' : ''}<div class="st-result"></div><button type="button" class="st-link" data-act="choose">${tx('otherChoice')}</button></div>
                     </div>
-                    <div class="st-row st-toprow"><button type="button" class="st-link" data-act="choose">${tx('otherChoice')}</button></div>
+                    <div class="st-progress"><div class="st-track" role="progressbar" aria-label="${tx('progress')}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="st-fill"></span><span class="st-rocket">${ICON.rocket}</span></div><span class="st-count"></span><span class="st-roundstars" title="${tx('starsRound')}">${ICON.star}<span>+0</span></span></div>
                     <p class="st-tryhint">${tx('tryHint')}</p>
                     ${sectionsHtml(res.sections)}
                     <div class="st-submit">
                         <div class="st-row">
+                            <span class="st-landing" aria-live="polite"></span>
                             <button type="button" class="st-btn" data-act="check">${tx('checkAll')}</button>
                             <button type="button" class="st-btn st-btn2" data-act="again" hidden>${tx('again')}</button>
                             <button type="button" class="st-link" data-act="choose">${tx('otherChoice')}</button>
@@ -2704,6 +2737,7 @@
                 }
             });
             persist();
+            progress();
 
             if (timed) {
                 // The clock goes on across a reload
@@ -2746,6 +2780,26 @@
             if (fb) {
                 fb.innerHTML = '';
             }
+        }
+
+        // Rocket bar: tasks with an answer; stars: tasks checked right
+        function progress() {
+            const tasks = [...root.querySelectorAll('li[data-task]')];
+            const done = tasks.filter((li) => [...li.querySelectorAll('input[data-k]')].some(isFilled)).length;
+            const right = tasks.filter((li) => li.classList.contains('st-try-ok') || li.classList.contains('st-ok')).length;
+            const pct = tasks.length ? Math.round(100 * done / tasks.length) : 0;
+            const track = root.querySelector('.st-track');
+
+            if (!track) {
+                return;
+            }
+
+            track.setAttribute('aria-valuenow', String(pct));
+            track.style.setProperty('--st-p', pct + '%');
+            root.querySelector('.st-count').textContent = `${done} / ${tasks.length}`;
+            root.querySelector('.st-roundstars span').textContent = '+' + right;
+            const left = tasks.length - done;
+            root.querySelector('.st-landing').innerHTML = finished ? tx('landedDone') : (0 === left ? tx('landed') : (1 === left ? tx('landingOne') : tx('landing', left)));
         }
 
         // The server no longer has the round (session over): only a new practice helps
@@ -2832,6 +2886,7 @@
 
             li.classList.add(ok ? 'st-try-ok' : 'st-try-bad');
             li.querySelector('.st-tryfb').innerHTML = head;
+            progress();
 
             if (state) {
                 state.tried = state.tried || {};
@@ -2982,6 +3037,15 @@
             root.querySelector('[data-act="again"]').hidden = false;
             msg(pct >= 80 ? 'ok' : pct >= 50 ? 'warn' : 'bad', tx('practiceResult', res.points, res.max, pct));
 
+            // One star per task solved completely, counted once per round
+            if (state && !state.starsAdded) {
+                state.starsAdded = true;
+                stars.add(root.querySelectorAll('li.st-ok').length);
+                persist();
+            }
+
+            progress();
+
             if (!restored) {
                 root.querySelector('.st-msg').scrollIntoView({behavior: 'smooth', block: 'center'});
             }
@@ -2993,6 +3057,7 @@
 
             if (li && !finished) {
                 clearTry(li);
+                progress();
             }
 
             if (state && !finished) {
