@@ -410,7 +410,7 @@ trait FigureAreaComposedTasks
             $steps[] = 'A = A₁ + A₂ = '.self::b($u($A, '²'));
 
             return [
-                'q' => 'Berechne zuerst die Höhe h mit dem Satz des Pythagoras, dann den Flächeninhalt A der Figur.',
+                'q' => 'Berechne die Höhe h und den Flächeninhalt A der Figur.',
                 'fields' => [['h', $unit, $h, self::EXACT], ['A', $unit.'²', $A, self::EXACT]],
                 'steps' => $steps,
                 'svg' => (new FigureAreaSvg())
@@ -447,7 +447,7 @@ trait FigureAreaComposedTasks
         $steps[] = 'A = A₁ + A₂ + A₃ + A₄ ≈ '.self::b($u(round($A, 1), '²'));
 
         return [
-            'q' => 'Berechne zuerst die Höhe h mit dem Satz des Pythagoras, dann den Flächeninhalt A der Figur.',
+            'q' => 'Berechne die Höhe h und den Flächeninhalt A der Figur.',
             'fields' => [['h', $unit, $h, self::EXACT], ['A', $unit.'²', round($A, 1), self::ROUND]],
             'steps' => $steps,
             'svg' => (new FigureAreaSvg())

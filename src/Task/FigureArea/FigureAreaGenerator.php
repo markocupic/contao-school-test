@@ -1289,7 +1289,7 @@ final class FigureAreaGenerator
         if ('pyHouse' === $variant || 'pyWorkpiece' === $variant) {
             return $this->pyComposed('pyWorkpiece' === $variant, $unit);
         }
-        $pyth = static fn (string $x): string => self::fill('Berechne zuerst {0} mit dem Satz des Pythagoras, dann den Flächeninhalt A.', $x);
+        $pyth = static fn (string $x): string => self::fill('Berechne {0} und den Flächeninhalt A.', $x);
 
         if ('right' === $variant) {
             [$a, $b, $c] = self::triple(30);
