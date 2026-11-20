@@ -49,7 +49,7 @@
         de: {
             chooseMain: 'Was möchtest du üben?', chooseType: 'Thema', main_arithmetik: 'Arithmetik', main_algebra: 'Algebra', main_geometrie: 'Geometrie',
             chooseArea: 'Bereich', chooseLevel: 'Schwierigkeit', easy: 'Leicht', medium: 'Mittel', hard: 'Anspruchsvoller',
-            missionKicker: 'Mathe-Mission', missionTitle: 'Wohin fliegst du heute?', missionStart: 'Mission starten', sub_arithmetik: 'Planet der Zahlen', sub_algebra: 'Mond der Gleichungen', sub_geometrie: 'Formen-Galaxie', stars: '{0} Sterne', starsOne: '1 Stern', starsRound: 'Sterne in dieser Übung', progress: 'Fortschritt', landing: 'Noch {0} Aufgaben bis zur Landung', landingOne: 'Noch 1 Aufgabe bis zur Landung', landed: 'Alles ausgefüllt: bereit zur Landung!', landedDone: 'Gelandet!',
+            missionTitle: 'Wohin fliegst du heute?', missionStart: 'Mission starten', sub_arithmetik: 'Planet der Zahlen', sub_algebra: 'Mond der Gleichungen', sub_geometrie: 'Formen-Galaxie', stars: '{0} Sterne', starsOne: '1 Stern', starsRound: 'Sterne in dieser Übung', progress: 'Fortschritt', landing: 'Noch {0} Aufgaben bis zur Landung', landingOne: 'Noch 1 Aufgabe bis zur Landung', landed: 'Alles ausgefüllt: bereit zur Landung!', landedDone: 'Gelandet!',
             practiceHead: 'Üben', practiceIntro2: 'Wähle aus, was du üben möchtest, und die Schwierigkeit. Bei jedem Start gibt es neue Aufgaben. Nichts wird gespeichert und es gibt keine Note. Nach dem Auswerten siehst du zu jeder Aufgabe die Lösung und den Lösungsweg.', otherChoice: 'Andere Auswahl',
             language: 'Sprache', startTitle: 'Test starten', enterCode: 'Gib deinen fünfstelligen Code ein.', code: 'Code', start: 'Starten',
             codeFive: 'Der Code hat fünf Ziffern.', wait: 'Einen Moment …', noConnection: 'Keine Verbindung zum Server. Versuche es nochmals.',
@@ -89,7 +89,7 @@
         fr: {
             chooseMain: 'Que veux-tu travailler ?', chooseType: 'Thème', main_arithmetik: 'Arithmétique', main_algebra: 'Algèbre', main_geometrie: 'Géométrie',
             chooseArea: 'Domaine', chooseLevel: 'Difficulté', easy: 'Facile', medium: 'Moyen', hard: 'Exigeant',
-            missionKicker: 'Mission maths', missionTitle: 'Où voles-tu aujourd’hui&nbsp;?', missionStart: 'Lancer la mission', sub_arithmetik: 'Planète des nombres', sub_algebra: 'Lune des équations', sub_geometrie: 'Galaxie des formes', stars: '{0} étoiles', starsOne: '1 étoile', starsRound: 'Étoiles de cet entraînement', progress: 'Progression', landing: 'Encore {0} tâches avant l’atterrissage', landingOne: 'Encore 1 tâche avant l’atterrissage', landed: 'Tout est rempli&nbsp;: prêt pour l’atterrissage&nbsp;!', landedDone: 'Atterri&nbsp;!',
+            missionTitle: 'Où voles-tu aujourd’hui&nbsp;?', missionStart: 'Lancer la mission', sub_arithmetik: 'Planète des nombres', sub_algebra: 'Lune des équations', sub_geometrie: 'Galaxie des formes', stars: '{0} étoiles', starsOne: '1 étoile', starsRound: 'Étoiles de cet entraînement', progress: 'Progression', landing: 'Encore {0} tâches avant l’atterrissage', landingOne: 'Encore 1 tâche avant l’atterrissage', landed: 'Tout est rempli&nbsp;: prêt pour l’atterrissage&nbsp;!', landedDone: 'Atterri&nbsp;!',
             practiceHead: 'S’entraîner', practiceIntro2: 'Choisis ce que tu veux travailler et la difficulté. À chaque départ, tu reçois de nouvelles tâches. Rien n’est enregistré et il n’y a pas de note. Après la correction, tu vois la solution et la démarche de chaque tâche.', otherChoice: 'Autre choix',
             language: 'Langue', startTitle: 'Commencer le test', enterCode: 'Saisis ton code à cinq chiffres.', code: 'Code', start: 'Commencer',
             codeFive: 'Le code comporte cinq chiffres.', wait: 'Un instant …', noConnection: 'Pas de connexion au serveur. Réessaie.',
@@ -129,7 +129,7 @@
         it: {
             chooseMain: 'Cosa vuoi esercitare?', chooseType: 'Tema', main_arithmetik: 'Aritmetica', main_algebra: 'Algebra', main_geometrie: 'Geometria',
             chooseArea: 'Campo', chooseLevel: 'Difficoltà', easy: 'Facile', medium: 'Medio', hard: 'Impegnativo',
-            missionKicker: 'Missione matematica', missionTitle: 'Dove voli oggi?', missionStart: 'Avvia la missione', sub_arithmetik: 'Pianeta dei numeri', sub_algebra: 'Luna delle equazioni', sub_geometrie: 'Galassia delle forme', stars: '{0} stelle', starsOne: '1 stella', starsRound: 'Stelle di questo esercizio', progress: 'Avanzamento', landing: 'Ancora {0} esercizi prima dell’atterraggio', landingOne: 'Ancora 1 esercizio prima dell’atterraggio', landed: 'Tutto compilato: pronti all’atterraggio!', landedDone: 'Atterrati!',
+            missionTitle: 'Dove voli oggi?', missionStart: 'Avvia la missione', sub_arithmetik: 'Pianeta dei numeri', sub_algebra: 'Luna delle equazioni', sub_geometrie: 'Galassia delle forme', stars: '{0} stelle', starsOne: '1 stella', starsRound: 'Stelle di questo esercizio', progress: 'Avanzamento', landing: 'Ancora {0} esercizi prima dell’atterraggio', landingOne: 'Ancora 1 esercizio prima dell’atterraggio', landed: 'Tutto compilato: pronti all’atterraggio!', landedDone: 'Atterrati!',
             practiceHead: 'Esercitarsi', practiceIntro2: 'Scegli cosa vuoi esercitare e la difficoltà. A ogni avvio ricevi nuovi esercizi. Non viene salvato nulla e non c’è nessun voto. Dopo la correzione vedi la soluzione e il procedimento di ogni esercizio.', otherChoice: 'Altra scelta',
             language: 'Lingua', startTitle: 'Iniziare il test', enterCode: 'Inserisci il tuo codice di cinque cifre.', code: 'Codice', start: 'Iniziare',
             codeFive: 'Il codice ha cinque cifre.', wait: 'Un momento …', noConnection: 'Nessuna connessione al server. Riprova.',
@@ -169,7 +169,7 @@
         en: {
             chooseMain: 'What do you want to practise?', chooseType: 'Topic', main_arithmetik: 'Arithmetic', main_algebra: 'Algebra', main_geometrie: 'Geometry',
             chooseArea: 'Area', chooseLevel: 'Difficulty', easy: 'Easy', medium: 'Medium', hard: 'Challenging',
-            missionKicker: 'Maths mission', missionTitle: 'Where are you flying today?', missionStart: 'Start the mission', sub_arithmetik: 'Planet of numbers', sub_algebra: 'Moon of equations', sub_geometrie: 'Shape galaxy', stars: '{0} stars', starsOne: '1 star', starsRound: 'Stars in this practice', progress: 'Progress', landing: '{0} tasks left until landing', landingOne: '1 task left until landing', landed: 'All filled in: ready to land!', landedDone: 'Landed!',
+            missionTitle: 'Where are you flying today?', missionStart: 'Start the mission', sub_arithmetik: 'Planet of numbers', sub_algebra: 'Moon of equations', sub_geometrie: 'Shape galaxy', stars: '{0} stars', starsOne: '1 star', starsRound: 'Stars in this practice', progress: 'Progress', landing: '{0} tasks left until landing', landingOne: '1 task left until landing', landed: 'All filled in: ready to land!', landedDone: 'Landed!',
             practiceHead: 'Practice', practiceIntro2: 'Choose what you want to practise and the difficulty. Every start gives you new tasks. Nothing is saved and there is no grade. After checking you see the solution and the steps for every task.', otherChoice: 'Change selection',
             language: 'Language', startTitle: 'Start the test', enterCode: 'Enter your five-digit code.', code: 'Code', start: 'Start',
             codeFive: 'The code has five digits.', wait: 'One moment …', noConnection: 'No connection to the server. Please try again.',
@@ -2604,7 +2604,7 @@
             root.innerHTML = `
                 <div class="st-card st-practice">
                     <div class="st-topbar">${langPicker()}<span class="st-stars">${ICON.star}${1 === stars.get() ? tx('starsOne') : tx('stars', stars.get())}</span></div>
-                    <div class="st-hero"><p class="st-kicker">${tx('missionKicker')}</p><h2>${tx('missionTitle')}</h2><p class="st-intro">${tx('practiceIntro2')}</p></div>
+                    <div class="st-hero"><h2>${tx('missionTitle')}</h2><p class="st-intro">${tx('practiceIntro2')}</p></div>
                     ${mainNav()}
                     <div class="st-choose">
                         ${choice.main ? `
@@ -2664,7 +2664,7 @@
             root.innerHTML = `
                 <div class="st-test st-practice">
                     <div class="st-head">
-                        <div><p class="st-kicker">${main ? `${tx('main_' + main)} · ${tx('sub_' + main)}` : tx('missionKicker')}</p><h2>${esc(label())}</h2><div class="st-headpts">${tx('points', total)}${timed ? ` · ${tx('minutes', res.timeLimit)}` : ''}</div></div>
+                        <div>${main ? `<p class="st-kicker">${tx('main_' + main)} · ${tx('sub_' + main)}</p>` : ''}<h2>${esc(label())}</h2><div class="st-headpts">${tx('points', total)}${timed ? ` · ${tx('minutes', res.timeLimit)}` : ''}</div></div>
                         <div class="st-status">${timed ? '<div class="st-clock" role="timer"></div>' : ''}<div class="st-result"></div><button type="button" class="st-link" data-act="choose">${tx('otherChoice')}</button></div>
                     </div>
                     <div class="st-progress"><div class="st-track" role="progressbar" aria-label="${tx('progress')}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="st-fill"></span><span class="st-rocket">${ICON.rocket}</span></div><span class="st-count"></span><span class="st-roundstars" title="${tx('starsRound')}">${ICON.star}<span>+0</span></span></div>
