@@ -987,8 +987,8 @@ final class FigureAreaGenerator
     {
         $variant = match ($level) {
             'easy' => Util::pick(['grid', 'lshape', 'house', 'tshape', 'stairs', 'arrow']),
-            'medium' => Util::pick(['frame', 'tunnel', 'notch', 'ushape', 'star', 'gridpoly', 'hall', 'workpiece', 'roundsquare']),
-            default => Util::pick(['quarter', 'track', 'holes', 'circleInSquare', 'squareInCircle', 'lens', 'semicut', 'roundsquare']),
+            'medium' => Util::pick(['frame', 'tunnel', 'notch', 'ushape', 'star', 'gridpoly', 'hall', 'workpiece', 'roundsquare', 'coordPoly']),
+            default => Util::pick(['quarter', 'track', 'holes', 'circleInSquare', 'squareInCircle', 'lens', 'semicut', 'roundsquare', 'coordArc']),
         };
         $unit = 'easy' === $level ? 'cm' : Util::pick(['cm', 'm']);
         $q = 'Berechne den Flächeninhalt A der farbigen Fläche.';
@@ -1229,10 +1229,14 @@ final class FigureAreaGenerator
     {
         $variant = match ($level) {
             'easy' => 'right',
-            'medium' => Util::pick(['rectangle', 'isosceles', 'rhombus']),
-            default => Util::pick(['trapezoid', 'equilateral', 'rightTrapezoid']),
+            'medium' => Util::pick(['rectangle', 'isosceles', 'rhombus', 'pyHouse']),
+            default => Util::pick(['trapezoid', 'equilateral', 'rightTrapezoid', 'pyWorkpiece', 'pyWorkpiece']),
         };
         $unit = Util::pick(['cm', 'cm', 'm']);
+
+        if ('pyHouse' === $variant || 'pyWorkpiece' === $variant) {
+            return $this->pyComposed('pyWorkpiece' === $variant, $unit);
+        }
         $pyth = static fn (string $x): string => self::fill('Berechne zuerst {0} mit dem Satz des Pythagoras, dann den Flächeninhalt A.', $x);
 
         if ('right' === $variant) {

@@ -20,12 +20,16 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  */
 trait FigureAreaComposedTasks
 {
-    private const MORE_COMPOSED = ['tshape', 'stairs', 'arrow', 'ushape', 'star', 'gridpoly', 'hall', 'workpiece', 'roundsquare', 'circleInSquare', 'squareInCircle', 'lens', 'semicut'];
+    private const MORE_COMPOSED = ['tshape', 'stairs', 'arrow', 'ushape', 'star', 'gridpoly', 'hall', 'workpiece', 'roundsquare', 'circleInSquare', 'squareInCircle', 'lens', 'semicut', 'coordPoly', 'coordArc'];
 
     private function composedMore(string $variant, string $unit): array
     {
         $q = 'Berechne den Flächeninhalt A der farbigen Fläche.';
         $u = static fn (float|int $x, string $sq = ''): string => self::u($x, $unit.$sq);
+
+        if ('coordPoly' === $variant || 'coordArc' === $variant) {
+            return $this->coordFigure('coordArc' === $variant);
+        }
 
         switch ($variant) {
             case 'tshape':
@@ -353,5 +357,172 @@ trait FigureAreaComposedTasks
                         ->dim([$x1, 0], [$x1 + $d, 0], 'd = '.$u($d), -1),
                 ];
         }
+    }
+
+    /**
+     * Pairs of right triangles with the same leg h: h => list of [other leg, hypotenuse].
+     */
+    private static function triplesByLeg(): array
+    {
+        $byLeg = [];
+
+        foreach (self::TRIPLES as [$a, $b, $c]) {
+            for ($k = 1; $k * $c <= 45; ++$k) {
+                $byLeg[$k * $a][] = [$k * $b, $k * $c];
+                $byLeg[$k * $b][] = [$k * $a, $k * $c];
+            }
+        }
+
+        return array_filter($byLeg, static fn (array $l, int $h): bool => $h >= 4 && $h <= 24, ARRAY_FILTER_USE_BOTH);
+    }
+
+    /**
+     * Composed figure with Pythagoras (as in aufgabenfuchs, Aufgabe 52): the height h comes from
+     * a right triangle. Medium: triangle and rectangle. Hard: triangle, rectangle with a
+     * semicircle cut out, tower and a second triangle with the same height.
+     */
+    private function pyComposed(bool $hard, string $unit): array
+    {
+        $u = static fn (float|int $x, string $sq = ''): string => self::u($x, $unit.$sq);
+        $byLeg = self::triplesByLeg();
+
+        // Two different triangles with the same height, if there are
+        for ($i = 0; $i < 200; ++$i) {
+            $h = array_rand($byLeg);
+            [$p, $s1] = Util::pick($byLeg[$h]);
+            [$q, $s2] = Util::pick($byLeg[$h]);
+
+            if ($p <= 40 && $q <= 30 && $p >= 4 && ($q !== $p || $i > 150)) {
+                break;
+            }
+        }
+
+        $steps = [
+            self::p('Die Höhe h aus dem linken Dreieck (Satz des Pythagoras): {0}', 'h = √(('.$u($s1).')² − ('.$u($p).')²) = '.$u($h)),
+        ];
+        $A1 = $p * $h / 2;
+
+        if (!$hard) {
+            $w = mt_rand(max(4, (int) ($p / 3)), max(6, $p));
+            $A2 = $w * $h;
+            $A = $A1 + $A2;
+            $steps[] = 'A₁ = '.$u($p).' · '.$u($h).' : 2 = '.$u($A1, '²').', A₂ = '.$u($w).' · '.$u($h).' = '.$u($A2, '²');
+            $steps[] = 'A = A₁ + A₂ = '.self::b($u($A, '²'));
+
+            return [
+                'q' => 'Berechne zuerst die Höhe h mit dem Satz des Pythagoras, dann den Flächeninhalt A der Figur.',
+                'fields' => [['h', $unit, $h, self::EXACT], ['A', $unit.'²', $A, self::EXACT]],
+                'steps' => $steps,
+                'svg' => (new FigureAreaSvg())
+                    ->shape([['poly', [[0, 0], [$p + $w, 0], [$p + $w, $h], [$p, $h]]]], 'green')
+                    ->line([$p, 0], [$p, $h], 'sol', 's')
+                    ->right([$p, 0], [$p + $w, 0], [$p, $h], 's')
+                    ->label([$p * .65, $h / 3], 'A₁', 'part', null, 0, 's')
+                    ->label([$p + $w / 2, $h / 2], 'A₂', 'part', null, 0, 's')
+                    ->side([0, 0], [$p, $h], $u($s1), [$p, 0])
+                    ->dim([0, 0], [$p, 0], $u($p), -1)
+                    ->dim([$p, 0], [$p + $w, 0], $u($w), -1)
+                    ->dim([$p + $w, 0], [$p + $w, $h], 'h = ?', -1, 'ask', 'q')
+                    ->dim([$p + $w, 0], [$p + $w, $h], 'h = '.$u($h), -1, 'sol', 's'),
+            ];
+        }
+
+        $d = 2 * mt_rand(3, max(3, min(10, $h - 1)));
+        $r = $d / 2;
+        $w = 2 * mt_rand(3, 10);
+        $H = mt_rand(6, 20);
+        $x1 = $p + $d;
+        $x2 = $x1 + $w;
+        $A2 = $d * $h - M_PI * $r * $r / 2;
+        $A3 = $w * ($h + $H);
+        $A4 = $q * $h / 2;
+        $A = $A1 + $A2 + $A3 + $A4;
+        // Narrow parts get their dimension one row lower, so the labels do not overlap
+        $steps[] = self::p('Kontrolle mit dem rechten Dreieck: {0}', '√(('.$u($s2).')² − ('.$u($q).')²) = '.$u($h));
+        $steps[] = self::p('Zerlege in Dreieck, Rechteck minus Halbkreis, Turm und Dreieck.');
+        $steps[] = 'A₁ = '.$u($p).' · '.$u($h).' : 2 = '.$u($A1, '²');
+        $steps[] = 'A₂ = '.$u($d).' · '.$u($h).' − π · ('.$u($r).')² : 2 ≈ '.$u($d * $h, '²').' − '.$u(round(M_PI * $r * $r / 2, 2), '²').' ≈ '.$u(round($A2, 2), '²');
+        $steps[] = 'A₃ = '.$u($w).' · ('.$u($h).' + '.$u($H).') = '.$u($A3, '²');
+        $steps[] = 'A₄ = '.$u($q).' · '.$u($h).' : 2 = '.$u($A4, '²');
+        $steps[] = 'A = A₁ + A₂ + A₃ + A₄ ≈ '.self::b($u(round($A, 1), '²'));
+
+        return [
+            'q' => 'Berechne zuerst die Höhe h mit dem Satz des Pythagoras, dann den Flächeninhalt A der Figur.',
+            'fields' => [['h', $unit, $h, self::EXACT], ['A', $unit.'²', round($A, 1), self::ROUND]],
+            'steps' => $steps,
+            'svg' => (new FigureAreaSvg())
+                ->shape([['path', [['M', [0, 0]], ['L', [$x2 + $q, 0]], ['L', [$x2, $h]], ['L', [$x2, $h + $H]], ['L', [$x1, $h + $H]], ['L', [$x1, $h]], ['arc', [$p + $r, $h], $r, 0, -180]]]], 'green')
+                ->line([$p, 0], [$p, $h], 'sol', 's')
+                ->line([$x1, 0], [$x1, $h], 'sol', 's')
+                ->line([$x2, 0], [$x2, $h], 'sol', 's')
+                ->label([$p * .65, $h / 3], 'A₁', 'part', null, 0, 's')
+                ->label([$p + $r, max(.2 * $h, ($h - $r) / 2)], 'A₂', 'part', null, 0, 's')
+                ->label([$x1 + $w / 2, ($h + $H) / 2], 'A₃', 'part', null, 0, 's')
+                ->label([$x2 + $q / 3, $h / 3], 'A₄', 'part', null, 0, 's')
+                ->side([0, 0], [$p, $h], $u($s1), [$p, 0])
+                ->side([$x2 + $q, 0], [$x2, $h], $u($s2), [$x2, 0])
+                // Bottom dimensions on two rows, so short parts do not overlap
+                ->dim([0, 0], [$p, 0], $u($p), -1)
+                ->dim([$p, 0], [$x1, 0], $u($d), -1, 'given', 'b', 2)
+                ->dim([$x1, 0], [$x2, 0], $u($w), -1)
+                ->dim([$x2, 0], [$x2 + $q, 0], $u($q), -1, 'given', 'b', 2)
+                ->dim([$x1, $h], [$x1, $h + $H], $u($H), 1)
+                ->dim([0, 0], [0, $h], 'h = ?', 1, 'ask', 'q')
+                ->dim([0, 0], [0, $h], 'h = '.$u($h), 1, 'sol', 's'),
+        ];
+    }
+
+    /**
+     * Figure in a coordinate system (1 square = 1 cm), as in aufgabenfuchs Aufgabe 30: rectangle,
+     * triangle on top, triangle on the right and, at the bottom right, a quarter circle (hard)
+     * or a triangle (medium). The lengths are read off the grid.
+     */
+    private function coordFigure(bool $arc): array
+    {
+        $x0 = mt_rand(1, 3);
+        $a = mt_rand(5, 9);
+        $r = mt_rand(4, 8);
+        $c = $x0 + $a;
+        $yL = $r + mt_rand(2, 5);
+        $xR = $c + $r + mt_rand(-1, 1);
+        $yR = $r + mt_rand(2, 6);
+        $A1 = $a * $r;
+        $A2 = $a * ($yL - $r) / 2;
+        $A3 = $arc ? M_PI * $r * $r / 4 : $r * $r / 2;
+        $A4 = $r * ($yR - $r) / 2;
+        $A = $A1 + $A2 + $A3 + $A4;
+        $bottom = $arc ? ['arc', [$c, $r], $r, -90, 0] : ['L', [$c + $r, $r]];
+        $u = static fn (float|int $x, string $sq = ''): string => self::u($x, 'cm'.$sq);
+        $xMax = (int) (5 * ceil(($xR + 2) / 5));
+        $yMax = (int) (5 * ceil(($yL > $yR ? $yL : $yR) / 5));
+
+        $steps = [
+            $arc
+                ? self::p('Lies die Längen im Gitter ab. Zerlege in ein Rechteck, zwei Dreiecke und einen Viertelkreis mit r = {0}.', $u($r))
+                : self::p('Lies die Längen im Gitter ab. Zerlege in ein Rechteck und drei Dreiecke.'),
+            'A₁ = '.$u($a).' · '.$u($r).' = '.$u($A1, '²'),
+            'A₂ = '.$u($a).' · '.$u($yL - $r).' : 2 = '.$u($A2, '²'),
+            $arc
+                ? 'A₃ = π · ('.$u($r).')² : 4 ≈ '.$u(round($A3, 2), '²')
+                : 'A₃ = '.$u($r).' · '.$u($r).' : 2 = '.$u($A3, '²'),
+            'A₄ = '.$u($r).' · '.$u($yR - $r).' : 2 = '.$u($A4, '²'),
+            'A = A₁ + A₂ + A₃ + A₄ '.($arc ? '≈ ' : '= ').self::b($u($arc ? round($A, 1) : $A, '²')),
+        ];
+
+        return [
+            'q' => 'Jedes Häuschen ist 1 cm lang. Lies die Masse im Koordinatensystem ab und berechne den Flächeninhalt A der farbigen Fläche.',
+            'fields' => [['A', 'cm²', $arc ? round($A, 1) : $A, $arc ? self::ROUND : self::EXACT]],
+            'steps' => $steps,
+            'svg' => (new FigureAreaSvg())
+                ->grid(1)
+                ->axes($xMax, $yMax)
+                ->shape([['path', [['M', [$x0, 0]], ['L', [$c, 0]], $bottom, ['L', [$xR, $yR]], ['L', [$c, $r]], ['L', [$x0, $yL]]]]], 'green')
+                ->line([$c, 0], [$c, $r], 'sol', 's')
+                ->line([$x0, $r], [$c + $r, $r], 'sol', 's')
+                ->label([$x0 + $a / 2, $r / 2], 'A₁', 'part', null, 0, 's')
+                ->label([$x0 + $a / 3, $r + ($yL - $r) / 3], 'A₂', 'part', null, 0, 's')
+                ->label([$c + $r * .35, $r * .55], 'A₃', 'part', null, 0, 's')
+                ->label([$c + $r * .6, $r + ($yR - $r) / 3], 'A₄', 'part', null, 0, 's'),
+        ];
     }
 }

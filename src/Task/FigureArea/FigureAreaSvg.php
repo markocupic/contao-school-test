@@ -54,6 +54,8 @@ final class FigureAreaSvg
 
     private float|null $grid = null;
 
+    private array|null $axes = null;
+
     /**
      * A filled figure. Each part is ['poly', [[x, y], …]], ['circle', [x, y], r] or
      * ['path', [cmd, …]] with the commands ['M', [x, y]], ['L', [x, y]] and
@@ -145,6 +147,16 @@ final class FigureAreaSvg
         return $this;
     }
 
+    /**
+     * Coordinate axes from the origin with a number every $step units and the unit at the ends.
+     */
+    public function axes(float $xMax, float $yMax, int $step = 5, string $unit = 'cm'): self
+    {
+        $this->axes = [$xMax, $yMax, $step, $unit];
+
+        return $this;
+    }
+
     public function render(bool $solution): string
     {
         $show = static fn (array $e): bool => 'b' === $e['when'] || ($solution ? 's' : 'q') === $e['when'];
@@ -153,6 +165,28 @@ final class FigureAreaSvg
 
         if (null !== $this->grid) {
             $out .= $this->gridSvg($tx, $s);
+        }
+
+        if (null !== $this->axes) {
+            [$xMax, $yMax, $step, $unit] = $this->axes;
+            $o = $tx([0, 0]);
+            $xe = $tx([$xMax, 0]);
+            $ye = $tx([0, $yMax]);
+            $out .= self::seg($o, $xe, 'stroke="#475569" stroke-width="1.6"').self::seg($o, $ye, 'stroke="#475569" stroke-width="1.6"');
+            $out .= '<path d="M'.self::f([$xe[0] + 8, $xe[1]]).' L'.self::f([$xe[0] - 2, $xe[1] - 5]).' L'.self::f([$xe[0] - 2, $xe[1] + 5]).' Z" fill="#475569"/>';
+            $out .= '<path d="M'.self::f([$ye[0], $ye[1] - 8]).' L'.self::f([$ye[0] - 5, $ye[1] + 2]).' L'.self::f([$ye[0] + 5, $ye[1] + 2]).' Z" fill="#475569"/>';
+
+            for ($v = 0; $v <= $xMax; $v += $step) {
+                $p = $tx([$v, 0]);
+                $out .= $this->text([$p[0], $p[1] + 13], (string) $v, 'note');
+            }
+
+            for ($v = $step; $v <= $yMax; $v += $step) {
+                $p = $tx([0, $v]);
+                $out .= $this->text([$p[0] - 14, $p[1]], (string) $v, 'note');
+            }
+
+            $out .= $this->text([$xe[0] + 4, $xe[1] + 26], $unit, 'note').$this->text([$ye[0] + 22, $ye[1] + 4], $unit, 'note');
         }
 
         foreach ($this->shapes as $sh) {
@@ -243,6 +277,11 @@ final class FigureAreaSvg
         foreach ($this->dims as $d) {
             $pts[] = $d['a'];
             $pts[] = $d['b'];
+        }
+
+        if (null !== $this->axes) {
+            $pts[] = [0, 0];
+            $pts[] = [$this->axes[0], $this->axes[1]];
         }
 
         $xs = array_column($pts, 0);
