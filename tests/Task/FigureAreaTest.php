@@ -15,6 +15,7 @@ use Markocupic\ContaoSchoolTest\Task\AnswerChecker;
 use Markocupic\ContaoSchoolTest\Task\FigureArea\FigureAreaGenerator;
 use Markocupic\ContaoSchoolTest\Task\TaskPresenter;
 use Markocupic\ContaoSchoolTest\Task\TaskTranslator;
+use Markocupic\ContaoSchoolTest\Task\Util;
 use Markocupic\ContaoSchoolTest\TestType\FigureAreaTestType;
 use PHPUnit\Framework\TestCase;
 
@@ -82,6 +83,41 @@ class FigureAreaTest extends TestCase
                                 $this->assertTrue(mb_strlen($translator->text($f['label'], $lang)) <= 2 || $translator->text($f['label'], $lang) !== $f['label'], "label $lang: ".$f['label']);
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Every additional composed figure: the solution is right and the texts are translated.
+     */
+    public function testEveryComposedFigure(): void
+    {
+        $generator = new FigureAreaGenerator();
+        $checker = new AnswerChecker();
+        $translator = new TaskTranslator();
+        $more = new \ReflectionMethod($generator, 'composedMore');
+        $variants = (new \ReflectionClassConstant($generator, 'MORE_COMPOSED'))->getValue();
+        mt_srand(5);
+
+        foreach ($variants as $variant) {
+            for ($i = 0; $i < 40; ++$i) {
+                $t = $more->invoke($generator, $variant, Util::pick(['cm', 'm']));
+                $values = array_map(static fn (array $f) => $f[2], $t['fields']);
+                $task = ['a' => ['type' => 'angles', 'v' => $values, 'tol' => array_map(static fn (array $f) => $f[3], $t['fields'])]];
+
+                foreach ($values as $v) {
+                    $this->assertTrue($v > 0, "$variant $v");
+                }
+
+                $this->assertSame(\count($values), $checker->check($task, array_map('strval', $values))['points'], $variant);
+                $this->assertStringStartsWith('<svg', $t['svg']->render(true), $variant);
+                $this->assertNotSame($t['q'], $translator->question($t['q'], 'fr'), $variant);
+
+                foreach ($t['steps'] as $step) {
+                    if (preg_match('#<span class="st-t">(.*?)</span>#su', $step, $m)) {
+                        $this->assertStringNotContainsString($m[1], $translator->way($step, 'it'), $variant);
                     }
                 }
             }

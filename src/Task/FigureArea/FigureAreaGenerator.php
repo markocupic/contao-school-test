@@ -22,6 +22,7 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  */
 final class FigureAreaGenerator
 {
+    use FigureAreaComposedTasks;
     use FigureAreaWordTasks;
 
     public const KINDS = ['dreieck', 'rechteck', 'parallelogramm', 'trapez', 'kreis', 'zusammengesetzt', 'pythagoras'];
@@ -985,12 +986,16 @@ final class FigureAreaGenerator
     private function composed(string $level): array
     {
         $variant = match ($level) {
-            'easy' => Util::pick(['grid', 'lshape', 'house']),
-            'medium' => Util::pick(['frame', 'tunnel', 'notch', 'lshape']),
-            default => Util::pick(['quarter', 'track', 'holes', 'tunnel']),
+            'easy' => Util::pick(['grid', 'lshape', 'house', 'tshape', 'stairs', 'arrow']),
+            'medium' => Util::pick(['frame', 'tunnel', 'notch', 'ushape', 'star', 'gridpoly', 'hall', 'workpiece', 'roundsquare']),
+            default => Util::pick(['quarter', 'track', 'holes', 'circleInSquare', 'squareInCircle', 'lens', 'semicut', 'roundsquare']),
         };
         $unit = 'easy' === $level ? 'cm' : Util::pick(['cm', 'm']);
         $q = 'Berechne den Flächeninhalt A der farbigen Fläche.';
+
+        if (\in_array($variant, self::MORE_COMPOSED, true)) {
+            return $this->composedMore($variant, $unit);
+        }
 
         if ('grid' === $variant || 'lshape' === $variant) {
             $W = mt_rand(5, 11);
