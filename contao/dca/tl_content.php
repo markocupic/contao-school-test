@@ -15,7 +15,15 @@ declare(strict_types=1);
 use Markocupic\ContaoSchoolTest\Controller\ContentElement\SchoolTestController;
 use Markocupic\ContaoSchoolTest\Controller\ContentElement\SchoolTestPracticeController;
 
-// No own settings: the test comes from the student's code, the practice choice is made in the frontend.
+// Test: no own settings, the test comes from the student's code. Practice: the choice is made in the frontend.
 // Headline, template, CSS ID/classes, protection and visibility as with every content element.
 $GLOBALS['TL_DCA']['tl_content']['palettes'][SchoolTestController::TYPE] = '{type_legend},type,headline;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
-$GLOBALS['TL_DCA']['tl_content']['palettes'][SchoolTestPracticeController::TYPE] = $GLOBALS['TL_DCA']['tl_content']['palettes'][SchoolTestController::TYPE];
+// Practice: optionally the space background over the whole page (own practice page)
+$GLOBALS['TL_DCA']['tl_content']['palettes'][SchoolTestPracticeController::TYPE] = '{type_legend},type,headline;{config_legend},schoolTestPageStyle;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['schoolTestPageStyle'] = [
+    'inputType' => 'checkbox',
+    'exclude' => true,
+    'eval' => ['tl_class' => 'clr'],
+    'sql' => ['type' => 'boolean', 'default' => false],
+];

@@ -112,7 +112,7 @@ Neues Feld in `tl_st_test`: `areaKinds` (nach dem Update `contao:migrate`).
 
    Das Übungselement hat ein eigenes, kindgerechtes Aussehen «Mathe-Mission» (Weltraum, farbige Kacheln für Arithmetik, Algebra und Geometrie, Raketen-Fortschrittsbalken). Für jede ganz richtige Aufgabe gibt es nach «Übung auswerten» einen Stern; die Sterne zählt nur der Browser (`localStorage`, Schlüssel `st-stars`), nichts geht an den Server. Es werden keine Web-Fonts geladen. Die Testseite bleibt unverändert.
 
-   Läuft das Übungselement allein auf einer Seite, gibt es dafür ein Seiten-Stylesheet (Weltraum-Hintergrund über die ganze Seite, Planet und Mond, App zentriert und auf grossen Bildschirmen grösser). Im Seitenlayout unter «Zusätzliche <head>-Tags» eintragen: `<link rel="stylesheet" href="/bundles/markocupiccontaoschooltest/page/mathe-mission.css">`
+   Läuft das Übungselement allein auf einer Seite, gibt es dafür ein Seiten-Stylesheet (Weltraum-Hintergrund über die ganze Seite, Planet und Mond, App zentriert und auf grossen Bildschirmen grösser). Einschalten im Inhaltselement mit «Ganze Seite gestalten (eigene Übungsseite)» (Feld `tl_content.schoolTestPageStyle`, nach dem Update `contao:migrate`). Oder von Hand im Seitenlayout unter «Zusätzliche <head>-Tags»: `<link rel="stylesheet" href="/bundles/markocupiccontaoschooltest/page/mathe-mission.css">`
 7. **Auswertung** (Symbol in der Testliste): Klassenübersicht und pro Schülerin und Schüler ein Blatt mit allen Aufgaben, Antworten, Lösungen, Punkten und Note.
 
 ## Regeln im Frontend

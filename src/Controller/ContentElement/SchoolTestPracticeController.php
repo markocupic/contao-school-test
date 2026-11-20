@@ -58,6 +58,9 @@ class SchoolTestPracticeController extends AbstractContentElementController
             ],
         ]);
 
+        // Own practice page: the space background over the whole page
+        $template->set('page_style', (bool) $model->schoolTestPageStyle);
+
         return $template->getResponse();
     }
 }

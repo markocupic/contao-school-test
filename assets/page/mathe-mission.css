@@ -2,8 +2,10 @@
  * Mathe-Mission: page stylesheet for a standalone practice page
  * (content element «Online-Test üben» alone on the page).
  *
- * Contao: Layout → «Zusätzliche <head>-Tags»:
+ * Loaded by the content element when «Ganze Seite gestalten» is on. Or by hand, Contao layout →
+ * «Zusätzliche <head>-Tags»:
  * <link rel="stylesheet" href="/bundles/markocupiccontaoschooltest/page/mathe-mission.css">
+ * Selectors start with "html body", so they win over the page theme.
  *
  * Space background over the whole page, the app centred and a little larger on wide screens.
  * No web fonts, no images: everything is drawn with CSS.
@@ -28,7 +30,7 @@ html {
     min-height: 100%;
 }
 
-body {
+html body {
     position: relative;
     display: flow-root;
     min-height: 100vh;
@@ -77,8 +79,8 @@ body {
 }
 
 /* Ringed planet bottom left, moon top right; behind the content, not clickable */
-body::before,
-body::after {
+html body::before,
+html body::after {
     content: "";
     position: fixed;
     z-index: 0;
@@ -86,7 +88,7 @@ body::after {
     border-radius: 50%;
 }
 
-body::before {
+html body::before {
     left: var(--mm-pl);
     bottom: var(--mm-pb);
     width: var(--mm-pw);
@@ -115,7 +117,7 @@ html::after {
     opacity: .85;
 }
 
-body::after {
+html body::after {
     right: clamp(16px, 5vw, 90px);
     top: clamp(20px, 6vh, 70px);
     width: clamp(46px, 6vw, 96px);
@@ -130,11 +132,11 @@ body::after {
 }
 
 /* Contao layout: no fixed widths, floats or backgrounds around the app */
-#wrapper,
-#container,
-#main,
-#main > .inside,
-.mod_article {
+html body #wrapper,
+html body #container,
+html body #main,
+html body #main > .inside,
+html body .mod_article {
     position: relative;
     z-index: 1;
     width: auto;
@@ -146,26 +148,26 @@ body::after {
 }
 
 /* Contao: the app vertically centred in the window, the footer at the bottom */
-#wrapper {
+html body #wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: 100vh;
 }
 
-#container {
+html body #container {
     flex: 0 0 auto;
 }
 
-#header,
-#footer {
+html body #header,
+html body #footer {
     position: relative;
     z-index: 1;
     color: #8fa0e8;
     background: none;
 }
 
-#footer {
+html body #footer {
     padding: 18px 16px 28px;
     text-align: center;
     font-size: .85rem;
@@ -177,7 +179,7 @@ body::after {
 }
 
 /* The app: centred, a glass panel on the page background */
-.school-test.st-space {
+html body .school-test.st-space {
     position: relative;
     z-index: 1;
     box-sizing: border-box;
@@ -196,18 +198,18 @@ body::after {
     backdrop-filter: blur(10px);
 }
 
-.school-test.st-space .st-card.st-practice {
+html body .school-test.st-space .st-card.st-practice {
     box-shadow: 0 16px 40px rgba(0, 0, 0, .3);
 }
 
 /* Tiles a little taller, so the start page fills the panel */
 @media (min-width: 621px) {
-    .school-test.st-space .st-main {
+    html body .school-test.st-space .st-main {
         min-height: 120px;
         justify-content: flex-end;
     }
 
-    .school-test.st-space .st-main:hover {
+    html body .school-test.st-space .st-main:hover {
         transform: translateY(-3px);
         box-shadow: 0 12px 28px rgba(0, 0, 0, .35);
     }
@@ -215,66 +217,66 @@ body::after {
 
 /* Wide screens: larger text and tiles */
 @media (min-width: 1400px) {
-    .school-test.st-space {
+    html body .school-test.st-space {
         width: min(1200px, calc(100% - 64px));
         font-size: 1.0625rem;
     }
 
-    .school-test.st-space .st-main {
+    html body .school-test.st-space .st-main {
         min-height: 150px;
         padding: 22px;
     }
 
-    .school-test.st-space .st-main-name {
+    html body .school-test.st-space .st-main-name {
         font-size: 1.35rem;
     }
 
-    .school-test.st-space .st-intro {
+    html body .school-test.st-space .st-intro {
         font-size: 1.02rem;
     }
 }
 
 @media (min-width: 1900px) {
-    .school-test.st-space {
+    html body .school-test.st-space {
         width: 1400px;
         font-size: 1.15rem;
     }
 
-    .school-test.st-space .st-hero h2 {
+    html body .school-test.st-space .st-hero h2 {
         font-size: 3.2rem;
     }
 
-    .school-test.st-space .st-main {
+    html body .school-test.st-space .st-main {
         min-height: 190px;
         padding: 26px;
     }
 
-    .school-test.st-space .st-main svg {
+    html body .school-test.st-space .st-main svg {
         width: 34px;
         height: 34px;
     }
 
-    .school-test.st-space .st-main-name {
+    html body .school-test.st-space .st-main-name {
         font-size: 1.6rem;
     }
 
-    .school-test.st-space .st-main-sub {
+    html body .school-test.st-space .st-main-sub {
         font-size: .95rem;
     }
 
-    .school-test.st-space .st-langbtn,
-    .school-test.st-space .st-stars {
+    html body .school-test.st-space .st-langbtn,
+    html body .school-test.st-space .st-stars {
         font-size: 1.1rem;
     }
 
-    .school-test.st-space .st-intro {
+    html body .school-test.st-space .st-intro {
         max-width: 70ch;
         font-size: 1.15rem;
     }
 }
 
 @media (min-width: 2400px) {
-    .school-test.st-space {
+    html body .school-test.st-space {
         width: 1560px;
         font-size: 1.25rem;
     }
@@ -282,7 +284,7 @@ body::after {
 
 /* Small screens: the panel uses the whole width */
 @media (max-width: 620px) {
-    .school-test.st-space {
+    html body .school-test.st-space {
         width: auto;
         margin: 0;
         padding: 10px;
