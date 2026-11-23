@@ -145,6 +145,7 @@
 .school-test .st-turn { fill: none; stroke: #7a3db8; stroke-width: 2; }
 .school-test .st-arrowhead { fill: #7a3db8; }
 .school-test .st-mark { fill: #7a3db8; font-style: italic; }
+.school-test .st-mark.st-halo { stroke: #fff; stroke-width: 4px; paint-order: stroke; stroke-linejoin: round; }
 .school-test .st-z { fill: #7a3db8; }
 .school-test .st-fig { fill: rgba(29, 63, 143, .14); stroke: var(--st-accent); stroke-width: 2; stroke-linejoin: round; }
 .school-test .st-figpt { fill: var(--st-accent); }

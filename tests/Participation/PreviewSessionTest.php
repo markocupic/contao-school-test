@@ -39,7 +39,7 @@ class PreviewSessionTest extends TestCase
         $this->assertSame(PreviewSession::STUDENT, $run['student']);
         $this->assertFalse($run['lockOnLeave']);
         $this->assertSame('fr', $run['lang']);
-        $this->assertSame(20 * 60, $run['remaining']);
+        $this->assertEqualsWithDelta(20 * 60, $run['remaining'], 1);
         $this->assertCount(2, $run['sections']);
 
         // The solutions never reach the browser

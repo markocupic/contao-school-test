@@ -60,10 +60,14 @@ final class BoardSvg
             }
         }
 
+        $axisLabel = '';
+
         if (isset($d['seg'])) {
             [$p, $q] = $d['seg'];
             $svg .= '<line x1="'.$fmt($x($p[0])).'" y1="'.$fmt($y($p[1])).'" x2="'.$fmt($x($q[0])).'" y2="'.$fmt($y($q[1])).'" stroke="'.$violet.'" stroke-width="2"/>';
-            $svg .= $this->text($x($p[0] + ($q[0] - $p[0]) * .86) + 7, $y($p[1] + ($q[1] - $p[1]) * .86) - 4, 's', $violet, true);
+            // The name «s» where the axis is farthest from the figure (drawn above it, with a halo)
+            $t = self::axisLabelT($p, $q, $d['pts']);
+            $axisLabel = $this->text($x($p[0] + ($q[0] - $p[0]) * $t) + 7, $y($p[1] + ($q[1] - $p[1]) * $t) - 4, 's', $violet, true, true);
         }
 
         if (isset($d['vec'], $d['vecStart'])) {
@@ -81,7 +85,7 @@ final class BoardSvg
 
         // Figure
         $svg .= $this->poly($d['pts'], $x, $y, 'fill="#dfe6f5" stroke="#1d3f8f" stroke-width="1.5"');
-        $svg .= $this->labels($d['pts'], '', '#1d3f8f', $x, $y);
+        $svg .= $this->labels($d['pts'], '', '#1d3f8f', $x, $y).$axisLabel;
 
         if (!$solution) {
             return $svg.'</svg>';
@@ -162,8 +166,49 @@ final class BoardSvg
         return $out;
     }
 
-    private function text(float $px, float $py, string $text, string $color, bool $italic = false): string
+    /**
+     * Position (0 … 1) on the axis p → q for its name: as far as possible from the figure
+     * (points and edges). The image is the mirror image, so it is just as far away. On a tie,
+     * the end of the axis (like before).
+     *
+     * @param list<array{0: float, 1: float}> $pts
+     */
+    public static function axisLabelT(array $p, array $q, array $pts): float
     {
-        return '<text x="'.round($px, 1).'" y="'.round($py, 1).'" fill="'.$color.'" font-size="10" font-weight="700" font-family="Arial, sans-serif"'.($italic ? ' font-style="italic"' : '').'>'.htmlspecialchars($text, ENT_QUOTES | ENT_XML1).'</text>';
+        $best = 0.86;
+        $bestDist = -1.0;
+        $n = \count($pts);
+
+        foreach ([0.92, 0.86, 0.08, 0.14, 0.75, 0.25, 0.62, 0.38, 0.5] as $t) {
+            $c = [$p[0] + ($q[0] - $p[0]) * $t, $p[1] + ($q[1] - $p[1]) * $t];
+            $dist = INF;
+
+            for ($i = 0; $i < $n; ++$i) {
+                $dist = min($dist, self::segDist($c, $pts[$i], $pts[($i + 1) % $n]));
+            }
+
+            // Clearly better only (a quarter square), so the label stays near the end if possible
+            if ($dist > $bestDist + 0.25) {
+                $best = $t;
+                $bestDist = $dist;
+            }
+        }
+
+        return $best;
+    }
+
+    private static function segDist(array $c, array $a, array $b): float
+    {
+        $dx = $b[0] - $a[0];
+        $dy = $b[1] - $a[1];
+        $len = $dx * $dx + $dy * $dy;
+        $u = $len > 0 ? max(0, min(1, (($c[0] - $a[0]) * $dx + ($c[1] - $a[1]) * $dy) / $len)) : 0;
+
+        return hypot($c[0] - $a[0] - $u * $dx, $c[1] - $a[1] - $u * $dy);
+    }
+
+    private function text(float $px, float $py, string $text, string $color, bool $italic = false, bool $halo = false): string
+    {
+        return '<text x="'.round($px, 1).'" y="'.round($py, 1).'" fill="'.$color.'" font-size="10" font-weight="700" font-family="Arial, sans-serif"'.($italic ? ' font-style="italic"' : '').($halo ? ' stroke="#fff" stroke-width="3" paint-order="stroke"' : '').'>'.htmlspecialchars($text, ENT_QUOTES | ENT_XML1).'</text>';
     }
 }

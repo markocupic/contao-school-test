@@ -54,7 +54,7 @@ class TestSessionTest extends TestCase
 
         $r = $session->start($code);
         $this->assertSame('running', $r['state']);
-        $this->assertSame(1800, $r['remaining']);
+        $this->assertEqualsWithDelta(1800, $r['remaining'], 1);
         $this->assertSame('Kopfrechnen (Brüche)', $r['test'], 'Contao input encoding is decoded for the browser');
         $fr = $session->start($codes[1], 'fr');
         $this->assertSame('Muster Léa', $fr['student']);

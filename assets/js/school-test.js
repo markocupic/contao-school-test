@@ -391,6 +391,39 @@
     // Button icon: Geodreieck with scale and centre line
     const GEO_ICON = '<svg viewBox="0 0 34 19" width="34" height="19" aria-hidden="true" focusable="false"><path d="M2 2.5h30L17 17.5z" fill="currentColor" fill-opacity=".15" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M17 2.5v12.5" fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="2 1.5"/><path d="M7 2.5v2.6M12 2.5v2.6M22 2.5v2.6M27 2.5v2.6M9.5 2.5v1.5M14.5 2.5v1.5M19.5 2.5v1.5M24.5 2.5v1.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>';
 
+    /**
+     * Position (0 … 1) on the axis a → b for its name: as far as possible from the figure, the
+     * end of the axis on a tie. Same rule as BoardSvg::axisLabelT() for the printed sheets.
+     */
+    function axisLabelT(a, b, pts) {
+        const segDist = (c, p, q) => {
+            const dx = q[0] - p[0];
+            const dy = q[1] - p[1];
+            const len = dx * dx + dy * dy;
+            const u = len > 0 ? Math.max(0, Math.min(1, ((c[0] - p[0]) * dx + (c[1] - p[1]) * dy) / len)) : 0;
+
+            return Math.hypot(c[0] - p[0] - u * dx, c[1] - p[1] - u * dy);
+        };
+        let best = 0.86;
+        let bestDist = -1;
+
+        for (const t of [0.92, 0.86, 0.08, 0.14, 0.75, 0.25, 0.62, 0.38, 0.5]) {
+            const c = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+            let dist = Infinity;
+
+            pts.forEach((p, i) => {
+                dist = Math.min(dist, segDist(c, p, pts[(i + 1) % pts.length]));
+            });
+
+            if (dist > bestDist + 0.25) {
+                best = t;
+                bestDist = dist;
+            }
+        }
+
+        return best;
+    }
+
     const hasGeo = (d) => !!d.seg || (!!d.center && !d.ang && !d.vec);
 
     /**
@@ -875,12 +908,16 @@
                 g += `<line class="st-gl" x1="${X(0)}" y1="${Y(y)}" x2="${X(W)}" y2="${Y(y)}"/>`;
             }
 
+            let axisLabel = '';
+
             if (d.seg) {
                 const [a, b] = d.seg;
                 g += `<line class="st-axis" x1="${X(a[0])}" y1="${Y(a[1])}" x2="${X(b[0])}" y2="${Y(b[1])}"/>`;
-                const lx = a[0] + (b[0] - a[0]) * 0.86;
-                const ly = a[1] + (b[1] - a[1]) * 0.86;
-                g += `<text class="st-mark" x="${X(lx) + 9}" y="${Y(ly) - 6}">s</text>`;
+                // The name «s» where the axis is farthest from the figure, drawn above the figure
+                const t = axisLabelT(a, b, d.pts);
+                const lx = a[0] + (b[0] - a[0]) * t;
+                const ly = a[1] + (b[1] - a[1]) * t;
+                axisLabel = `<text class="st-mark st-halo" x="${X(lx) + 9}" y="${Y(ly) - 6}">s</text>`;
             }
 
             if (d.vec && d.vecStart) {
@@ -905,7 +942,7 @@
                 g += `<circle class="st-z" cx="${X(zx)}" cy="${Y(zy)}" r="4.5"/><text class="st-mark" x="${X(zx) + 8}" y="${Y(zy) + 17}">Z</text>`;
             }
 
-            g += poly(d.pts, 'st-fig') + d.pts.map((p) => `<circle class="st-figpt" cx="${X(p[0])}" cy="${Y(p[1])}" r="3.5"/>`).join('') + labels(d.pts, '', 'st-figlbl');
+            g += poly(d.pts, 'st-fig') + d.pts.map((p) => `<circle class="st-figpt" cx="${X(p[0])}" cy="${Y(p[1])}" r="3.5"/>`).join('') + labels(d.pts, '', 'st-figlbl') + axisLabel;
 
             if (result) {
                 g += poly(result.img, 'st-ghost');
