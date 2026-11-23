@@ -52,7 +52,7 @@ class TestDcaListener
         foreach ($this->testTypes->all() as $alias => $type) {
             $GLOBALS['TL_DCA']['tl_st_test']['palettes'][$alias] = '{title_legend},title,subject,type;{class_legend},class;'
                 .$type->getPaletteFields().',sameTasks'
-                .';{grade_legend},gradeStep,pointsForSix;{time_legend},timeLimit;{security_legend},lockOnLeave,resumeCode;{seb_legend},acceptSebBrowserOnly,sebConfigKey;{codesheet_legend},codeSheetNote;{publish_legend},published';
+                .';{grade_legend},gradeStep,pointsForSix;{time_legend},timeLimit;{security_legend},lockOnLeave,resumeCode;{seb_legend},acceptSebBrowserOnly,sebConfigKey;{codesheet_legend},codeSheetNote;{publish_legend},published;{owner_legend},author';
         }
     }
 

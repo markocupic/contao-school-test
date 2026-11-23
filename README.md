@@ -119,7 +119,7 @@ Innerhalb eines Abschnitts kommt keine Aufgabenart doppelt vor (pro Bereich und 
 
 ## Rechte im Backend
 
-Zugriff auf «Schultests» haben nur Backend-Benutzer, für deren Benutzergruppe die Module freigeschaltet sind. Jeder Test gehört der Person, die ihn angelegt (oder kopiert) hat (Feld `author`, «Besitzer»). Andere Benutzer sehen den Test nicht in der Liste und können ihn weder öffnen, bearbeiten, kopieren, löschen noch die Teilnahmen, das Codeblatt, die Auswertung oder die Vorschau aufrufen (`Security\TestVoter`, `Security\ParticipationVoter`). Administratoren sehen alle Tests, in der Liste mit dem Namen des Besitzers, und können den Besitzer im Test unter «Besitzer» ändern. Tests ohne Besitzer (angelegt vor diesem Update) sehen nur Administratoren, bis sie einen Besitzer zuweisen. Nach dem Update `contao:migrate` ausführen (neue Spalte `tl_st_test.author`).
+Zugriff auf «Schultests» haben nur Backend-Benutzer, für deren Benutzergruppe die Module freigeschaltet sind. Jeder Test gehört der Person, die ihn angelegt (oder kopiert) hat (Feld `author`, «Besitzer»). Andere Benutzer sehen den Test nicht in der Liste und können ihn weder öffnen, bearbeiten, kopieren, löschen noch die Teilnahmen, das Codeblatt, die Auswertung oder die Vorschau aufrufen (`Security\TestVoter`, `Security\ParticipationVoter`). Administratoren sehen alle Tests, in der Liste mit dem Namen des Besitzers, und können den Besitzer im Test unter «Besitzer» (unterste Gruppe im Formular) ändern. Tests ohne Besitzer (angelegt vor diesem Update) sehen nur Administratoren, bis sie einen Besitzer zuweisen. Nach dem Update `contao:migrate` ausführen (neue Spalte `tl_st_test.author`).
 
 ## Regeln im Frontend
 
