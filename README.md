@@ -48,6 +48,7 @@ Dritter Testtyp: **Winkel** mit Skizze zu jeder Aufgabe
 | Viereck | Winkelsumme, Parallelogramm |
 | Vieleck | Winkelsumme, fehlender Winkel, regelmässiges n-Eck, Anzahl Ecken |
 | Figuren mit Diagonalen und Höhen | Trapez mit Diagonale, regelmässiges Fünfeck mit zwei Diagonalen (auch Winkel im Schnittpunkt), Parallelogramm mit Diagonale und Höhe, gleichschenkliges Dreieck mit Höhe |
+| Winkel im Kreis (Peripherie- und Zentriwinkel) | vier Punkte auf dem Kreis, drei oder vier gesuchte Winkel ω₁ … ω₄: zwei sich kreuzende Sehnen (Peripheriewinkel über derselben Sehne, Winkelsumme, Nebenwinkel), Sehnenviereck mit Diagonale, zwei Dreiecke über dem Durchmesser (Thales), Zentriwinkel mit Peripheriewinkeln und gleichschenkligem Dreieck aus zwei Radien; die Skizzen sind massstabsgetreu, pro Runde jede Figur nur einmal |
 | Kombiniert | mehrere gesuchte Winkel pro Aufgabe (Aussenwinkel, Trapez, Parallelen) |
 | Profi | gleichschenklige und gleichseitige Dreiecke mit Parallelen |
 

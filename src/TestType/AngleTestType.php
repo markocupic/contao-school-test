@@ -31,6 +31,7 @@ final class AngleTestType implements PracticeTestTypeInterface
         'viereck' => 'Viereck',
         'vieleck' => 'Vieleck',
         'figuren' => 'Figuren mit Diagonalen und Höhen',
+        'kreis' => 'Winkel im Kreis (Peripherie- und Zentriwinkel)',
         'kombi' => 'Mehrere Winkel pro Aufgabe',
         'profi' => 'Profi: gleichschenklige und gleichseitige Dreiecke',
         'gemischt' => 'Alle Bereiche gemischt',
@@ -52,7 +53,7 @@ final class AngleTestType implements PracticeTestTypeInterface
 
     public function getLabel(): string
     {
-        return 'Winkel (Scheitel-, Neben- und Stufenwinkel, Dreieck, Viereck, Vieleck)';
+        return 'Winkel (Scheitel-, Neben- und Stufenwinkel, Dreieck, Viereck, Vieleck, Winkel im Kreis)';
     }
 
     public function getPaletteFields(): string

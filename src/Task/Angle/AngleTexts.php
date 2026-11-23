@@ -22,6 +22,7 @@ final class AngleTexts
         'Stufenwinkel an Parallelen' => ['Angles correspondants et parallèles', 'Angoli corrispondenti e parallele', 'Corresponding angles and parallel lines'],
         'Parallelen und zwei Geraden' => ['Parallèles et deux sécantes', 'Parallele e due trasversali', 'Parallel lines and two transversals'],
         'Figuren mit Diagonalen und Höhen' => ['Figures avec diagonales et hauteurs', 'Figure con diagonali e altezze', 'Figures with diagonals and heights'],
+        'Winkel im Kreis (Peripherie- und Zentriwinkel)' => ['Angles dans le cercle (angles inscrits et angles au centre)', 'Angoli nel cerchio (angoli alla circonferenza e al centro)', 'Angles in a circle (inscribed and central angles)'],
         'Dreieck' => ['Triangle', 'Triangolo', 'Triangle'],
         'Viereck' => ['Quadrilatère', 'Quadrilatero', 'Quadrilateral'],
         'Vieleck' => ['Polygone', 'Poligono', 'Polygon'],
@@ -35,6 +36,15 @@ final class AngleTexts
     ];
 
     public const PHRASES = [
+        // Angles in a circle
+        'Die Punkte A, B, C und D liegen auf dem Kreis. Berechne {0} und {1}.' => ['Les points A, B, C et D sont sur le cercle. Calcule {0} et {1}.', 'I punti A, B, C e D sono sulla circonferenza. Calcola {0} e {1}.', 'The points A, B, C and D lie on the circle. Calculate {0} and {1}.'],
+        'M ist der Mittelpunkt des Kreises, A, B, C und D liegen auf dem Kreis. Berechne {0} und {1}.' => ['M est le centre du cercle, A, B, C et D sont sur le cercle. Calcule {0} et {1}.', 'M è il centro del cerchio, A, B, C e D sono sulla circonferenza. Calcola {0} e {1}.', 'M is the centre of the circle, A, B, C and D lie on the circle. Calculate {0} and {1}.'],
+        '<b>Peripheriewinkel</b> über derselben Sehne {0} sind gleich gross → {1} = <b>{2}°</b>' => ['Les <b>angles inscrits</b> sur la même corde {0} sont égaux → {1} = <b>{2}°</b>', 'Gli <b>angoli alla circonferenza</b> sulla stessa corda {0} sono uguali → {1} = <b>{2}°</b>', '<b>Inscribed angles</b> on the same chord {0} are equal → {1} = <b>{2}°</b>'],
+        '<b>Sehnenviereck</b> {0}: Gegenüberliegende Winkel ergänzen sich zu 180° → {1} = 180° − {2}° = <b>{3}°</b>' => ['<b>Quadrilatère inscrit</b> {0}&nbsp;: les angles opposés font ensemble 180° → {1} = 180° − {2}° = <b>{3}°</b>', '<b>Quadrilatero inscritto</b> {0}: gli angoli opposti sommano 180° → {1} = 180° − {2}° = <b>{3}°</b>', '<b>Cyclic quadrilateral</b> {0}: opposite angles add up to 180° → {1} = 180° − {2}° = <b>{3}°</b>'],
+        '<b>Thaleskreis</b>: {0} ist ein Durchmesser → {1} = <b>90°</b>' => ['<b>Cercle de Thalès</b>&nbsp;: {0} est un diamètre → {1} = <b>90°</b>', '<b>Circonferenza di Talete</b>: {0} è un diametro → {1} = <b>90°</b>', '<b>Thales’ theorem</b>: {0} is a diameter → {1} = <b>90°</b>'],
+        '<b>Zentriwinkel</b> = 2 · Peripheriewinkel über der Sehne {0} → {1} = {2}° : 2 = <b>{3}°</b>' => ['<b>Angle au centre</b> = 2 · angle inscrit sur la corde {0} → {1} = {2}° : 2 = <b>{3}°</b>', '<b>Angolo al centro</b> = 2 · angolo alla circonferenza sulla corda {0} → {1} = {2}° : 2 = <b>{3}°</b>', '<b>Central angle</b> = 2 · inscribed angle on the chord {0} → {1} = {2}° : 2 = <b>{3}°</b>'],
+        '<b>Zentriwinkel</b> = 2 · Peripheriewinkel über der Sehne {0} → {1} = 2 · {2}° = <b>{3}°</b>' => ['<b>Angle au centre</b> = 2 · angle inscrit sur la corde {0} → {1} = 2 · {2}° = <b>{3}°</b>', '<b>Angolo al centro</b> = 2 · angolo alla circonferenza sulla corda {0} → {1} = 2 · {2}° = <b>{3}°</b>', '<b>Central angle</b> = 2 · inscribed angle on the chord {0} → {1} = 2 · {2}° = <b>{3}°</b>'],
+        '<b>Gleichschenkliges Dreieck</b> {0} (zwei Radien): {1} = (180° − {2}°) : 2 = <b>{3}°</b>' => ['<b>Triangle isocèle</b> {0} (deux rayons)&nbsp;: {1} = (180° − {2}°) : 2 = <b>{3}°</b>', '<b>Triangolo isoscele</b> {0} (due raggi): {1} = (180° − {2}°) : 2 = <b>{3}°</b>', '<b>Isosceles triangle</b> {0} (two radii): {1} = (180° − {2}°) : 2 = <b>{3}°</b>'],
         // Questions
         'Zwei Geraden schneiden sich. Berechne {0}.' => ['Deux droites se coupent. Calcule {0}.', 'Due rette si intersecano. Calcola {0}.', 'Two lines intersect. Calculate {0}.'],
         'Drei Geraden schneiden sich in einem Punkt. Berechne {0}.' => ['Trois droites se coupent en un point. Calcule {0}.', 'Tre rette si intersecano in un punto. Calcola {0}.', 'Three lines intersect at one point. Calculate {0}.'],

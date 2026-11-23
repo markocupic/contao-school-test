@@ -170,7 +170,7 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
         'angleKinds' => [
             'inputType' => 'checkbox',
             'exclude' => true,
-            'options' => ['scheitel', 'parallel', 'transversalen', 'dreieck', 'viereck', 'vieleck', 'figuren', 'kombi', 'profi'],
+            'options' => ['scheitel', 'parallel', 'transversalen', 'dreieck', 'viereck', 'vieleck', 'figuren', 'kreis', 'kombi', 'profi'],
             'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['angleKindsOptions'],
             'eval' => ['multiple' => true, 'tl_class' => 'clr'],
             'sql' => 'blob NULL',

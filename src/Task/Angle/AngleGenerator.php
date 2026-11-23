@@ -17,6 +17,7 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  * Angle tasks (port of the "Winkel-Trainer"): vertical and adjacent angles, corresponding
  * angles at parallels, triangles, quadrilaterals, polygons and combined tasks. Parallels
  * cut by two intersecting lines and figures with diagonals and heights: AngleFigureTasks.
+ * Angles in a circle (inscribed and central angles): AngleCircleTasks.
  *
  * A task holds the sketch as SVG (without and with solution) and one answer field per
  * unknown angle. Texts are German, the translator turns them into fr/it/en with the
@@ -24,9 +25,10 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  */
 final class AngleGenerator
 {
+    use AngleCircleTasks;
     use AngleFigureTasks;
 
-    public const KINDS = ['scheitel', 'parallel', 'transversalen', 'dreieck', 'viereck', 'vieleck', 'figuren', 'kombi', 'profi'];
+    public const KINDS = ['scheitel', 'parallel', 'transversalen', 'dreieck', 'viereck', 'vieleck', 'figuren', 'kreis', 'kombi', 'profi'];
 
     public const W = 640;
 
@@ -48,6 +50,7 @@ final class AngleGenerator
             'viereck' => $this->genQuad(),
             'vieleck' => $this->genPoly(),
             'figuren' => $this->genFigure(),
+            'kreis' => $this->genCircle(),
             'kombi' => $this->genCombined(),
             default => $this->genProfi(),
         };
@@ -212,7 +215,7 @@ final class AngleGenerator
 
     private static function newScene(): array
     {
-        return ['segs' => [], 'ext' => [], 'lines' => [], 'marks' => [], 'ticks' => [], 'labels' => [], 'chev' => [], 'solSegs' => [], 'solMarks' => [], 'arcs' => [], 'texts' => [], 'fit' => [], 'rot' => 0, 'dofit' => true, 'margin' => 70];
+        return ['segs' => [], 'ext' => [], 'lines' => [], 'marks' => [], 'ticks' => [], 'labels' => [], 'chev' => [], 'solSegs' => [], 'solMarks' => [], 'arcs' => [], 'texts' => [], 'circles' => [], 'dots' => [], 'fit' => [], 'rot' => 0, 'dofit' => true, 'margin' => 70];
     }
 
     private static function sectorMark(array $v, array $rays, int $k, string $text = '', string $kind = 'unknown'): array
@@ -1246,6 +1249,8 @@ final class AngleGenerator
             'solMarks' => array_map($mk, $S['solMarks']),
             'labels' => array_map(static fn (array $l): array => array_merge($l, ['p' => $F($l['p']), 'away' => isset($l['away']) ? $F($l['away']) : $cen]), $S['labels']),
             'arcs' => array_map(static fn (array $o): array => ['c' => $F($o['c']), 'a' => $F($o['a']), 'b' => $F($o['b'])], $S['arcs']),
+            'circles' => array_map(static fn (array $o): array => ['c' => $F($o['c']), 'r' => self::len(self::sub($F(self::add($o['c'], [$o['r'], 0])), $F($o['c'])))], $S['circles'] ?? []),
+            'dots' => array_map($F, $S['dots'] ?? []),
             'texts' => $S['texts'],
         ];
     }
@@ -1375,7 +1380,13 @@ final class AngleGenerator
             }
         }
 
-        $s = implode('', array_column($marks, 'fill'));
+        $s = '';
+
+        foreach ($sc['circles'] ?? [] as $o) {
+            $s .= '<circle cx="'.round($o['c'][0], 1).'" cy="'.round($o['c'][1], 1).'" r="'.round($o['r'], 1).'" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>';
+        }
+
+        $s .= implode('', array_column($marks, 'fill'));
         $lineLabels = [];
 
         foreach ($sc['lines'] as $l) {
@@ -1442,6 +1453,10 @@ final class AngleGenerator
 
             $Pa = static fn (float $a): array => self::add($o['c'], [$r * cos(self::rad($a)), $r * sin(self::rad($a))]);
             $s .= '<path d="M'.self::f($Pa($st - 7)).' A'.round($r, 1).' '.round($r, 1).' 0 0 1 '.self::f($Pa($st + $sp + 7)).'" fill="none" stroke="#64748b" stroke-width="1.6"/>';
+        }
+
+        foreach ($sc['dots'] ?? [] as $d) {
+            $s .= '<circle cx="'.round($d[0], 1).'" cy="'.round($d[1], 1).'" r="3.5" fill="#1e293b"/>';
         }
 
         $s .= implode('', array_column($marks, 'stroke'));
