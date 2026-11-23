@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Vorschau: {{ test.title }}</title>
+    <link rel="stylesheet" href="{{ asset('css/school-test.css', 'markocupic_contao_school_test') }}">
+    <link rel="stylesheet" href="{{ asset('page/mathe-mission.css', 'markocupic_contao_school_test') }}">
+</head>
+<body>
+    <div id="wrapper">
+        <div id="container">
+            <div class="mod_article">
+                <div class="school-test" data-school-test="{{ config|json_encode }}">
+                    <noscript><p>Für den Test muss JavaScript eingeschaltet sein.</p></noscript>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ asset('js/school-test.js', 'markocupic_contao_school_test') }}" defer></script>
+</body>
+</html>

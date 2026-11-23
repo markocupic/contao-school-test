@@ -23,9 +23,10 @@
     .notdone { padding: 12px 14px; background: #fff3d6; border-left: 4px solid #c88a00; margin-top: 12px; }
 {% endblock %}
 
-{% block toolbar %}{{ test.title }} · {{ class }} · Seite 1 ist die Klassenübersicht, danach ein Blatt pro Schülerin und Schüler{% endblock %}
+{% block toolbar %}{% if preview|default(false) %}Vorschau: {{ test.title }} · so sieht die Auswertung deines Versuchs aus, nichts ist gespeichert{% else %}{{ test.title }} · {{ class }} · Seite 1 ist die Klassenübersicht, danach ein Blatt pro Schülerin und Schüler{% endif %}{% endblock %}
 
 {% block body %}
+    {% if not preview|default(false) %}
     <div class="page">
         <h1>Klassenübersicht: {{ test.title }}</h1>
         <p class="sub">{{ test.subject }} · Klasse {{ class }}{% if test.timeLimit %} · Zeit {{ test.timeLimit }} Minuten{% endif %} · Note = 1 + 5 · Punkte / {{ test.pointsForSix ?: 'Maximum' }}, gerundet {{ gradeStep }}</p>
@@ -43,6 +44,7 @@
             {% endfor %}
         </table>
     </div>
+    {% endif %}
 
     {% for s in sheets %}
         <div class="page">

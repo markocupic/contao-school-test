@@ -69,65 +69,78 @@ class PrintController
     {
         $test = $this->getTest();
         $this->synchronizer->sync((int) $test['id']);
-        $rows = $this->getParticipations((int) $test['id']);
-        $sheets = [];
+        $sheets = array_map($this->sheet(...), $this->getParticipations((int) $test['id']));
 
-        foreach ($rows as $row) {
-            $sections = json_decode((string) $row['tasks'], true) ?: [];
-            $answers = json_decode((string) $row['answers'], true) ?: [];
-            $result = $sections ? $this->evaluator->evaluate($sections, $answers) : null;
-            $outSections = [];
+        $this->send($this->renderEvaluation($test, $sheets));
+    }
 
-            foreach ($sections as $si => $section) {
-                $tasks = [];
-
-                foreach ($section['tasks'] as $ti => $task) {
-                    $r = $result['sections'][$si]['tasks'][$ti];
-                    $given = $answers[TaskPresenter::key($si, $ti)] ?? null;
-                    $tasks[] = [
-                        'q' => $task['q'],
-                        'isTable' => 'table' === $task['a']['type'],
-                        'figure' => match ($task['a']['type']) {
-                            'points' => $this->renderBoard($task['a'], $given, $r['correct']),
-                            'triangle' => $this->renderTriangle($task['a'], $given, $r['correct']),
-                            'symmetry' => SymmetryGenerator::svg($task['a'], Evaluator::symmetryAnswer($given), $r['correct']),
-                            'angles' => $task['a']['solSvg'].$this->renderAngles($task['a'], \is_array($given) ? $given : [], $r['correct']),
-                            'terms' => ($task['a']['svg'] ?? '').$this->renderTerms($task['a'], \is_array($given) ? $given : [], $r['correct']),
-                            default => '',
-                        },
-                        'legend' => 'symmetry' === $task['a']['type'] ? 'Lösung grün gestrichelt (Achsen) und grüner Kreis (Zentrum) · Achsen und Z des Kindes: grün richtig, rot falsch' : ('triangle' === $task['a']['type'] ? 'Lösung grün gestrichelt auf die Seite AB gelegt · Seiten: grün alle drei als Strecken gezeichnet, rot nicht' : ('points' === $task['a']['type'] ? 'Lösung grün gestrichelt'.(empty($task['a']['draw']['free']) ? '' : ', Kreise: '.(string) round((float) ($task['a']['tol'] ?? 0.6) * 5, 1).' mm Toleranz').' · gesetzte Punkte: grün richtig, rot falsch'.(empty($task['a']['draw']['ggb']) ? '' : ' · Strecken: grün richtig verbunden, rot falsch') : '')),
-                        'table' => 'table' === $task['a']['type'] ? $this->renderTable($task['a'], \is_array($given) ? $given : [], $r['correct']) : '',
-                        'given' => $this->renderGiven($task['a'], $given),
-                        'solution' => $this->solutions->solution($task['a']),
-                        'points' => $r['points'],
-                        'max' => $r['max'],
-                    ];
-                }
-
-                $outSections[] = [
-                    'letter' => \chr(65 + $si),
-                    'title' => $section['title'],
-                    'points' => $result['sections'][$si]['points'],
-                    'max' => $result['sections'][$si]['max'],
-                    'tasks' => $tasks,
-                ];
-            }
-
-            $sheets[] = [
-                'row' => $row,
-                'finished' => ParticipationStatus::FINISHED === $row['status'],
-                'statusLabel' => $GLOBALS['TL_LANG']['tl_st_participation']['statusOptions'][$row['status']] ?? $row['status'],
-                'grade' => GradeCalculator::format($row['grade']),
-                'sections' => $outSections,
-            ];
-        }
-
-        $this->send($this->twig->render('@MarkocupicContaoSchoolTest/backend/evaluation.html.twig', [
+    /**
+     * Evaluation sheets of the given participations (test record already decoded). $preview:
+     * only the sheet, without the class overview.
+     */
+    public function renderEvaluation(array $test, array $sheets, bool $preview = false): string
+    {
+        return $this->twig->render('@MarkocupicContaoSchoolTest/backend/evaluation.html.twig', [
             'test' => $test,
             'class' => $this->getClassTitle($test),
             'sheets' => $sheets,
             'gradeStep' => $GLOBALS['TL_LANG']['tl_st_test']['gradeStepOptions'][$test['gradeStep']] ?? $test['gradeStep'],
-        ]));
+            'preview' => $preview,
+        ]);
+    }
+
+    /**
+     * One evaluation sheet: every task with the answer, the solution and the points.
+     */
+    public function sheet(array $row): array
+    {
+        $sections = json_decode((string) $row['tasks'], true) ?: [];
+        $answers = json_decode((string) $row['answers'], true) ?: [];
+        $result = $sections ? $this->evaluator->evaluate($sections, $answers) : null;
+        $outSections = [];
+
+        foreach ($sections as $si => $section) {
+            $tasks = [];
+
+            foreach ($section['tasks'] as $ti => $task) {
+                $r = $result['sections'][$si]['tasks'][$ti];
+                $given = $answers[TaskPresenter::key($si, $ti)] ?? null;
+                $tasks[] = [
+                    'q' => $task['q'],
+                    'isTable' => 'table' === $task['a']['type'],
+                    'figure' => match ($task['a']['type']) {
+                        'points' => $this->renderBoard($task['a'], $given, $r['correct']),
+                        'triangle' => $this->renderTriangle($task['a'], $given, $r['correct']),
+                        'symmetry' => SymmetryGenerator::svg($task['a'], Evaluator::symmetryAnswer($given), $r['correct']),
+                        'angles' => $task['a']['solSvg'].$this->renderAngles($task['a'], \is_array($given) ? $given : [], $r['correct']),
+                        'terms' => ($task['a']['svg'] ?? '').$this->renderTerms($task['a'], \is_array($given) ? $given : [], $r['correct']),
+                        default => '',
+                    },
+                    'legend' => 'symmetry' === $task['a']['type'] ? 'Lösung grün gestrichelt (Achsen) und grüner Kreis (Zentrum) · Achsen und Z des Kindes: grün richtig, rot falsch' : ('triangle' === $task['a']['type'] ? 'Lösung grün gestrichelt auf die Seite AB gelegt · Seiten: grün alle drei als Strecken gezeichnet, rot nicht' : ('points' === $task['a']['type'] ? 'Lösung grün gestrichelt'.(empty($task['a']['draw']['free']) ? '' : ', Kreise: '.(string) round((float) ($task['a']['tol'] ?? 0.6) * 5, 1).' mm Toleranz').' · gesetzte Punkte: grün richtig, rot falsch'.(empty($task['a']['draw']['ggb']) ? '' : ' · Strecken: grün richtig verbunden, rot falsch') : '')),
+                    'table' => 'table' === $task['a']['type'] ? $this->renderTable($task['a'], \is_array($given) ? $given : [], $r['correct']) : '',
+                    'given' => $this->renderGiven($task['a'], $given),
+                    'solution' => $this->solutions->solution($task['a']),
+                    'points' => $r['points'],
+                    'max' => $r['max'],
+                ];
+            }
+
+            $outSections[] = [
+                'letter' => \chr(65 + $si),
+                'title' => $section['title'],
+                'points' => $result['sections'][$si]['points'],
+                'max' => $result['sections'][$si]['max'],
+                'tasks' => $tasks,
+            ];
+        }
+
+        return [
+            'row' => $row,
+            'finished' => ParticipationStatus::FINISHED === $row['status'],
+            'statusLabel' => $GLOBALS['TL_LANG']['tl_st_participation']['statusOptions'][$row['status']] ?? $row['status'],
+            'grade' => GradeCalculator::format($row['grade']),
+            'sections' => $outSections,
+        ];
     }
 
     private function send(string $html): never
@@ -147,9 +160,16 @@ class PrintController
             throw new \RuntimeException(\sprintf('Test ID %d not found.', $id));
         }
 
-        // Contao stores input HTML-encoded, Twig escapes again: decode first to avoid "&amp;#40;"
+        return $this->decodeTest($test);
+    }
+
+    /**
+     * Contao stores input HTML-encoded, Twig escapes again: decode first to avoid "&amp;#40;".
+     */
+    public function decodeTest(array $test): array
+    {
         foreach (['title', 'subject', 'codeSheetNote'] as $field) {
-            $test[$field] = StringUtil::decodeEntities((string) $test[$field]);
+            $test[$field] = StringUtil::decodeEntities((string) ($test[$field] ?? ''));
         }
 
         return $test;

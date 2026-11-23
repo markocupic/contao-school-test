@@ -1,3 +1,7 @@
 markocupic_contao_school_test_api:
     resource: ../src/Controller/Api/
     type: attribute
+
+markocupic_contao_school_test_backend:
+    resource: ../src/Controller/Backend/
+    type: attribute

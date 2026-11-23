@@ -56,7 +56,7 @@
             interrupted: 'Dein Test wurde unterbrochen.', left: 'Du hast den Test verlassen. Er ist jetzt gesperrt.', lockedTitle: 'Test gesperrt',
             lockedText: 'Deine Antworten sind gespeichert. Melde dich bei deiner Lehrperson. Sie gibt den Wiederaufnahme-Code ein.',
             resumeCode: 'Wiederaufnahme-Code', continue: 'Weiter', otherCode: 'Anderen Code eingeben', enterResume: 'Bitte den Wiederaufnahme-Code eingeben.',
-            alreadyDone: 'Diesen Test hast du bereits abgegeben', handedIn: 'Test abgegeben', timeUpAuto: 'Die Zeit ist abgelaufen. Dein Test wurde automatisch abgegeben.',
+            previewTitle: 'Vorschau für Lehrpersonen', previewNote: 'Du löst den Test wie eine Schülerin oder ein Schüler. Nichts wird gespeichert; der Safe Exam Browser und die Sperre beim Verlassen sind ausgeschaltet.', previewStart: 'Test starten', previewBanner: 'Vorschau – nichts wird gespeichert', previewEval: 'Auswertung mit Lösungen ansehen', previewAgain: 'Nochmals lösen', gradeIs: 'Note {0}', alreadyDone: 'Diesen Test hast du bereits abgegeben', handedIn: 'Test abgegeben', timeUpAuto: 'Die Zeit ist abgelaufen. Dein Test wurde automatisch abgegeben.',
             score: '<span>{0}</span> von {1} Punkten', gradeFromTeacher: 'Die Note erhältst du von deiner Lehrperson.', points: '{0} Punkte', minutes: '{0} Minuten', pts: '{0} P.',
             saved: 'Gespeichert', saving: 'Wird gespeichert …', retry: 'Keine Verbindung, neuer Versuch …',
             stayHere: 'Bleibe auf dieser Seite. Wechselst du den Tab oder lädst du die Seite neu, wird der Test gesperrt.',
@@ -96,7 +96,7 @@
             interrupted: 'Ton test a été interrompu.', left: 'Tu as quitté le test. Il est maintenant bloqué.', lockedTitle: 'Test bloqué',
             lockedText: 'Tes réponses sont enregistrées. Adresse-toi à ton enseignant·e, qui saisira le code de reprise.',
             resumeCode: 'Code de reprise', continue: 'Continuer', otherCode: 'Saisir un autre code', enterResume: 'Saisis le code de reprise.',
-            alreadyDone: 'Tu as déjà rendu ce test', handedIn: 'Test rendu', timeUpAuto: 'Le temps est écoulé. Ton test a été rendu automatiquement.',
+            previewTitle: 'Aperçu pour les enseignants', previewNote: 'Tu résous le test comme une élève ou un élève. Rien n’est enregistré&nbsp;; le Safe Exam Browser et le blocage en quittant la page sont désactivés.', previewStart: 'Commencer le test', previewBanner: 'Aperçu – rien n’est enregistré', previewEval: 'Voir l’évaluation avec les solutions', previewAgain: 'Résoudre encore une fois', gradeIs: 'Note {0}', alreadyDone: 'Tu as déjà rendu ce test', handedIn: 'Test rendu', timeUpAuto: 'Le temps est écoulé. Ton test a été rendu automatiquement.',
             score: '<span>{0}</span> points sur {1}', gradeFromTeacher: 'Ton enseignant·e te donnera la note.', points: '{0} points', minutes: '{0} minutes', pts: '{0} pts',
             saved: 'Enregistré', saving: 'Enregistrement …', retry: 'Pas de connexion, nouvel essai …',
             stayHere: 'Reste sur cette page. Si tu changes d’onglet ou recharges la page, le test sera bloqué.',
@@ -136,7 +136,7 @@
             interrupted: 'Il tuo test è stato interrotto.', left: 'Hai lasciato il test. Ora è bloccato.', lockedTitle: 'Test bloccato',
             lockedText: 'Le tue risposte sono salvate. Rivolgiti al tuo docente: inserirà il codice di ripresa.',
             resumeCode: 'Codice di ripresa', continue: 'Continua', otherCode: 'Inserire un altro codice', enterResume: 'Inserisci il codice di ripresa.',
-            alreadyDone: 'Hai già consegnato questo test', handedIn: 'Test consegnato', timeUpAuto: 'Il tempo è scaduto. Il tuo test è stato consegnato automaticamente.',
+            previewTitle: 'Anteprima per docenti', previewNote: 'Risolvi il test come un’allieva o un allievo. Non viene salvato nulla; il Safe Exam Browser e il blocco all’uscita sono disattivati.', previewStart: 'Inizia il test', previewBanner: 'Anteprima – non viene salvato nulla', previewEval: 'Vedi la valutazione con le soluzioni', previewAgain: 'Risolvi di nuovo', gradeIs: 'Voto {0}', alreadyDone: 'Hai già consegnato questo test', handedIn: 'Test consegnato', timeUpAuto: 'Il tempo è scaduto. Il tuo test è stato consegnato automaticamente.',
             score: '<span>{0}</span> punti su {1}', gradeFromTeacher: 'Il voto te lo darà il tuo docente.', points: '{0} punti', minutes: '{0} minuti', pts: '{0} pt.',
             saved: 'Salvato', saving: 'Salvataggio …', retry: 'Nessuna connessione, nuovo tentativo …',
             stayHere: 'Resta su questa pagina. Se cambi scheda o ricarichi la pagina, il test viene bloccato.',
@@ -176,7 +176,7 @@
             interrupted: 'Your test was interrupted.', left: 'You left the test. It is now locked.', lockedTitle: 'Test locked',
             lockedText: 'Your answers are saved. Go to your teacher, who will enter the resume code.',
             resumeCode: 'Resume code', continue: 'Continue', otherCode: 'Enter a different code', enterResume: 'Please enter the resume code.',
-            alreadyDone: 'You have already handed in this test', handedIn: 'Test handed in', timeUpAuto: 'Time is up. Your test was handed in automatically.',
+            previewTitle: 'Preview for teachers', previewNote: 'You solve the test like a student. Nothing is saved; the Safe Exam Browser and the lock on leaving are switched off.', previewStart: 'Start test', previewBanner: 'Preview – nothing is saved', previewEval: 'See the evaluation with solutions', previewAgain: 'Solve again', gradeIs: 'Grade {0}', alreadyDone: 'You have already handed in this test', handedIn: 'Test handed in', timeUpAuto: 'Time is up. Your test was handed in automatically.',
             score: '<span>{0}</span> of {1} points', gradeFromTeacher: 'Your teacher will give you the grade.', points: '{0} points', minutes: '{0} minutes', pts: '{0} pts',
             saved: 'Saved', saving: 'Saving …', retry: 'No connection, retrying …',
             stayHere: 'Stay on this page. If you switch tabs or reload the page, the test will be locked.',
@@ -1905,6 +1905,10 @@
             return;
         }
 
+        // Teacher preview from the backend: no code, nothing saved, no SEB, no lock
+        const preview = !!api.preview;
+        const PREVIEW_CODE = '00000';
+
         const st = {
             code: '',
             token: '',
@@ -2013,9 +2017,48 @@
             }
         }
 
+        function showPreviewStart() {
+            root.innerHTML = `
+                <div class="st-card st-login">
+                    ${langPicker()}
+                    <h2>${tx('previewTitle')}</h2>
+                    <p><strong>${esc(api.title || '')}</strong></p>
+                    <p>${tx('previewNote')}</p>
+                    <p><button type="button" class="st-btn" data-act="pstart">${tx('previewStart')}</button></p>
+                    <div class="st-msg" aria-live="polite"></div>
+                </div>`;
+            root.lang = lang;
+            bindPicker(root, showLogin);
+            root.querySelector('[data-act="pstart"]').addEventListener('click', async () => {
+                st.code = PREVIEW_CODE;
+                message('', tx('wait'));
+
+                try {
+                    const res = await post('start', {code: PREVIEW_CODE, lang});
+
+                    if ('error' === res.state) {
+                        message('bad', esc(errorText(res, 'noConnection')));
+
+                        return;
+                    }
+
+                    handle(res);
+                } catch (err) {
+                    message('bad', tx('noConnection'));
+                }
+            });
+        }
+
         function showLogin() {
             stopClock();
             disarm();
+
+            if (preview) {
+                showPreviewStart();
+
+                return;
+            }
+
             root.innerHTML = `
                 <div class="st-card st-login">
                     ${langPicker()}
@@ -2126,9 +2169,22 @@
                     <h2>${res.already ? tx('alreadyDone') : tx('handedIn')}</h2>
                     ${res.timeUp ? `<p>${tx('timeUpAuto')}</p>` : ''}
                     <p><strong>${esc(res.student)}</strong> · ${esc(res.test)}</p>
-                    <p class="st-score">${tx('score', res.points, res.max)}</p>
-                    <p>${tx('gradeFromTeacher')}</p>
+                    <p class="st-score">${tx('score', res.points, res.max)}${preview && res.grade ? ` · ${tx('gradeIs', esc(res.grade))}` : ''}</p>
+                    ${preview ? `<p class="st-row"><a class="st-btn" href="${esc(api.evaluation)}" target="_blank" rel="noopener">${tx('previewEval')}</a> <button type="button" class="st-link" data-act="again">${tx('previewAgain')}</button></p>` : `<p>${tx('gradeFromTeacher')}</p>`}
+                    <div class="st-msg" aria-live="polite"></div>
                 </div>`;
+
+            if (preview) {
+                root.querySelector('[data-act="again"]').addEventListener('click', async () => {
+                    st.code = PREVIEW_CODE;
+
+                    try {
+                        handle(await post('restart', {code: PREVIEW_CODE, lang}));
+                    } catch (err) {
+                        message('bad', tx('noConnection'));
+                    }
+                });
+            }
         }
 
         function showTest(res) {
@@ -2160,6 +2216,7 @@
                         <div><h2>${esc(st.test)}</h2><div>${esc(st.student)} · ${tx('points', total)}${timed ? ` · ${tx('minutes', res.timeLimit)}` : ''}</div></div>
                         <div class="st-status">${timed ? '<div class="st-clock" role="timer"></div>' : ''}<div class="st-saved" aria-live="polite">${tx('saved')}</div></div>
                     </div>
+                    ${preview ? `<p class="st-warnbox st-previewbox">${tx('previewBanner')}</p>` : ''}
                     ${st.lockOnLeave ? `<p class="st-warnbox">${tx('stayHere')}</p>` : ''}
                     ${sections}
                     <div class="st-submit">
@@ -2380,6 +2437,14 @@
             showLogin();
             message('', tx('wait'));
             post('continue', {code: st.code, token: String(saved.token || ''), lang}).then((res) => {
+                // Preview without a running attempt: back to the start screen
+                if ('none' === res.state) {
+                    store.remove(KEY);
+                    showLogin();
+
+                    return;
+                }
+
                 if ('error' === res.state) {
                     store.remove(KEY);
                     message('bad', esc(errorText(res, 'noConnection')));

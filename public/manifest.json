@@ -1,7 +1,8 @@
 {
-  "js/school-test.js": "/bundles/markocupiccontaoschooltest/js/school-test.3c5cbd34.js",
-  "css/school-test.css": "/bundles/markocupiccontaoschooltest/css/school-test.081424b3.css",
-  "page/mathe-mission.css": "/bundles/markocupiccontaoschooltest/page/mathe-mission.css",
+  "js/school-test.js": "/bundles/markocupiccontaoschooltest/js/school-test.eeb37908.js",
+  "css/school-test.css": "/bundles/markocupiccontaoschooltest/css/school-test.441f22ac.css",
   "icons/evaluation.svg": "/bundles/markocupiccontaoschooltest/icons/evaluation.svg",
-  "icons/codesheet.svg": "/bundles/markocupiccontaoschooltest/icons/codesheet.svg"
+  "icons/codesheet.svg": "/bundles/markocupiccontaoschooltest/icons/codesheet.svg",
+  "page/mathe-mission.css": "/bundles/markocupiccontaoschooltest/page/mathe-mission.css",
+  "icons/preview.svg": "/bundles/markocupiccontaoschooltest/icons/preview.svg"
 }

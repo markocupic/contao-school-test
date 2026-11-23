@@ -57,3 +57,4 @@ $GLOBALS['TL_LANG']['tl_st_test']['published'] = ['Test freigeben', 'Nur freigeg
 $GLOBALS['TL_LANG']['tl_st_test']['children'] = 'Teilnahmen des Tests ID %s anzeigen';
 $GLOBALS['TL_LANG']['tl_st_test']['codesheet'] = 'Codeblatt drucken';
 $GLOBALS['TL_LANG']['tl_st_test']['evaluation'] = 'Auswertungsblätter drucken';
+$GLOBALS['TL_LANG']['tl_st_test']['preview'] = ['Try it', 'Solve the test yourself like a student: no code, no SEB, nothing is saved'];
