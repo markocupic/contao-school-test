@@ -20,7 +20,7 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  * (whole number or fraction like -3/4). Points per equation: 1 (levels 1–3),
  * 2 (levels 4–7) or 3 (levels 8–10).
  */
-final class EquationTestType implements PracticeTestTypeInterface
+final class EquationTestType implements PracticeTestTypeInterface, TaskKindsInterface
 {
     public const ALIAS = 'equations';
 
@@ -57,16 +57,16 @@ final class EquationTestType implements PracticeTestTypeInterface
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},difficulty,equationLevels,tasksPerKind';
+        return '{config_legend},difficulty,taskCounts';
     }
 
     public function generate(array $test): array
     {
         $difficulty = $this->difficulty((string) ($test['difficulty'] ?? 'medium'));
-        $count = max(1, min(10, (int) ($test['tasksPerKind'] ?? 2)));
         $sections = [];
 
-        foreach ($this->levels($test['equationLevels'] ?? null) as $level) {
+        foreach (TaskCounts::rows($test, $this) as $level => $count) {
+            $level = (int) $level;
             $tasks = [];
             $seen = [];
 
@@ -83,6 +83,30 @@ final class EquationTestType implements PracticeTestTypeInterface
         }
 
         return $sections;
+    }
+
+    public function getTaskKinds(): array
+    {
+        $labels = [];
+
+        foreach (EquationGenerator::LEVELS as $level => $title) {
+            $labels[$level] = 'Stufe '.$level.': '.$title;
+        }
+
+        return TaskCounts::labels('equationLevelsOptions', $labels);
+    }
+
+    /**
+     * Levels 1 to 5.
+     */
+    public function getDefaultTaskCounts(): array
+    {
+        return array_fill_keys([1, 2, 3, 4, 5], 2);
+    }
+
+    public function getMaxTaskCount(string|int $kind): int
+    {
+        return 10;
     }
 
     public function getPracticeLabels(): array
@@ -143,21 +167,5 @@ final class EquationTestType implements PracticeTestTypeInterface
     private function difficulty(string $difficulty): string
     {
         return \in_array($difficulty, self::DIFFICULTIES, true) ? $difficulty : 'medium';
-    }
-
-    /**
-     * Selected levels from the backend (serialized array), levels 1 to 5 if nothing is selected.
-     *
-     * @return list<int>
-     */
-    private function levels(mixed $value): array
-    {
-        if (\is_string($value) && '' !== $value) {
-            $value = @unserialize($value, ['allowed_classes' => false]);
-        }
-
-        $levels = \is_array($value) ? array_values(array_intersect(array_keys(EquationGenerator::LEVELS), array_map('intval', $value))) : [];
-
-        return $levels ?: [1, 2, 3, 4, 5];
     }
 }

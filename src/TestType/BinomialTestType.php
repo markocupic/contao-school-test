@@ -20,7 +20,7 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  * multiplying out and factorising. Every field is worth one point.
  * Easy = basic requirements, hard = additional requirements, medium mixes both.
  */
-final class BinomialTestType implements PracticeTestTypeInterface
+final class BinomialTestType implements PracticeTestTypeInterface, TaskKindsInterface
 {
     public const ALIAS = 'binomials';
 
@@ -64,20 +64,34 @@ final class BinomialTestType implements PracticeTestTypeInterface
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},difficulty,binomialTopics,tasksPerKind';
+        return '{config_legend},difficulty,taskCounts';
     }
 
     public function generate(array $test): array
     {
         $difficulty = $this->difficulty((string) ($test['difficulty'] ?? 'medium'));
-        $count = max(1, min(10, (int) ($test['tasksPerKind'] ?? 2)));
         $sections = [];
 
-        foreach ($this->kinds($test['binomialTopics'] ?? null) as $kind) {
-            $sections[] = $this->section($kind, $this->many($kind, $difficulty, $count));
+        foreach (TaskCounts::rows($test, $this) as $kind => $count) {
+            $sections[] = $this->section((string) $kind, $this->many((string) $kind, $difficulty, $count));
         }
 
         return $sections;
+    }
+
+    public function getTaskKinds(): array
+    {
+        return TaskCounts::labels('binomialTopicsOptions', array_combine(BinomialGenerator::TOPICS, array_map(static fn (string $k): string => self::TITLES[$k] ?? $k, BinomialGenerator::TOPICS)));
+    }
+
+    public function getDefaultTaskCounts(): array
+    {
+        return array_fill_keys(array_keys($this->getTaskKinds()), 2);
+    }
+
+    public function getMaxTaskCount(string|int $kind): int
+    {
+        return 10;
     }
 
     public function getPracticeLabels(): array
@@ -157,19 +171,5 @@ final class BinomialTestType implements PracticeTestTypeInterface
     private function difficulty(string $difficulty): string
     {
         return \in_array($difficulty, BinomialGenerator::LEVELS, true) ? $difficulty : 'medium';
-    }
-
-    /**
-     * Selected topics from the backend (serialized array), all if nothing is selected.
-     */
-    private function kinds(mixed $value): array
-    {
-        if (\is_string($value) && '' !== $value) {
-            $value = @unserialize($value, ['allowed_classes' => false]);
-        }
-
-        $kinds = \is_array($value) ? array_values(array_intersect(BinomialGenerator::TOPICS, $value)) : [];
-
-        return $kinds ?: BinomialGenerator::TOPICS;
     }
 }

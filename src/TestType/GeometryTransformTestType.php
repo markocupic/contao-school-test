@@ -23,7 +23,7 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  * Spiegeln, Drehen, Verschieben: the student places the image points on squared paper.
  * Every correctly placed image point is worth one point.
  */
-final class GeometryTransformTestType implements PracticeTestTypeInterface
+final class GeometryTransformTestType implements PracticeTestTypeInterface, TaskKindsInterface
 {
     public const ALIAS = 'geometry_transform';
 
@@ -66,21 +66,37 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},difficulty,transformKinds,tasksPerKind';
+        return '{config_legend},difficulty,taskCounts';
     }
 
     public function generate(array $test): array
     {
         $difficulty = $this->difficulty((string) ($test['difficulty'] ?? 'medium'));
-        $kinds = $this->kinds($test['transformKinds'] ?? null);
-        $count = max(1, min(10, (int) ($test['tasksPerKind'] ?? 2)));
         $sections = [];
 
-        foreach ($kinds as $kind) {
-            $sections[] = $this->section($kind, $this->many($kind, $difficulty, $count), $difficulty);
+        foreach (TaskCounts::rows($test, $this) as $kind => $count) {
+            $sections[] = $this->section((string) $kind, $this->many((string) $kind, $difficulty, $count), $difficulty);
         }
 
         return $sections;
+    }
+
+    public function getTaskKinds(): array
+    {
+        return TaskCounts::labels('transformKindsOptions', array_combine(TransformGenerator::KINDS, array_map(static fn (string $k): string => self::TITLES[$k] ?? $k, TransformGenerator::KINDS)));
+    }
+
+    /**
+     * All kinds except the GeoGebra variants (they load GeoGebra from outside).
+     */
+    public function getDefaultTaskCounts(): array
+    {
+        return array_fill_keys(array_diff(TransformGenerator::KINDS, TransformGenerator::GGB_KINDS), 2);
+    }
+
+    public function getMaxTaskCount(string|int $kind): int
+    {
+        return 10;
     }
 
     public function getPracticeLabels(): array
@@ -161,24 +177,6 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface
     {
         return \in_array($difficulty, TransformGenerator::LEVELS, true) ? $difficulty : 'medium';
     }
-
-    /**
-     * Selected kinds from the backend (serialized array), all if nothing is selected.
-     */
-    private function kinds(mixed $value): array
-    {
-        if (\is_string($value) && '' !== $value) {
-            $value = @unserialize($value, ['allowed_classes' => false]);
-        }
-
-        // Earlier constructions without squares are now the GeoGebra ones
-        $value = \is_array($value) ? array_map(static fn (mixed $k): mixed => TransformGenerator::LEGACY_KINDS[$k] ?? $k, $value) : $value;
-        $kinds = \is_array($value) ? array_values(array_intersect(TransformGenerator::KINDS, $value)) : [];
-
-        // Nothing selected: all kinds except the GeoGebra variants (they load GeoGebra from outside)
-        return $kinds ?: array_values(array_diff(TransformGenerator::KINDS, TransformGenerator::GGB_KINDS));
-    }
-
     public function getPracticeArea(): string
     {
         return 'geometrie';

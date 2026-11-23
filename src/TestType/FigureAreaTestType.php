@@ -21,7 +21,7 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  * levels, with sketches.
  * Every fourth task of a figure is a word problem; "Textaufgaben" has word problems only.
  */
-final class FigureAreaTestType implements PracticeTestTypeInterface
+final class FigureAreaTestType implements PracticeTestTypeInterface, TaskKindsInterface
 {
     public const ALIAS = 'figure_areas';
 
@@ -66,20 +66,34 @@ final class FigureAreaTestType implements PracticeTestTypeInterface
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},difficulty,areaKinds,tasksPerKind';
+        return '{config_legend},difficulty,taskCounts';
     }
 
     public function generate(array $test): array
     {
         $level = $this->level((string) ($test['difficulty'] ?? 'medium'));
-        $count = max(1, min(10, (int) ($test['tasksPerKind'] ?? 2)));
         $sections = [];
 
-        foreach ($this->kinds($test['areaKinds'] ?? null) as $kind) {
-            $sections[] = $this->section($kind, $this->many($kind, $level, $count));
+        foreach (TaskCounts::rows($test, $this) as $kind => $count) {
+            $sections[] = $this->section((string) $kind, $this->many((string) $kind, $level, $count));
         }
 
         return $sections;
+    }
+
+    public function getTaskKinds(): array
+    {
+        return TaskCounts::labels('areaKindsOptions', array_combine(self::KINDS, array_map(static fn (string $k): string => self::TITLES[$k] ?? $k, self::KINDS)));
+    }
+
+    public function getDefaultTaskCounts(): array
+    {
+        return array_fill_keys(array_keys($this->getTaskKinds()), 2);
+    }
+
+    public function getMaxTaskCount(string|int $kind): int
+    {
+        return 10;
     }
 
     public function getPracticeLabels(): array
@@ -168,19 +182,5 @@ final class FigureAreaTestType implements PracticeTestTypeInterface
     private function level(string $difficulty): string
     {
         return \in_array($difficulty, FigureAreaGenerator::LEVELS, true) ? $difficulty : 'medium';
-    }
-
-    /**
-     * Selected kinds from the backend (serialized array), all if nothing is selected.
-     */
-    private function kinds(mixed $value): array
-    {
-        if (\is_string($value) && '' !== $value) {
-            $value = @unserialize($value, ['allowed_classes' => false]);
-        }
-
-        $kinds = \is_array($value) ? array_values(array_intersect(self::KINDS, $value)) : [];
-
-        return $kinds ?: self::KINDS;
     }
 }

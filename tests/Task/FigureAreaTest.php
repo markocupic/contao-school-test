@@ -17,6 +17,7 @@ use Markocupic\ContaoSchoolTest\Task\TaskPresenter;
 use Markocupic\ContaoSchoolTest\Task\TaskTranslator;
 use Markocupic\ContaoSchoolTest\Task\Util;
 use Markocupic\ContaoSchoolTest\TestType\FigureAreaTestType;
+use Markocupic\ContaoSchoolTest\TestType\TaskCounts;
 use PHPUnit\Framework\TestCase;
 
 class FigureAreaTest extends TestCase
@@ -152,13 +153,15 @@ class FigureAreaTest extends TestCase
         $this->assertCount(\count(FigureAreaTestType::KINDS), $type->generate([]));
         $this->assertSame('In the coordinate system', $type->getPracticeTopics()['koordinaten']['en']);
 
-        $sections = $type->generate(['areaKinds' => serialize(['kreis', 'text']), 'tasksPerKind' => 4, 'difficulty' => 'hard']);
+        $sections = $type->generate(['taskCounts' => TaskCounts::toRows(['kreis' => 4, 'text' => 3]), 'difficulty' => 'hard']);
         $this->assertCount(2, $sections);
         $this->assertSame('kreis', $sections[0]['area']);
         $this->assertCount(4, $sections[0]['tasks']);
         // Every fourth task is a word problem, the word problem section has no sketches
         $this->assertSame('', $sections[0]['tasks'][3]['a']['svg']);
         $this->assertNotSame('', $sections[0]['tasks'][0]['a']['svg']);
+        $this->assertCount(3, $sections[1]['tasks']);
+        $this->assertCount(3, $sections[1]['tasks']);
 
         foreach ($sections[1]['tasks'] as $t) {
             $this->assertSame('', $t['a']['svg']);

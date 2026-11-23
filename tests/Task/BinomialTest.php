@@ -136,7 +136,7 @@ class BinomialTest extends TestCase
         $translator = new TaskTranslator();
         mt_srand(9);
 
-        $sections = $type->generate(['difficulty' => 'medium', 'binomialTopics' => '', 'tasksPerKind' => 2]);
+        $sections = $type->generate(['difficulty' => 'medium']);
         $this->assertSame(BinomialGenerator::TOPICS, array_column($sections, 'area'));
         $this->assertSame('algebra', $type->getPracticeArea());
         $this->assertCount(3, $type->generatePractice('geschickt', 'easy')[0]['tasks']);

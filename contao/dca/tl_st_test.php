@@ -155,13 +155,25 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
             'eval' => ['mandatory' => true, 'tl_class' => 'w50'],
             'sql' => "varchar(16) NOT NULL default 'medium'",
         ],
-        'tasksPerArea' => [
-            'inputType' => 'select',
+        // Kind and number of tasks per section (Contao 5.7 row wizard). The kinds depend on the test
+        // type (TaskKindsInterface), see TestDcaListener. Read by TestType\TaskCounts::rows().
+        'taskCounts' => [
+            'inputType' => 'rowWizard',
             'exclude' => true,
-            'default' => 6,
-            'options' => MentalArithmeticTestType::TASKS_PER_AREA,
-            'eval' => ['mandatory' => true, 'tl_class' => 'w50'],
-            'sql' => 'smallint(5) unsigned NOT NULL default 6',
+            'fields' => [
+                'kind' => [
+                    'label' => &$GLOBALS['TL_LANG']['tl_st_test']['taskCountsKind'],
+                    'inputType' => 'select',
+                    'eval' => ['mandatory' => true, 'includeBlankOption' => true, 'chosen' => true, 'cell_style' => 'width:75%'],
+                ],
+                'count' => [
+                    'label' => &$GLOBALS['TL_LANG']['tl_st_test']['taskCountsCount'],
+                    'inputType' => 'select',
+                    'eval' => ['mandatory' => true],
+                ],
+            ],
+            'eval' => ['mandatory' => true, 'min' => 1, 'actions' => ['copy', 'delete'], 'sortable' => true, 'tl_class' => 'clr'],
+            'sql' => 'blob NULL',
         ],
         'sameTasks' => [
             'inputType' => 'checkbox',
@@ -174,62 +186,6 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
             // Shared tasks of all students, generated on the first start (see TestSession)
             'eval' => ['doNotCopy' => true],
             'sql' => 'mediumtext NULL',
-        ],
-        'transformKinds' => [
-            'inputType' => 'checkbox',
-            'exclude' => true,
-            'options' => ['achse', 'punkt', 'drehung', 'verschiebung', 'achse_ggb', 'punkt_ggb', 'symmetrie'],
-            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['transformKindsOptions'],
-            'eval' => ['multiple' => true, 'tl_class' => 'clr'],
-            'sql' => 'blob NULL',
-        ],
-        'angleKinds' => [
-            'inputType' => 'checkbox',
-            'exclude' => true,
-            'options' => ['scheitel', 'parallel', 'transversalen', 'dreieck', 'viereck', 'vieleck', 'figuren', 'kreis', 'kombi', 'profi'],
-            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['angleKindsOptions'],
-            'eval' => ['multiple' => true, 'tl_class' => 'clr'],
-            'sql' => 'blob NULL',
-        ],
-        'triangleKinds' => [
-            'inputType' => 'checkbox',
-            'exclude' => true,
-            'options' => ['sss', 'sws', 'wsw', 'ssw', 'hoehe', 'winkelhalbierende', 'schwerelinie'],
-            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['triangleKindsOptions'],
-            'eval' => ['multiple' => true, 'tl_class' => 'clr'],
-            'sql' => 'blob NULL',
-        ],
-        'areaKinds' => [
-            'inputType' => 'checkbox',
-            'exclude' => true,
-            'options' => ['dreieck', 'rechteck', 'parallelogramm', 'trapez', 'kreis', 'zusammengesetzt', 'pythagoras', 'koordinaten', 'text'],
-            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['areaKindsOptions'],
-            'eval' => ['multiple' => true, 'tl_class' => 'clr'],
-            'sql' => 'blob NULL',
-        ],
-        'binomialTopics' => [
-            'inputType' => 'checkbox',
-            'exclude' => true,
-            'options' => ['rechteckfiguren', 'geschickt', 'rechteckmodell', 'ausmultiplizieren', 'faktorisieren'],
-            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['binomialTopicsOptions'],
-            'eval' => ['multiple' => true, 'tl_class' => 'clr'],
-            'sql' => 'blob NULL',
-        ],
-        'equationLevels' => [
-            'inputType' => 'checkbox',
-            'exclude' => true,
-            'options' => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['equationLevelsOptions'],
-            'eval' => ['multiple' => true, 'tl_class' => 'clr'],
-            'sql' => 'blob NULL',
-        ],
-        'tasksPerKind' => [
-            'inputType' => 'select',
-            'exclude' => true,
-            'default' => 2,
-            'options' => [1, 2, 3, 4, 5],
-            'eval' => ['tl_class' => 'w50'],
-            'sql' => 'smallint(5) unsigned NOT NULL default 2',
         ],
         'gradeStep' => [
             'inputType' => 'select',

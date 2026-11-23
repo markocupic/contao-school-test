@@ -20,7 +20,7 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  * an angle bisector or a median.
  * Every given measure the constructed triangle has is worth one point, one more for the sides.
  */
-final class TriangleTestType implements PracticeTestTypeInterface
+final class TriangleTestType implements PracticeTestTypeInterface, TaskKindsInterface
 {
     public const ALIAS = 'triangles';
 
@@ -59,20 +59,34 @@ final class TriangleTestType implements PracticeTestTypeInterface
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},difficulty,triangleKinds,tasksPerKind';
+        return '{config_legend},difficulty,taskCounts';
     }
 
     public function generate(array $test): array
     {
         $difficulty = $this->difficulty((string) ($test['difficulty'] ?? 'medium'));
-        $count = max(1, min(10, (int) ($test['tasksPerKind'] ?? 2)));
         $sections = [];
 
-        foreach ($this->kinds($test['triangleKinds'] ?? null) as $kind) {
-            $sections[] = $this->section($kind, $this->many($kind, $difficulty, $count), $difficulty);
+        foreach (TaskCounts::rows($test, $this) as $kind => $count) {
+            $sections[] = $this->section((string) $kind, $this->many((string) $kind, $difficulty, $count), $difficulty);
         }
 
         return $sections;
+    }
+
+    public function getTaskKinds(): array
+    {
+        return TaskCounts::labels('triangleKindsOptions', array_combine(TriangleGenerator::KINDS, array_map(static fn (string $k): string => self::TITLES[$k] ?? $k, TriangleGenerator::KINDS)));
+    }
+
+    public function getDefaultTaskCounts(): array
+    {
+        return array_fill_keys(array_keys($this->getTaskKinds()), 2);
+    }
+
+    public function getMaxTaskCount(string|int $kind): int
+    {
+        return 10;
     }
 
     public function getPracticeLabels(): array
@@ -154,19 +168,5 @@ final class TriangleTestType implements PracticeTestTypeInterface
     private function difficulty(string $difficulty): string
     {
         return \in_array($difficulty, TriangleGenerator::LEVELS, true) ? $difficulty : 'medium';
-    }
-
-    /**
-     * Selected kinds from the backend (serialized array), all if nothing is selected.
-     */
-    private function kinds(mixed $value): array
-    {
-        if (\is_string($value) && '' !== $value) {
-            $value = @unserialize($value, ['allowed_classes' => false]);
-        }
-
-        $kinds = \is_array($value) ? array_values(array_intersect(TriangleGenerator::KINDS, $value)) : [];
-
-        return $kinds ?: TriangleGenerator::KINDS;
     }
 }

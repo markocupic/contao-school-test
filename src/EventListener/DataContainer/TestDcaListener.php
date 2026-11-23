@@ -23,6 +23,8 @@ use Doctrine\DBAL\Connection;
 use Markocupic\ContaoSchoolTest\Participation\CodeGenerator;
 use Markocupic\ContaoSchoolTest\Participation\ParticipationStatus;
 use Markocupic\ContaoSchoolTest\Participation\ParticipationSynchronizer;
+use Markocupic\ContaoSchoolTest\TestType\TaskCounts;
+use Markocupic\ContaoSchoolTest\TestType\TaskKindsInterface;
 use Markocupic\ContaoSchoolTest\TestType\TestTypeRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -58,6 +60,84 @@ class TestDcaListener
     public function typeOptions(): array
     {
         return array_map(static fn ($type) => $type->getLabel(), $this->testTypes->all());
+    }
+
+    /**
+     * Row wizard «Aufgaben pro Bereich»: the kinds of the chosen test type.
+     */
+    #[AsCallback(table: 'tl_st_test', target: 'fields.taskCounts.fields.kind.options')]
+    public function taskKindOptions(DataContainer|null $dc = null): array
+    {
+        return $this->kindsType($dc)?->getTaskKinds() ?? [];
+    }
+
+    #[AsCallback(table: 'tl_st_test', target: 'fields.taskCounts.fields.count.options')]
+    public function taskCountOptions(DataContainer|null $dc = null): array
+    {
+        $type = $this->kindsType($dc);
+        $max = 10;
+
+        if ($type) {
+            $max = max(array_map($type->getMaxTaskCount(...), array_keys($type->getTaskKinds())));
+        }
+
+        return range(1, $max);
+    }
+
+    /**
+     * New test or another test type: start with the usual rows of the type.
+     */
+    #[AsCallback(table: 'tl_st_test', target: 'fields.taskCounts.load')]
+    public function loadTaskCounts(mixed $value, DataContainer $dc): mixed
+    {
+        $type = $this->kindsType($dc);
+
+        if (!$type) {
+            return $value;
+        }
+
+        $kinds = array_map('strval', array_keys($type->getTaskKinds()));
+        $rows = array_values(array_filter(TaskCounts::decode($value), static fn (array $row): bool => \in_array((string) ($row['kind'] ?? ''), $kinds, true)));
+
+        return $rows ?: TaskCounts::toRows($type->getDefaultTaskCounts());
+    }
+
+    /**
+     * Every kind only once, at least one row.
+     */
+    #[AsCallback(table: 'tl_st_test', target: 'fields.taskCounts.save')]
+    public function saveTaskCounts(mixed $value, DataContainer $dc): mixed
+    {
+        $type = $this->kindsType($dc);
+        $rows = TaskCounts::decode($value);
+
+        if (!$type) {
+            return $value;
+        }
+
+        $labels = $type->getTaskKinds();
+        $seen = [];
+
+        foreach ($rows as $row) {
+            $kind = (string) ($row['kind'] ?? '');
+
+            if (isset($seen[$kind])) {
+                throw new \RuntimeException(\sprintf('«%s» steht zweimal in der Liste. Jeder Bereich darf nur einmal vorkommen; erhöhe stattdessen die Anzahl Aufgaben.', $labels[$kind] ?? $kind));
+            }
+
+            $seen[$kind] = true;
+            $max = $type->getMaxTaskCount($kind);
+
+            if ((int) ($row['count'] ?? 0) > $max) {
+                throw new \RuntimeException(\sprintf('«%s»: höchstens %d.', $labels[$kind] ?? $kind, $max));
+            }
+        }
+
+        if (!$seen) {
+            throw new \RuntimeException('Wähle mindestens einen Bereich mit einer Anzahl Aufgaben.');
+        }
+
+        return $value;
     }
 
     #[AsCallback(table: 'tl_st_test', target: 'config.onsubmit')]
@@ -176,5 +256,18 @@ class TestDcaListener
         if ($user instanceof BackendUser && $testId > 0) {
             $this->connection->update('tl_st_test', ['author' => (int) $user->id], ['id' => $testId]);
         }
+    }
+
+    private function kindsType(DataContainer|null $dc): TaskKindsInterface|null
+    {
+        $alias = (string) ($dc?->getCurrentRecord()['type'] ?? '');
+
+        if (!$this->testTypes->has($alias)) {
+            return null;
+        }
+
+        $type = $this->testTypes->get($alias);
+
+        return $type instanceof TaskKindsInterface ? $type : null;
     }
 }

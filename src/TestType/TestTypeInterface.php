@@ -33,7 +33,7 @@ interface TestTypeInterface
     public function getLabel(): string;
 
     /**
-     * The type specific part of the tl_st_test palette, e.g. "{config_legend},difficulty,tasksPerArea".
+     * The type specific part of the tl_st_test palette, e.g. "{config_legend},difficulty,taskCounts".
      * The fields must exist in the tl_st_test DCA.
      */
     public function getPaletteFields(): string;

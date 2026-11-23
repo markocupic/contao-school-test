@@ -26,7 +26,7 @@ use Markocupic\ContaoSchoolTest\Task\Util;
 /**
  * Kopfrechnungstest: all five areas (A–E), difficulty easy/medium/hard and a number of tasks per area.
  */
-final class MentalArithmeticTestType implements PracticeTestTypeInterface
+final class MentalArithmeticTestType implements PracticeTestTypeInterface, TaskKindsInterface
 {
     public const ALIAS = 'mental_arithmetic';
 
@@ -38,8 +38,6 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface
         'medium' => [3, 4],
         'hard' => [5, 6],
     ];
-
-    public const TASKS_PER_AREA = [4, 6, 8, 10];
 
     public function getAlias(): string
     {
@@ -53,7 +51,7 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},difficulty,tasksPerArea';
+        return '{config_legend},difficulty,taskCounts';
     }
 
     /**
@@ -67,13 +65,17 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface
     public function generate(array $test): array
     {
         $levels = self::DIFFICULTY_LEVELS[$test['difficulty'] ?? 'medium'] ?? self::DIFFICULTY_LEVELS['medium'];
-        $n = (int) ($test['tasksPerArea'] ?? 6);
-        $n = max(1, min(20, $n));
-        $sections = [];
+        $areas = [];
 
         foreach ($this->getAreas() as $area) {
-            // Percent tables have 6–7 fields each: one table, two from 8 tasks per area
-            $count = 'pt' === $area->getAlias() ? ($n >= 8 ? 2 : 1) : $n;
+            $areas[$area->getAlias()] = $area;
+        }
+
+        $sections = [];
+
+        // Percent tables: the number is the number of tables (6–7 fields each)
+        foreach (TaskCounts::rows($test, $this) as $alias => $count) {
+            $area = $areas[$alias];
 
             if (1 === $count) {
                 $tasks = $area->generateMany((int) Util::pick($levels), 1);
@@ -91,6 +93,30 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface
         }
 
         return $sections;
+    }
+
+    public function getTaskKinds(): array
+    {
+        $labels = [];
+
+        foreach ($this->getAreas() as $area) {
+            $labels[$area->getAlias()] = $area->getTitle().('pt' === $area->getAlias() ? ' (Anzahl Tabellen, höchstens 3)' : '');
+        }
+
+        return $labels;
+    }
+
+    /**
+     * All five areas, 6 tasks each, one percent table.
+     */
+    public function getDefaultTaskCounts(): array
+    {
+        return ['kr' => 6, 'br' => 6, 'uw' => 6, 'pt' => 1, 'sz' => 6];
+    }
+
+    public function getMaxTaskCount(string|int $kind): int
+    {
+        return 'pt' === $kind ? 3 : 20;
     }
 
     public function getPracticeLabels(): array
@@ -128,7 +154,7 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface
         $difficulty = \array_key_exists($difficulty, self::DIFFICULTY_LEVELS) ? $difficulty : 'medium';
 
         if ('all' === $topic) {
-            return $this->generate(['difficulty' => $difficulty, 'tasksPerArea' => 4]);
+            return $this->generate(['difficulty' => $difficulty, TaskCounts::FIELD => TaskCounts::toRows(['kr' => 4, 'br' => 4, 'uw' => 4, 'pt' => 1, 'sz' => 4])]);
         }
 
         [$low, $high] = self::DIFFICULTY_LEVELS[$difficulty];

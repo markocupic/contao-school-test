@@ -19,7 +19,7 @@ use Markocupic\ContaoSchoolTest\Task\Util;
  * Winkel: angles at intersecting lines, at parallels, in triangles, quadrilaterals and
  * polygons. Every unknown angle is worth one point.
  */
-final class AngleTestType implements PracticeTestTypeInterface
+final class AngleTestType implements PracticeTestTypeInterface, TaskKindsInterface
 {
     public const ALIAS = 'angles';
 
@@ -58,19 +58,33 @@ final class AngleTestType implements PracticeTestTypeInterface
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},angleKinds,tasksPerKind';
+        return '{config_legend},taskCounts';
     }
 
     public function generate(array $test): array
     {
-        $count = max(1, min(10, (int) ($test['tasksPerKind'] ?? 2)));
         $sections = [];
 
-        foreach ($this->kinds($test['angleKinds'] ?? null) as $kind) {
-            $sections[] = $this->section($kind, $this->many($kind, $count));
+        foreach (TaskCounts::rows($test, $this) as $kind => $count) {
+            $sections[] = $this->section((string) $kind, $this->many((string) $kind, $count));
         }
 
         return $sections;
+    }
+
+    public function getTaskKinds(): array
+    {
+        return TaskCounts::labels('angleKindsOptions', array_combine(AngleGenerator::KINDS, array_map(static fn (string $k): string => self::TITLES[$k] ?? $k, AngleGenerator::KINDS)));
+    }
+
+    public function getDefaultTaskCounts(): array
+    {
+        return array_fill_keys(array_keys($this->getTaskKinds()), 2);
+    }
+
+    public function getMaxTaskCount(string|int $kind): int
+    {
+        return 10;
     }
 
     public function getPracticeLabels(): array
@@ -138,19 +152,5 @@ final class AngleTestType implements PracticeTestTypeInterface
     private function section(string $kind, array $tasks): array
     {
         return ['area' => $kind, 'title' => self::TITLES[$kind], 'instruction' => self::INSTRUCTION, 'tasks' => $tasks];
-    }
-
-    /**
-     * Selected kinds from the backend (serialized array), all if nothing is selected.
-     */
-    private function kinds(mixed $value): array
-    {
-        if (\is_string($value) && '' !== $value) {
-            $value = @unserialize($value, ['allowed_classes' => false]);
-        }
-
-        $kinds = \is_array($value) ? array_values(array_intersect(AngleGenerator::KINDS, $value)) : [];
-
-        return $kinds ?: AngleGenerator::KINDS;
     }
 }

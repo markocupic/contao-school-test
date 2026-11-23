@@ -1,6 +1,6 @@
 # Contao School Test
 
-Online-Tests für die Schule in Contao 5.3 und 6: Klassen und Schüler erfassen, Tests erstellen, Codeblatt drucken, Test im Frontend lösen lassen, Auswertungsblatt mit Note drucken.
+Online-Tests für die Schule in Contao 5.7 und 6: Klassen und Schüler erfassen, Tests erstellen, Codeblatt drucken, Test im Frontend lösen lassen, Auswertungsblatt mit Note drucken.
 
 Zwei Inhaltselemente: **Online-Test (Schule)** mit Code-Anmeldung und **Online-Test üben** ohne Anmeldung und unabhängig von Tests.
 
@@ -25,11 +25,11 @@ Zweiter Testtyp: **Spiegeln, Drehen, Verschieben** auf Häuschenpapier (20 × 14
 | Achsen-/Punktspiegelung mit GeoGebra | Konstruktion ohne Häuschen in GeoGebra, Toleranz 4 / 3 / 1.5 mm je nach Schwierigkeit; einen Punkt mehr, wenn die Bildpunkte mit Strecken zur Bildfigur verbunden sind |
 | Symmetrie: Achsen und Zentrum einzeichnen | Karte mit grauen Figuren oder Kacheln: nur achsensymmetrisch, nur punktsymmetrisch, beides oder keines. Auf einem einfachen Zeichenfeld (ohne GeoGebra) jede Symmetrieachse mit zwei Klicks einzeichnen und das Zentrum Z mit einem Klick setzen, sonst «Keine Symmetrie»; «Rückgängig» und «Alles löschen». 1 Punkt für die Achsen (alle, keine zu viel), 1 Punkt für das Zentrum. Ungefähr genügt: Toleranz Leicht 0.6 / 8°, Mittel 0.5 / 6°, Anspruchsvoller 0.4 / 5° (Kartenbreite 10). Leicht: Bild in der Kartenmitte, Mittel: verschoben, Anspruchsvoller: verschoben und gedreht, auch vier Achsen |
 
-Im Backend wählst du Schwierigkeit, Abbildungsarten und Aufgaben pro Art. Die Kinder setzen die Bildpunkte A′, B′, … mit einem Klick auf die Gitterpunkte, ein Klick auf einen gesetzten Punkt entfernt ihn. Jeder richtige Bildpunkt gibt einen Punkt. Auf dem Auswertungsblatt erscheint jede Aufgabe als Zeichnung: Lösung grün gestrichelt, gesetzte Punkte grün oder rot.
+Im Backend wählst du die Schwierigkeit und unter «Aufgaben pro Bereich» die Abbildungsarten mit ihrer Anzahl Aufgaben. Die Kinder setzen die Bildpunkte A′, B′, … mit einem Klick auf die Gitterpunkte, ein Klick auf einen gesetzten Punkt entfernt ihn. Jeder richtige Bildpunkt gibt einen Punkt. Auf dem Auswertungsblatt erscheint jede Aufgabe als Zeichnung: Lösung grün gestrichelt, gesetzte Punkte grün oder rot.
 
 ### GeoGebra
 
-Die Varianten «mit GeoGebra» laden GeoGebra beim ersten Anzeigen der Aufgabe von `https://www.geogebra.org/apps/deployggb.js`. Ohne Auswahl im Backend sind sie deshalb nicht im Test. Die Werkzeugleiste ist eingeschränkt (Bewegen, Punkt, Schneiden, Gerade, Strecke, Halbgerade, Senkrechte, Parallele, Kreise, Zirkel, Löschen), Eingabezeile, Algebra-Ansicht, Kontextmenü und die Spiegeln-Werkzeuge fehlen. Das Kind wählt A′, B′, … und klickt dann auf die Stelle in der Zeichnung; der Punkt heisst danach in GeoGebra A′. Bewertet wird über die Koordinaten der Bildpunkte. Dazu kommt ein Punkt, wenn die Bildpunkte mit Strecken (Werkzeug Strecke oder Vieleck) genau zur Bildfigur verbunden sind: alle Seiten vorhanden, keine Diagonale zu viel. Gespeichert werden die Bildpunkte und diese Strecken, andere Hilfslinien nicht.
+Die Varianten «mit GeoGebra» laden GeoGebra beim ersten Anzeigen der Aufgabe von `https://www.geogebra.org/apps/deployggb.js`. In einem neuen Test stehen sie deshalb nicht in der Liste «Aufgaben pro Bereich». Die Werkzeugleiste ist eingeschränkt (Bewegen, Punkt, Schneiden, Gerade, Strecke, Halbgerade, Senkrechte, Parallele, Kreise, Zirkel, Löschen), Eingabezeile, Algebra-Ansicht, Kontextmenü und die Spiegeln-Werkzeuge fehlen. Das Kind wählt A′, B′, … und klickt dann auf die Stelle in der Zeichnung; der Punkt heisst danach in GeoGebra A′. Bewertet wird über die Koordinaten der Bildpunkte. Dazu kommt ein Punkt, wenn die Bildpunkte mit Strecken (Werkzeug Strecke oder Vieleck) genau zur Bildfigur verbunden sind: alle Seiten vorhanden, keine Diagonale zu viel. Gespeichert werden die Bildpunkte und diese Strecken, andere Hilfslinien nicht.
 
 GeoGebra ist für die nicht-kommerzielle Nutzung (Schule, Unterricht) frei, siehe [geogebra.org/license](https://www.geogebra.org/license). Für eine selbst gehostete Kopie des Math Apps Bundle vor dem Script setzen:
 
@@ -68,7 +68,6 @@ Sechster Testtyp: **Produkte von Binomen** (Algebra)
 
 Leicht = Grundanforderungen, Anspruchsvoller = Zusatzanforderungen, Mittel mischt Aufgabe für Aufgabe beides. Jedes Feld gibt einen Punkt. Terme werden auf dem Server gelesen (`Task/Term/TermParser`): Hochzahlen mit ^ oder ², Mal-Punkte dürfen fehlen, Dezimalkomma geht auch. Gewertet wird, ob die Eingabe gleichwertig ist und die verlangte Form hat (ohne Klammern und zusammengefasst, als Produkt, vollständig faktorisiert). Ist sie gleichwertig, aber in der falschen Form, sagt die Rückmeldung beim Üben das.
 
-Neues Feld in `tl_st_test`: `binomialTopics` (nach dem Update `contao:migrate`).
 
 Fünfter Testtyp: **Dreieckskonstruktionen** mit GeoGebra
 
@@ -84,7 +83,6 @@ Fünfter Testtyp: **Dreieckskonstruktionen** mit GeoGebra
 
 Das Kind konstruiert das Dreieck irgendwo auf dem Blatt (1 Einheit = 1 cm). Die ersten drei Punkte heissen in GeoGebra A, B und C, mit den Knöpfen A, B, C gibt es einem anderen Punkt den Namen. Bewertet werden nicht Koordinaten, sondern die gegebenen Masse: Jedes Mass, das das Dreieck ABC innerhalb der Toleranz hat, gibt einen Punkt (Lage, Drehung und Spiegelung egal), einen weiteren gibt es für die drei Seiten als Strecken. Toleranz: Leicht 2 mm und 2°, Mittel 1 mm und 1°, Anspruchsvoller 0.5 mm und 0.5°. Leicht baut immer auf der Seite c auf, Werte auf 0.5 cm und 5°. Beim Üben zeigt die Rückmeldung jedes Mass mit dem Wert im Dreieck des Kindes, die Lösung liegt grün gestrichelt auf seiner Seite AB.
 
-Neues Feld in `tl_st_test`: `triangleKinds` (nach dem Update `contao:migrate`).
 
 Siebter Testtyp: **Flächenberechnung** (Geometrie) mit farbigen, beschrifteten Skizzen, je drei Niveaus:
 
@@ -101,12 +99,13 @@ Siebter Testtyp: **Flächenberechnung** (Geometrie) mit farbigen, beschrifteten 
 
 Innerhalb eines Abschnitts kommt keine Aufgabenart doppelt vor (pro Bereich und Niveau gibt es mindestens drei Arten, Leicht auch mit Figuren auf Häuschenpapier). Jede vierte Aufgabe eines Bereichs ist eine **Textaufgabe** (Segel, Parkett, Platten, Grundstück mit Preis, Pizza, Wand mit Farbe, Bildschirm, Giebel …), der Bereich «Textaufgaben» hat nur solche. Textaufgaben zeigen keine Skizze, die Lösung schon. Jeder gesuchte Wert gibt einen Punkt. Werte ohne π und Wurzeln müssen genau stimmen; Ergebnisse mit π oder Wurzeln werden auf eine Dezimale gerundet, π ≈ 3.14 gilt auch, ebenso Folgefehler aus einem gerundeten Zwischenresultat. Beim Üben zeigt die Lösung die Skizze mit den Werten (zusammengesetzte Flächen mit der Zerlegung A₁, A₂) und den Lösungsweg.
 
-Neues Feld in `tl_st_test`: `areaKinds` (nach dem Update `contao:migrate`).
 
 ## Ablauf
 
 1. **Klassen** (Backend › Schultests › Klassen): Klasse anlegen, Schülerinnen und Schüler erfassen.
-2. **Tests** (Backend › Schultests › Tests): Test anlegen, Testtyp und Klasse wählen, Schwierigkeit (Leicht = Level 1–2, Mittel = 3–4, Anspruchsvoller = 5–6), Aufgaben pro Bereich, Zeit in Minuten, Notenrundung. Beim Speichern erhält jede Schülerin und jeder Schüler einen **fünfstelligen Code**, der Test einen **Wiederaufnahme-Code** für die Lehrperson.
+2. **Tests** (Backend › Schultests › Tests): Test anlegen, Testtyp und Klasse wählen, Schwierigkeit (Leicht = Level 1–2, Mittel = 3–4, Anspruchsvoller = 5–6), «Aufgaben pro Bereich», Zeit in Minuten, Notenrundung. Beim Speichern erhält jede Schülerin und jeder Schüler einen **fünfstelligen Code**, der Test einen **Wiederaufnahme-Code** für die Lehrperson.
+
+   **Aufgaben pro Bereich** (Feld `taskCounts`, Row Wizard ab Contao 5.7): pro Zeile ein Bereich (Kopfrechnen, Abbildungsart, Winkelart, Flächenart, Stufe …, je nach Testtyp) und die Anzahl Aufgaben, zum Beispiel Dreieck 2, Kreis 4, Textaufgaben 1. Jede Zeile ergibt einen Abschnitt, in der Reihenfolge der Zeilen (verschiebbar); jeder Bereich darf nur einmal vorkommen. Ein neuer Test (oder ein anderer Testtyp) startet mit den üblichen Zeilen des Typs, nicht benötigte Zeilen löschst du einfach. Höchstens 10 Aufgaben pro Bereich, Kopfrechnungstest 20, Prozent-Tabellen 3 Tabellen. Eigene Testtypen liefern ihre Bereiche über `TestType\TaskKindsInterface` und lesen das Feld mit `TestType\TaskCounts::rows()`. Die früheren Felder (`tasksPerArea`, `tasksPerKind`, `areaKinds`, `angleKinds`, …) gibt es nicht mehr; bestehende Tests zeigen nach dem Update die üblichen Zeilen ihres Typs.
 3. **Codeblatt** (Symbol in der Testliste): Karten mit Name und Code zum Ausschneiden.
    **Ausprobieren** (Play-Symbol in der Testliste): öffnet den Test in einem neuen Tab, so wie ihn die Schülerinnen und Schüler sehen, aber ohne Code und ohne eigenen Fake-Schüler. Der Safe Exam Browser und die Sperre beim Verlassen sind dabei ausgeschaltet, auch wenn der Test sie verlangt; der Test muss nicht freigegeben sein. Sprache wählen, lösen, abgeben: Punkte und Note erscheinen sofort, «Auswertung mit Lösungen ansehen» zeigt das Auswertungsblatt dieses Versuchs, «Nochmals lösen» beginnt neu. Mit «Gleiche Aufgaben für alle» und bereits gestarteten Teilnahmen bekommt man genau die Aufgaben der Klasse, sonst neue Zufallsaufgaben (sie werden nicht beim Test gespeichert). Der Versuch liegt nur in der Backend-Session (`Participation\PreviewSession`, Routen `/contao/school-test/preview/{id}`, Zugriff mit dem Recht auf das Modul «Tests»): keine Teilnahme, nichts in der Klassenübersicht.
 4. **Test freigeben** (Häkchen «Test freigeben»).

@@ -117,7 +117,7 @@ class TriangleTest extends TestCase
         $translator = new TaskTranslator();
         mt_srand(8);
 
-        $sections = $type->generate(['difficulty' => 'medium', 'triangleKinds' => '', 'tasksPerKind' => 2]);
+        $sections = $type->generate(['difficulty' => 'medium']);
         $this->assertSame(TriangleGenerator::KINDS, array_column($sections, 'area'));
         $this->assertStringContainsString('Bis 1 mm und 1° Abweichung', $sections[0]['instruction']);
 

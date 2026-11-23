@@ -124,8 +124,7 @@ class PreviewSessionTest extends TestCase
             'pointsForSix' => 0,
             'gradeStep' => '0.5',
             'difficulty' => 'easy',
-            'areaKinds' => serialize(['rechteck', 'dreieck']),
-            'tasksPerKind' => 2,
+            'taskCounts' => serialize([['kind' => 'rechteck', 'count' => '2'], ['kind' => 'dreieck', 'count' => '2']]),
         ];
     }
 }

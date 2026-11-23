@@ -22,6 +22,7 @@ use Markocupic\ContaoSchoolTest\Task\TaskPresenter;
 use Markocupic\ContaoSchoolTest\Task\TaskTranslator;
 use Markocupic\ContaoSchoolTest\TestType\AngleTestType;
 use Markocupic\ContaoSchoolTest\TestType\EquationTestType;
+use Markocupic\ContaoSchoolTest\TestType\TaskCounts;
 use PHPUnit\Framework\TestCase;
 
 class AngleEquationTest extends TestCase
@@ -113,12 +114,14 @@ class AngleEquationTest extends TestCase
 
     public function testTestTypesUseTheBackendSelection(): void
     {
-        $sections = (new AngleTestType())->generate(['angleKinds' => serialize(['dreieck', 'profi']), 'tasksPerKind' => 3]);
+        $sections = (new AngleTestType())->generate(['taskCounts' => serialize([['kind' => 'profi', 'count' => '3'], ['kind' => 'dreieck', 'count' => '1']])]);
         $this->assertCount(2, $sections);
-        $this->assertCount(3, $sections[1]['tasks']);
-        $this->assertSame('profi', $sections[1]['area']);
+        $this->assertCount(3, $sections[0]['tasks']);
+        $this->assertCount(1, $sections[1]['tasks']);
+        $this->assertSame('dreieck', $sections[1]['area']);
+        $this->assertSame('profi', $sections[0]['area']);
 
-        $sections = (new EquationTestType())->generate(['equationLevels' => serialize(['2', '9']), 'tasksPerKind' => 2, 'difficulty' => 'easy']);
+        $sections = (new EquationTestType())->generate(['taskCounts' => TaskCounts::toRows([2 => 2, 9 => 2]), 'difficulty' => 'easy']);
         $this->assertCount(2, $sections);
         $this->assertSame('level9', $sections[1]['area']);
         $this->assertSame(3, $sections[1]['tasks'][0]['points']);

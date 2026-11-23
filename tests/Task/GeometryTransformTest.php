@@ -113,14 +113,16 @@ class GeometryTransformTest extends TestCase
     public function testGeoGebraKindsAreNotInTheDefaultSelection(): void
     {
         $type = new GeometryTransformTestType();
-        $areas = array_column($type->generate(['difficulty' => 'medium', 'transformKinds' => '', 'tasksPerKind' => 1]), 'area');
+        $areas = array_column($type->generate(['difficulty' => 'medium', 'taskCounts' => '']), 'area');
         $this->assertSame(['achse', 'punkt', 'drehung', 'verschiebung', 'symmetrie'], $areas);
 
-        // Earlier constructions on the own board are now the GeoGebra ones
-        $legacy = $type->generate(['difficulty' => 'easy', 'transformKinds' => serialize(['achse_frei']), 'tasksPerKind' => 1]);
-        $this->assertSame('achse_ggb', $legacy[0]['area']);
+        $this->assertCount(2, $type->generate(['difficulty' => 'medium', 'taskCounts' => ''])[0]['tasks']);
 
-        $sections = $type->generate(['difficulty' => 'hard', 'transformKinds' => serialize(['punkt_ggb']), 'tasksPerKind' => 1]);
+        // Unknown kinds and empty rows count as no selection
+        $fallback = $type->generate(['difficulty' => 'easy', 'taskCounts' => serialize([['kind' => 'achse_frei', 'count' => '1'], ['kind' => 'drehung', 'count' => '0']])]);
+        $this->assertSame($areas, array_column($fallback, 'area'));
+
+        $sections = $type->generate(['difficulty' => 'hard', 'taskCounts' => serialize([['kind' => 'punkt_ggb', 'count' => '1']])]);
         $this->assertSame('Punktspiegelung mit GeoGebra', $sections[0]['title']);
         $this->assertStringContainsString('GeoGebra', $sections[0]['instruction']);
         $this->assertStringContainsString('1.5 mm', $sections[0]['instruction']);
