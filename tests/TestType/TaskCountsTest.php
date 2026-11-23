@@ -48,6 +48,19 @@ class TaskCountsTest extends TestCase
         $this->assertSame($defaults, TaskCounts::rows(['taskCounts' => 'a:1:{i:0;s:3:"bad"'], $type));
     }
 
+    public function testZeroLeavesTheKindOut(): void
+    {
+        $type = new FigureAreaTestType();
+        $rows = [
+            ['kind' => 'dreieck', 'count' => '0', 'difficulty' => 'easy'],
+            ['kind' => 'kreis', 'count' => '3', 'difficulty' => 'hard'],
+            ['kind' => 'trapez', 'count' => '0', 'difficulty' => 'medium'],
+        ];
+
+        $this->assertSame(['kreis' => ['count' => 3, 'difficulty' => 'hard']], TaskCounts::rows(['taskCounts' => serialize($rows)], $type));
+        $this->assertSame(['kreis'], array_column($type->generate(['taskCounts' => serialize($rows)]), 'area'));
+    }
+
     public function testNumericKindsOfEquations(): void
     {
         $type = new EquationTestType();

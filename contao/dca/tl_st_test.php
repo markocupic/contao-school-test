@@ -163,10 +163,10 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
                     'inputType' => 'select',
                     'eval' => ['mandatory' => true, 'includeBlankOption' => true, 'chosen' => true, 'cell_style' => 'width:60%'],
                 ],
+                // 0 = the kind is left out (row stays in the list). Not mandatory: «0» must count as a value
                 'count' => [
                     'label' => &$GLOBALS['TL_LANG']['tl_st_test']['taskCountsCount'],
                     'inputType' => 'select',
-                    'eval' => ['mandatory' => true],
                 ],
                 // Removed by TestDcaListener::hideDifficulty() for types without difficulty (angles)
                 'difficulty' => [

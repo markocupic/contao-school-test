@@ -81,7 +81,8 @@ class TestDcaListener
             $max = max(array_map($type->getMaxTaskCount(...), array_keys($type->getTaskKinds())));
         }
 
-        return range(1, $max);
+        // 0: keep the row, but the section is left out
+        return range(0, $max);
     }
 
     /**
@@ -114,7 +115,7 @@ class TestDcaListener
     }
 
     /**
-     * Every kind only once, at least one row.
+     * Every kind only once, at least one row with tasks (rows with 0 are left out of the test).
      */
     #[AsCallback(table: 'tl_st_test', target: 'fields.taskCounts.save')]
     public function saveTaskCounts(mixed $value, DataContainer $dc): mixed
@@ -128,6 +129,7 @@ class TestDcaListener
 
         $labels = $type->getTaskKinds();
         $seen = [];
+        $tasks = 0;
 
         foreach ($rows as $row) {
             $kind = (string) ($row['kind'] ?? '');
@@ -138,14 +140,16 @@ class TestDcaListener
 
             $seen[$kind] = true;
             $max = $type->getMaxTaskCount($kind);
+            $count = (int) ($row['count'] ?? 0);
+            $tasks += max(0, $count);
 
-            if ((int) ($row['count'] ?? 0) > $max) {
+            if ($count > $max) {
                 throw new \RuntimeException(\sprintf('«%s»: höchstens %d.', $labels[$kind] ?? $kind, $max));
             }
         }
 
-        if (!$seen) {
-            throw new \RuntimeException('Wähle mindestens einen Bereich mit einer Anzahl Aufgaben.');
+        if (0 === $tasks) {
+            throw new \RuntimeException('Mindestens ein Bereich braucht eine Anzahl Aufgaben grösser als 0.');
         }
 
         return $value;
