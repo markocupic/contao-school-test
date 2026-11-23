@@ -32,12 +32,76 @@ trait AngleCircleTasks
             $this->circleQueue = Util::shuffle(['chords', 'quad', 'diameter', 'centre']);
         }
 
-        return match (array_shift($this->circleQueue)) {
-            'chords' => $this->cChords(),
-            'quad' => $this->cQuad(),
-            'diameter' => $this->cDiameter(),
-            default => $this->cCentre(),
-        };
+        $variant = array_shift($this->circleQueue);
+
+        // New figure until the angle marks and their labels do not overlap
+        for ($try = 0; $try < 60; ++$try) {
+            $t = match ($variant) {
+                'chords' => $this->cChords(),
+                'quad' => $this->cQuad(),
+                'diameter' => $this->cDiameter(),
+                default => $this->cCentre(),
+            };
+
+            if (!self::crowded($t['S']['marks'])) {
+                break;
+            }
+        }
+
+        return $t;
+    }
+
+    /**
+     * Whether two angle labels overlap, or a label lies on the arc of another angle. Same radii
+     * as AngleGenerator::markSvg(), in pixels of the circle sketch (unit radius = $k pixels).
+     */
+    public static function crowded(array $marks): bool
+    {
+        $k = (self::H - 2 * 34) / 2.32;
+        $info = [];
+
+        foreach ($marks as $m) {
+            if ('right' === $m['kind']) {
+                continue;
+            }
+
+            $ua = self::unit(self::sub($m['a'], $m['v']));
+            $ub = self::unit(self::sub($m['b'], $m['v']));
+            $sp = self::deg(acos(max(-1, min(1, $ua[0] * $ub[0] + $ua[1] * $ub[1]))));
+            $r = 'neutral' === $m['kind'] ? 20 : ($sp < 28 ? 50 : ($sp < 55 ? 38 : 30));
+            $text = (string) ($m['text'] ?? '');
+            $lr = $r + ($sp < 28 ? 20 : 15) + (mb_strlen($text) > 3 ? 4 : 0);
+            $v = self::mul($m['v'], $k);
+            $info[] = [
+                'v' => $v,
+                'r' => $r,
+                'label' => '' === $text ? null : self::add($v, self::mul(self::unit(self::add($ua, $ub)), $lr)),
+            ];
+        }
+
+        foreach ($info as $i => $a) {
+            if (null === $a['label']) {
+                continue;
+            }
+
+            foreach ($info as $j => $b) {
+                if ($i === $j) {
+                    continue;
+                }
+
+                // Two labels: at least about the width of «45°»
+                if (null !== $b['label'] && $j > $i && self::len(self::sub($a['label'], $b['label'])) < 34) {
+                    return true;
+                }
+
+                // A label on or inside the arc of an angle at another vertex
+                if (self::len(self::sub($a['v'], $b['v'])) > 1 && self::len(self::sub($a['label'], $b['v'])) < $b['r'] + 16) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

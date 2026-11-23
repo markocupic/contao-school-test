@@ -46,7 +46,25 @@ class AngleCircleTest extends TestCase
             }
 
             $this->assertGreaterThanOrEqual(3, $count, 'several unknown angles per task');
+
+            // Labels do not overlap each other or the arc of another angle
+            $this->assertFalse(AngleGenerator::crowded($t['S']['marks']), $t['prompt']);
         }
+    }
+
+    public function testCrowdedLabelsAreDetected(): void
+    {
+        // Small triangle ABS: the label at A lies on the arc at S (the case from the screenshot)
+        $A = [cos(deg2rad(-40)), sin(deg2rad(-40))];
+        $B = [cos(deg2rad(10)), sin(deg2rad(10))];
+        $S = [0.45, -0.1];
+        $marks = [
+            ['v' => $A, 'a' => $B, 'b' => [-0.6, 0.7], 'text' => '50°', 'kind' => 'given'],
+            ['v' => $S, 'a' => $A, 'b' => $B, 'text' => '95°', 'kind' => 'given'],
+        ];
+
+        $this->assertTrue(AngleGenerator::crowded($marks));
+        $this->assertFalse(AngleGenerator::crowded([$marks[0]]));
     }
 
     public function testTasksAreSolvableTranslatedAndVaried(): void
