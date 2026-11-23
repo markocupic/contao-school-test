@@ -73,7 +73,7 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface, TaskK
         $sections = [];
 
         // Percent tables: the number is the number of tables (6–7 fields each)
-        foreach (TaskCounts::rows($test, $this) as $alias => ['count' => $count, 'difficulty' => $difficulty]) {
+        foreach (TaskCounts::rows($test, $this) as ['kind' => $alias, 'count' => $count, 'difficulty' => $difficulty]) {
             $area = $areas[$alias];
             $levels = self::DIFFICULTY_LEVELS[$difficulty] ?? self::DIFFICULTY_LEVELS['medium'];
 

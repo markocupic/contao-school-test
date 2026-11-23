@@ -65,7 +65,7 @@ final class AngleTestType implements PracticeTestTypeInterface, TaskKindsInterfa
     {
         $sections = [];
 
-        foreach (TaskCounts::rows($test, $this) as $kind => ['count' => $count]) {
+        foreach (TaskCounts::rows($test, $this) as ['kind' => $kind, 'count' => $count]) {
             $sections[] = $this->section((string) $kind, $this->many((string) $kind, $count));
         }
 

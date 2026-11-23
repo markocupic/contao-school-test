@@ -73,7 +73,7 @@ final class FigureAreaTestType implements PracticeTestTypeInterface, TaskKindsIn
     {
         $sections = [];
 
-        foreach (TaskCounts::rows($test, $this) as $kind => ['count' => $count, 'difficulty' => $difficulty]) {
+        foreach (TaskCounts::rows($test, $this) as ['kind' => $kind, 'count' => $count, 'difficulty' => $difficulty]) {
             $level = $this->level($difficulty);
             $sections[] = $this->section((string) $kind, $this->many((string) $kind, $level, $count));
         }

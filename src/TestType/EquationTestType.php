@@ -64,7 +64,7 @@ final class EquationTestType implements PracticeTestTypeInterface, TaskKindsInte
     {
         $sections = [];
 
-        foreach (TaskCounts::rows($test, $this) as $level => ['count' => $count, 'difficulty' => $difficulty]) {
+        foreach (TaskCounts::rows($test, $this) as ['kind' => $level, 'count' => $count, 'difficulty' => $difficulty]) {
             $level = (int) $level;
             $difficulty = $this->difficulty($difficulty);
             $tasks = [];

@@ -115,7 +115,8 @@ class TestDcaListener
     }
 
     /**
-     * Every kind only once, at least one row with tasks (rows with 0 are left out of the test).
+     * At least one row with tasks (rows with 0 are left out of the test). A kind may appear
+     * several times, e.g. with different difficulties: each row is a section of its own.
      */
     #[AsCallback(table: 'tl_st_test', target: 'fields.taskCounts.save')]
     public function saveTaskCounts(mixed $value, DataContainer $dc): mixed
@@ -128,17 +129,10 @@ class TestDcaListener
         }
 
         $labels = $type->getTaskKinds();
-        $seen = [];
         $tasks = 0;
 
         foreach ($rows as $row) {
             $kind = (string) ($row['kind'] ?? '');
-
-            if (isset($seen[$kind])) {
-                throw new \RuntimeException(\sprintf('«%s» steht zweimal in der Liste. Jeder Bereich darf nur einmal vorkommen; erhöhe stattdessen die Anzahl Aufgaben.', $labels[$kind] ?? $kind));
-            }
-
-            $seen[$kind] = true;
             $max = $type->getMaxTaskCount($kind);
             $count = (int) ($row['count'] ?? 0);
             $tasks += max(0, $count);

@@ -73,7 +73,7 @@ final class GeometryTransformTestType implements PracticeTestTypeInterface, Task
     {
         $sections = [];
 
-        foreach (TaskCounts::rows($test, $this) as $kind => ['count' => $count, 'difficulty' => $difficulty]) {
+        foreach (TaskCounts::rows($test, $this) as ['kind' => $kind, 'count' => $count, 'difficulty' => $difficulty]) {
             $difficulty = $this->difficulty($difficulty);
             $sections[] = $this->section((string) $kind, $this->many((string) $kind, $difficulty, $count), $difficulty);
         }

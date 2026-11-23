@@ -21,18 +21,19 @@ final class TaskCounts
     public const DIFFICULTIES = ['easy', 'medium', 'hard'];
 
     /**
-     * Kind => [count, difficulty], in the order of the rows. Unknown kinds and empty rows are
-     * skipped, a kind listed twice gets the sum (and the first difficulty), counts are limited to
-     * 1 … getMaxTaskCount(). Difficulty of a row: its own, else medium.
-     * Without a valid row: the defaults of the type.
+     * The sections of the test, in the order of the rows: [kind, count, difficulty]. A kind may
+     * appear several times (e.g. 2 × medium and 1 × hard, each a section of its own); rows with
+     * the same kind and difficulty are merged into the first one. Unknown kinds and rows with 0
+     * tasks are skipped, counts are limited to 1 … getMaxTaskCount(). Difficulty of a row: its
+     * own, else medium. Without a valid row: the defaults of the type.
      *
-     * @return array<string|int, array{count: int, difficulty: string}>
+     * @return list<array{kind: string|int, count: int, difficulty: string}>
      */
     public static function rows(array $test, TaskKindsInterface $type): array
     {
         $kinds = self::keys($type->getTaskKinds());
-        $fallback = 'medium';
         $rows = [];
+        $index = [];
 
         foreach (self::decode($test[self::FIELD] ?? null) as $row) {
             $kind = $row['kind'] ?? null;
@@ -43,15 +44,22 @@ final class TaskCounts
             }
 
             $kind = $kinds[(string) $kind];
-            $rows[$kind] = [
-                'count' => min($type->getMaxTaskCount($kind), ($rows[$kind]['count'] ?? 0) + $count),
-                'difficulty' => $rows[$kind]['difficulty'] ?? self::difficulty($row['difficulty'] ?? null, $fallback),
-            ];
+            $difficulty = self::difficulty($row['difficulty'] ?? null, 'medium');
+            $key = $kind.'|'.$difficulty;
+
+            if (isset($index[$key])) {
+                $rows[$index[$key]]['count'] = min($type->getMaxTaskCount($kind), $rows[$index[$key]]['count'] + $count);
+
+                continue;
+            }
+
+            $index[$key] = \count($rows);
+            $rows[] = ['kind' => $kind, 'count' => min($type->getMaxTaskCount($kind), $count), 'difficulty' => $difficulty];
         }
 
         if (!$rows) {
             foreach ($type->getDefaultTaskCounts() as $kind => $count) {
-                $rows[$kind] = ['count' => max(1, min($type->getMaxTaskCount($kind), $count)), 'difficulty' => $fallback];
+                $rows[] = ['kind' => $kind, 'count' => max(1, min($type->getMaxTaskCount($kind), $count)), 'difficulty' => 'medium'];
             }
         }
 
