@@ -53,5 +53,6 @@ $GLOBALS['TL_LANG']['tl_st_test']['published'] = ['Test freigeben', 'Nur freigeg
 $GLOBALS['TL_LANG']['tl_st_test']['children'] = 'Teilnahmen des Tests ID %s anzeigen';
 $GLOBALS['TL_LANG']['tl_st_test']['codesheet'] = 'Codeblatt drucken';
 $GLOBALS['TL_LANG']['tl_st_test']['evaluation'] = 'Auswertungsblätter drucken';
+$GLOBALS['TL_LANG']['tl_st_test']['worksheet'] = ['Arbeitsblatt drucken', 'Den Test auf Papier: Aufgaben mit Feldern zum Hineinschreiben und auf Wunsch ein Lösungsblatt (drucken oder als PDF speichern)'];
 $GLOBALS['TL_LANG']['tl_st_test']['preview'] = ['Ausprobieren', 'Den Test selbst lösen wie eine Schülerin oder ein Schüler: ohne Code, ohne SEB, nichts wird gespeichert'];
 $GLOBALS['TL_LANG']['tl_st_test']['author'] = ['Besitzer', 'Nur dieser Backend-Benutzer sieht, bearbeitet und löscht den Test (Administratoren sehen alle Tests). Neue Tests gehören automatisch der Person, die sie anlegt oder kopiert.'];

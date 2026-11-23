@@ -29,7 +29,7 @@ final class BoardSvg
      * @param array<int, bool>                        $correct
      * @param list<array{0: int, 1: int}>|null       $edges   GeoGebra: segments drawn by the student (index pairs)
      */
-    public function render(array $a, array $given, array $correct, array|null $edges = null): string
+    public function render(array $a, array $given, array $correct, array|null $edges = null, bool $solution = true, float|null $mm = null): string
     {
         $d = $a['draw'];
         [$w, $h] = $d['grid'];
@@ -40,7 +40,9 @@ final class BoardSvg
         $vh = $h * self::S + 2 * self::P;
         $violet = '#6b2fa8';
 
-        $svg = '<svg class="geo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '.$vw.' '.$vh.'" width="'.$vw.'" height="'.$vh.'">';
+        // $mm: millimetres per grid unit on paper (worksheet), otherwise pixels
+        $size = null === $mm ? 'width="'.$vw.'" height="'.$vh.'"' : 'style="width:'.round($vw / self::S * $mm, 1).'mm;height:'.round($vh / self::S * $mm, 1).'mm"';
+        $svg = '<svg class="geo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '.$vw.' '.$vh.'" '.$size.'>';
         $svg .= '<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="'.$violet.'"/></marker></defs>';
 
         $free = !empty($d['free']);
@@ -80,6 +82,10 @@ final class BoardSvg
         // Figure
         $svg .= $this->poly($d['pts'], $x, $y, 'fill="#dfe6f5" stroke="#1d3f8f" stroke-width="1.5"');
         $svg .= $this->labels($d['pts'], '', '#1d3f8f', $x, $y);
+
+        if (!$solution) {
+            return $svg.'</svg>';
+        }
 
         // Solution, for constructions with the tolerance circle around every image point
         $svg .= $this->poly($a['img'], $x, $y, 'fill="none" stroke="#1a7f43" stroke-width="1.8" stroke-dasharray="5 3"');

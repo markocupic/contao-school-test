@@ -25,5 +25,6 @@ $GLOBALS['BE_MOD']['school_test'] = [
         'tables' => ['tl_st_test', 'tl_st_participation'],
         'codesheet' => [PrintController::class, 'codeSheet'],
         'evaluation' => [PrintController::class, 'evaluation'],
+        'worksheet' => [PrintController::class, 'worksheet'],
     ],
 ];

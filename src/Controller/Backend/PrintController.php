@@ -34,6 +34,8 @@ use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleGenerator;
 use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleGeometry;
 use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleSvg;
 use Markocupic\ContaoSchoolTest\Task\Util;
+use Markocupic\ContaoSchoolTest\Task\WorksheetRenderer;
+use Markocupic\ContaoSchoolTest\TestType\TestTypeRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +43,7 @@ use Twig\Environment;
 
 /**
  * Printable pages, opened from the test list in the backend
- * (key=codesheet / key=evaluation, see contao/config/config.php).
+ * (key=codesheet / key=evaluation / key=worksheet, see contao/config/config.php).
  * Contao checks the module permissions before calling these methods.
  */
 class PrintController
@@ -55,6 +57,8 @@ class PrintController
         private readonly SolutionRenderer $solutions,
         private readonly BoardSvg $board,
         private readonly Security $security,
+        private readonly TestTypeRegistry $testTypes,
+        private readonly WorksheetRenderer $worksheet,
     ) {
     }
 
@@ -77,6 +81,63 @@ class PrintController
         $sheets = array_map($this->sheet(...), $this->getParticipations((int) $test['id']));
 
         $this->send($this->renderEvaluation($test, $sheets));
+    }
+
+    /**
+     * Paper version of the test to write in, with a solution sheet. «Gleiche Aufgaben für alle»:
+     * the shared tasks (generated and stored now if nobody has started), so paper and online
+     * test are the same. Otherwise new random tasks on every call.
+     */
+    public function worksheet(DataContainer|null $dc = null): string
+    {
+        $test = $this->getTest();
+
+        if (!$this->testTypes->has((string) $test['type'])) {
+            throw new \RuntimeException('Dieser Testtyp ist nicht installiert.');
+        }
+
+        $shared = (bool) $test['sameTasks'];
+        $json = (string) ($test['tasks'] ?? '');
+
+        if ($shared && '' === $json) {
+            $this->connection->executeStatement(
+                "UPDATE tl_st_test SET tasks = ? WHERE id = ? AND (tasks IS NULL OR tasks = '')",
+                [json_encode($this->testTypes->get((string) $test['type'])->generate($test), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE), $test['id']],
+            );
+            $json = (string) $this->connection->fetchOne('SELECT tasks FROM tl_st_test WHERE id = ?', [$test['id']]);
+        }
+
+        $sections = $shared ? (json_decode($json, true) ?: []) : $this->testTypes->get((string) $test['type'])->generate($test);
+        $out = [];
+        $max = 0;
+
+        foreach ($sections as $section) {
+            $tasks = [];
+            $points = 0;
+
+            foreach ($section['tasks'] as $task) {
+                $points += (int) ($task['points'] ?? 1);
+                $tasks[] = [
+                    'q' => $task['q'],
+                    'wide' => WorksheetRenderer::isWide($task),
+                    'blank' => $this->worksheet->blank($task),
+                    'solution' => $this->worksheet->solution($task),
+                    'points' => (int) ($task['points'] ?? 1),
+                ];
+            }
+
+            $max += $points;
+            $out[] = ['title' => $section['title'], 'instruction' => $this->worksheet->instruction($section), 'points' => $points, 'tasks' => $tasks];
+        }
+
+        $this->send($this->twig->render('@MarkocupicContaoSchoolTest/backend/worksheet.html.twig', [
+            'test' => $test,
+            'class' => $this->getClassTitle($test),
+            'sections' => $out,
+            'max' => $max,
+            'pointsForSix' => (int) $test['pointsForSix'] ?: $max,
+            'shared' => $shared,
+        ]));
     }
 
     /**

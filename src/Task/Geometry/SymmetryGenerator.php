@@ -363,8 +363,14 @@ final class SymmetryGenerator
      * The card for the printed evaluation: figures, the solution (green dashed) and the
      * student's axes and Z (green right, red wrong, grey "keine Symmetrie").
      */
-    public static function svg(array $a, array|null $answer = null, array $correct = []): string
+    public static function svg(array $a, array|null $answer = null, array $correct = [], bool $solution = true): string
     {
+        // Worksheet: only the card, without axes and centre
+        if (!$solution) {
+            $a['axes'] = [];
+            $a['center'] = null;
+        }
+
         $s = 30;
         $p = 10;
         $x = static fn (float $v): float => round($p + $v * $s, 1);

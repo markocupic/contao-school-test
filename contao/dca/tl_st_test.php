@@ -65,6 +65,12 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
                 'icon' => 'bundles/markocupiccontaoschooltest/icons/evaluation.svg',
                 'attributes' => 'target="_blank"',
             ],
+            // Paper version to write in, with a solution sheet
+            'worksheet' => [
+                'href' => 'key=worksheet',
+                'icon' => 'bundles/markocupiccontaoschooltest/icons/worksheet.svg',
+                'attributes' => 'target="_blank"',
+            ],
             // Try the test like a student, without a code and without SEB (PreviewController)
             'preview' => [
                 'route' => 'markocupic_school_test_preview',
