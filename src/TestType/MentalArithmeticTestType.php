@@ -51,7 +51,7 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface, TaskK
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},difficulty,taskCounts';
+        return '{config_legend},taskCounts';
     }
 
     /**
@@ -64,7 +64,6 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface, TaskK
 
     public function generate(array $test): array
     {
-        $levels = self::DIFFICULTY_LEVELS[$test['difficulty'] ?? 'medium'] ?? self::DIFFICULTY_LEVELS['medium'];
         $areas = [];
 
         foreach ($this->getAreas() as $area) {
@@ -74,8 +73,9 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface, TaskK
         $sections = [];
 
         // Percent tables: the number is the number of tables (6–7 fields each)
-        foreach (TaskCounts::rows($test, $this) as $alias => $count) {
+        foreach (TaskCounts::rows($test, $this) as $alias => ['count' => $count, 'difficulty' => $difficulty]) {
             $area = $areas[$alias];
+            $levels = self::DIFFICULTY_LEVELS[$difficulty] ?? self::DIFFICULTY_LEVELS['medium'];
 
             if (1 === $count) {
                 $tasks = $area->generateMany((int) Util::pick($levels), 1);
@@ -119,6 +119,11 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface, TaskK
         return 'pt' === $kind ? 3 : 20;
     }
 
+    public function hasTaskDifficulty(): bool
+    {
+        return true;
+    }
+
     public function getPracticeLabels(): array
     {
         return [
@@ -154,7 +159,7 @@ final class MentalArithmeticTestType implements PracticeTestTypeInterface, TaskK
         $difficulty = \array_key_exists($difficulty, self::DIFFICULTY_LEVELS) ? $difficulty : 'medium';
 
         if ('all' === $topic) {
-            return $this->generate(['difficulty' => $difficulty, TaskCounts::FIELD => TaskCounts::toRows(['kr' => 4, 'br' => 4, 'uw' => 4, 'pt' => 1, 'sz' => 4])]);
+            return $this->generate([TaskCounts::FIELD => TaskCounts::toRows(['kr' => 4, 'br' => 4, 'uw' => 4, 'pt' => 1, 'sz' => 4], $difficulty)]);
         }
 
         [$low, $high] = self::DIFFICULTY_LEVELS[$difficulty];

@@ -99,7 +99,18 @@ class TestDcaListener
         $kinds = array_map('strval', array_keys($type->getTaskKinds()));
         $rows = array_values(array_filter(TaskCounts::decode($value), static fn (array $row): bool => \in_array((string) ($row['kind'] ?? ''), $kinds, true)));
 
-        return $rows ?: TaskCounts::toRows($type->getDefaultTaskCounts());
+        if (!$rows) {
+            return TaskCounts::toRows($type->getDefaultTaskCounts());
+        }
+
+        // Rows without a difficulty yet: medium
+        foreach ($rows as &$row) {
+            if (!\in_array($row['difficulty'] ?? null, TaskCounts::DIFFICULTIES, true)) {
+                $row['difficulty'] = 'medium';
+            }
+        }
+
+        return $rows;
     }
 
     /**
@@ -194,8 +205,10 @@ class TestDcaListener
      * Non-admins only see their own tests (editing and deleting are checked in Security\TestVoter).
      */
     #[AsCallback(table: 'tl_st_test', target: 'config.onload')]
-    public function onLoad(): void
+    public function onLoad(DataContainer|null $dc = null): void
     {
+        $this->hideDifficulty($dc);
+
         $user = $this->security->getUser();
 
         if ($user instanceof BackendUser && !$user->isAdmin) {
@@ -255,6 +268,22 @@ class TestDcaListener
 
         if ($user instanceof BackendUser && $testId > 0) {
             $this->connection->update('tl_st_test', ['author' => (int) $user->id], ['id' => $testId]);
+        }
+    }
+
+    /**
+     * Test types without difficulty (angles): no difficulty column in «Aufgaben pro Bereich».
+     */
+    private function hideDifficulty(DataContainer|null $dc): void
+    {
+        if (!$dc?->id) {
+            return;
+        }
+
+        $type = $this->kindsType($dc);
+
+        if ($type && !$type->hasTaskDifficulty()) {
+            unset($GLOBALS['TL_DCA']['tl_st_test']['fields']['taskCounts']['fields']['difficulty']);
         }
     }
 

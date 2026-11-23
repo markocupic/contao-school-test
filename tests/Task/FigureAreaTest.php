@@ -153,7 +153,7 @@ class FigureAreaTest extends TestCase
         $this->assertCount(\count(FigureAreaTestType::KINDS), $type->generate([]));
         $this->assertSame('In the coordinate system', $type->getPracticeTopics()['koordinaten']['en']);
 
-        $sections = $type->generate(['taskCounts' => TaskCounts::toRows(['kreis' => 4, 'text' => 3]), 'difficulty' => 'hard']);
+        $sections = $type->generate(['taskCounts' => TaskCounts::toRows(['kreis' => 4, 'text' => 3], 'hard')]);
         $this->assertCount(2, $sections);
         $this->assertSame('kreis', $sections[0]['area']);
         $this->assertCount(4, $sections[0]['tasks']);

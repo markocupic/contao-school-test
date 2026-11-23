@@ -121,7 +121,7 @@ class AngleEquationTest extends TestCase
         $this->assertSame('dreieck', $sections[1]['area']);
         $this->assertSame('profi', $sections[0]['area']);
 
-        $sections = (new EquationTestType())->generate(['taskCounts' => TaskCounts::toRows([2 => 2, 9 => 2]), 'difficulty' => 'easy']);
+        $sections = (new EquationTestType())->generate(['taskCounts' => TaskCounts::toRows([2 => 2, 9 => 2], 'easy')]);
         $this->assertCount(2, $sections);
         $this->assertSame('level9', $sections[1]['area']);
         $this->assertSame(3, $sections[1]['tasks'][0]['points']);

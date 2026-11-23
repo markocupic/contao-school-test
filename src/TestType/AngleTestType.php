@@ -65,7 +65,7 @@ final class AngleTestType implements PracticeTestTypeInterface, TaskKindsInterfa
     {
         $sections = [];
 
-        foreach (TaskCounts::rows($test, $this) as $kind => $count) {
+        foreach (TaskCounts::rows($test, $this) as $kind => ['count' => $count]) {
             $sections[] = $this->section((string) $kind, $this->many((string) $kind, $count));
         }
 
@@ -85,6 +85,11 @@ final class AngleTestType implements PracticeTestTypeInterface, TaskKindsInterfa
     public function getMaxTaskCount(string|int $kind): int
     {
         return 10;
+    }
+
+    public function hasTaskDifficulty(): bool
+    {
+        return false;
     }
 
     public function getPracticeLabels(): array

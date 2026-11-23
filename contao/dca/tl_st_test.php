@@ -16,6 +16,7 @@ use Contao\DataContainer;
 use Contao\DC_Table;
 use Markocupic\ContaoSchoolTest\Grading\GradeCalculator;
 use Markocupic\ContaoSchoolTest\TestType\MentalArithmeticTestType;
+use Markocupic\ContaoSchoolTest\TestType\TaskCounts;
 
 /*
  * The palette of each test type is added by TestDcaListener (onload) from
@@ -145,17 +146,7 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
             'eval' => ['mandatory' => true, 'includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql' => 'int(10) unsigned NOT NULL default 0',
         ],
-        'difficulty' => [
-            'inputType' => 'select',
-            'exclude' => true,
-            'filter' => true,
-            'default' => 'medium',
-            'options' => array_keys(MentalArithmeticTestType::DIFFICULTY_LEVELS),
-            'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['difficultyOptions'],
-            'eval' => ['mandatory' => true, 'tl_class' => 'w50'],
-            'sql' => "varchar(16) NOT NULL default 'medium'",
-        ],
-        // Kind and number of tasks per section (Contao 5.7 row wizard). The kinds depend on the test
+        // Kind, number of tasks and difficulty per section (Contao 5.7 row wizard). The kinds depend on the test
         // type (TaskKindsInterface), see TestDcaListener. Read by TestType\TaskCounts::rows().
         'taskCounts' => [
             'inputType' => 'rowWizard',
@@ -164,11 +155,20 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
                 'kind' => [
                     'label' => &$GLOBALS['TL_LANG']['tl_st_test']['taskCountsKind'],
                     'inputType' => 'select',
-                    'eval' => ['mandatory' => true, 'includeBlankOption' => true, 'chosen' => true, 'cell_style' => 'width:75%'],
+                    'eval' => ['mandatory' => true, 'includeBlankOption' => true, 'chosen' => true, 'cell_style' => 'width:60%'],
                 ],
                 'count' => [
                     'label' => &$GLOBALS['TL_LANG']['tl_st_test']['taskCountsCount'],
                     'inputType' => 'select',
+                    'eval' => ['mandatory' => true],
+                ],
+                // Removed by TestDcaListener::hideDifficulty() for types without difficulty (angles)
+                'difficulty' => [
+                    'label' => &$GLOBALS['TL_LANG']['tl_st_test']['taskCountsDifficulty'],
+                    'inputType' => 'select',
+                    'default' => 'medium',
+                    'options' => TaskCounts::DIFFICULTIES,
+                    'reference' => &$GLOBALS['TL_LANG']['tl_st_test']['difficultyOptions'],
                     'eval' => ['mandatory' => true],
                 ],
             ],

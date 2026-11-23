@@ -66,15 +66,15 @@ final class FigureAreaTestType implements PracticeTestTypeInterface, TaskKindsIn
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},difficulty,taskCounts';
+        return '{config_legend},taskCounts';
     }
 
     public function generate(array $test): array
     {
-        $level = $this->level((string) ($test['difficulty'] ?? 'medium'));
         $sections = [];
 
-        foreach (TaskCounts::rows($test, $this) as $kind => $count) {
+        foreach (TaskCounts::rows($test, $this) as $kind => ['count' => $count, 'difficulty' => $difficulty]) {
+            $level = $this->level($difficulty);
             $sections[] = $this->section((string) $kind, $this->many((string) $kind, $level, $count));
         }
 
@@ -94,6 +94,11 @@ final class FigureAreaTestType implements PracticeTestTypeInterface, TaskKindsIn
     public function getMaxTaskCount(string|int $kind): int
     {
         return 10;
+    }
+
+    public function hasTaskDifficulty(): bool
+    {
+        return true;
     }
 
     public function getPracticeLabels(): array

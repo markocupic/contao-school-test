@@ -28,39 +28,66 @@ class TaskCountsTest extends TestCase
     {
         $type = new MentalArithmeticTestType();
         $rows = [
-            ['kind' => 'sz', 'count' => '3'],
-            ['kind' => 'pt', 'count' => '9'],
+            ['kind' => 'sz', 'count' => '3', 'difficulty' => 'hard'],
+            ['kind' => 'pt', 'count' => '9', 'difficulty' => 'easy'],
             ['kind' => 'nope', 'count' => '4'],
-            ['kind' => 'sz', 'count' => '2'],
+            ['kind' => 'sz', 'count' => '2', 'difficulty' => 'easy'],
             ['kind' => 'kr', 'count' => ''],
-            ['kind' => 'br', 'count' => '50'],
+            ['kind' => 'br', 'count' => '50', 'difficulty' => 'extreme'],
         ];
 
-        $this->assertSame(['sz' => 5, 'pt' => 3, 'br' => 20], TaskCounts::rows(['taskCounts' => serialize($rows)], $type));
-        $this->assertSame($type->getDefaultTaskCounts(), TaskCounts::rows(['taskCounts' => ''], $type));
-        $this->assertSame($type->getDefaultTaskCounts(), TaskCounts::rows([], $type));
-        $this->assertSame($type->getDefaultTaskCounts(), TaskCounts::rows(['taskCounts' => 'a:1:{i:0;s:3:"bad"'], $type));
+        $this->assertSame([
+            'sz' => ['count' => 5, 'difficulty' => 'hard'],
+            'pt' => ['count' => 3, 'difficulty' => 'easy'],
+            'br' => ['count' => 20, 'difficulty' => 'medium'],
+        ], TaskCounts::rows(['taskCounts' => serialize($rows)], $type));
+
+        $defaults = array_map(static fn (int $count): array => ['count' => $count, 'difficulty' => 'medium'], $type->getDefaultTaskCounts());
+        $this->assertSame($defaults, TaskCounts::rows(['taskCounts' => ''], $type));
+        $this->assertSame($defaults, TaskCounts::rows([], $type));
+        $this->assertSame($defaults, TaskCounts::rows(['taskCounts' => 'a:1:{i:0;s:3:"bad"'], $type));
     }
 
     public function testNumericKindsOfEquations(): void
     {
         $type = new EquationTestType();
 
-        $this->assertSame([9 => 3, 2 => 1], TaskCounts::rows(['taskCounts' => TaskCounts::toRows(['9' => 3, '2' => 1])], $type));
-        $this->assertSame([['kind' => '9', 'count' => '3']], TaskCounts::toRows([9 => 3]));
+        $this->assertSame([9 => ['count' => 3, 'difficulty' => 'easy'], 2 => ['count' => 1, 'difficulty' => 'easy']], TaskCounts::rows(['taskCounts' => TaskCounts::toRows(['9' => 3, '2' => 1], 'easy')], $type));
+        $this->assertSame([['kind' => '9', 'count' => '3', 'difficulty' => 'medium']], TaskCounts::toRows([9 => 3]));
         $this->assertSame('Stufe 9: Binome (x² fällt weg)', $type->getTaskKinds()[9]);
 
-        $sections = $type->generate(['taskCounts' => TaskCounts::toRows([9 => 3, 2 => 1]), 'difficulty' => 'easy']);
+        $sections = $type->generate(['taskCounts' => TaskCounts::toRows([9 => 3, 2 => 1], 'easy')]);
         $this->assertSame(['level9', 'level2'], array_column($sections, 'area'));
         $this->assertSame([3, 1], array_map(static fn (array $s): int => \count($s['tasks']), $sections));
     }
 
     public function testMentalArithmeticCountsPerArea(): void
     {
-        $sections = (new MentalArithmeticTestType())->generate(['difficulty' => 'easy', 'taskCounts' => TaskCounts::toRows(['br' => 3, 'pt' => 2, 'kr' => 11])]);
+        $sections = (new MentalArithmeticTestType())->generate(['taskCounts' => TaskCounts::toRows(['br' => 3, 'pt' => 2, 'kr' => 11], 'easy')]);
 
         $this->assertSame(['br', 'pt', 'kr'], array_column($sections, 'area'));
         $this->assertSame([3, 2, 11], array_map(static fn (array $s): int => \count($s['tasks']), $sections));
+    }
+
+    public function testDifficultyPerRow(): void
+    {
+        $rows = [
+            ['kind' => 'achse_ggb', 'count' => '1', 'difficulty' => 'easy'],
+            ['kind' => 'punkt_ggb', 'count' => '1', 'difficulty' => 'hard'],
+        ];
+        $sections = (new GeometryTransformTestType())->generate(['taskCounts' => serialize($rows)]);
+        $this->assertStringContainsString('4 mm', $sections[0]['instruction']);
+        $this->assertStringContainsString('1.5 mm', $sections[1]['instruction']);
+
+        $sections = (new TriangleTestType())->generate(['taskCounts' => serialize([['kind' => 'sss', 'count' => '1', 'difficulty' => 'easy'], ['kind' => 'sws', 'count' => '1', 'difficulty' => 'hard']])]);
+        $this->assertNotSame($sections[0]['instruction'], $sections[1]['instruction']);
+
+        // Mental arithmetic: easy = levels 1 and 2, hard = levels 5 and 6
+        $sections = (new MentalArithmeticTestType())->generate(['taskCounts' => serialize([['kind' => 'kr', 'count' => '2', 'difficulty' => 'easy'], ['kind' => 'br', 'count' => '2', 'difficulty' => 'hard']])]);
+        $this->assertSame(['kr', 'br'], array_column($sections, 'area'));
+
+        $this->assertFalse((new AngleTestType())->hasTaskDifficulty());
+        $this->assertTrue((new FigureAreaTestType())->hasTaskDifficulty());
     }
 
     public function testEveryTypeHasConsistentKinds(): void
@@ -78,7 +105,7 @@ class TaskCountsTest extends TestCase
             // Each kind on its own, as many tasks as allowed (up to 10)
             foreach (array_keys($kinds) as $kind) {
                 $max = min(10, $type->getMaxTaskCount($kind));
-                $sections = $type->generate(['difficulty' => 'hard', 'taskCounts' => TaskCounts::toRows([$kind => $max])]);
+                $sections = $type->generate(['taskCounts' => TaskCounts::toRows([$kind => $max], 'hard')]);
                 $this->assertCount(1, $sections, $type->getAlias().': '.$kind);
                 $this->assertCount($max, $sections[0]['tasks'], $type->getAlias().': '.$kind);
             }

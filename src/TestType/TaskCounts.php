@@ -12,43 +12,50 @@ declare(strict_types=1);
 namespace Markocupic\ContaoSchoolTest\TestType;
 
 /**
- * Reads tl_st_test.taskCounts: a list of rows [kind, count] from the row wizard (Contao 5.7+).
+ * Reads tl_st_test.taskCounts: a list of rows [kind, count, difficulty] from the row wizard (Contao 5.7+).
  */
 final class TaskCounts
 {
     public const FIELD = 'taskCounts';
 
+    public const DIFFICULTIES = ['easy', 'medium', 'hard'];
+
     /**
-     * Kind => number of tasks, in the order of the rows. Unknown kinds and empty rows are skipped,
-     * a kind listed twice gets the sum, counts are limited to 1 … getMaxTaskCount(). Without a
-     * valid row: the defaults of the type.
+     * Kind => [count, difficulty], in the order of the rows. Unknown kinds and empty rows are
+     * skipped, a kind listed twice gets the sum (and the first difficulty), counts are limited to
+     * 1 … getMaxTaskCount(). Difficulty of a row: its own, else medium.
+     * Without a valid row: the defaults of the type.
      *
-     * @return array<string|int, int>
+     * @return array<string|int, array{count: int, difficulty: string}>
      */
     public static function rows(array $test, TaskKindsInterface $type): array
     {
-        $kinds = $type->getTaskKinds();
-        $counts = [];
+        $kinds = self::keys($type->getTaskKinds());
+        $fallback = 'medium';
+        $rows = [];
 
         foreach (self::decode($test[self::FIELD] ?? null) as $row) {
             $kind = $row['kind'] ?? null;
             $count = (int) ($row['count'] ?? 0);
 
-            if (!\is_scalar($kind) || !\array_key_exists((string) $kind, self::keys($kinds)) || $count < 1) {
+            if (!\is_scalar($kind) || !\array_key_exists((string) $kind, $kinds) || $count < 1) {
                 continue;
             }
 
-            $kind = self::keys($kinds)[(string) $kind];
-            $counts[$kind] = min($type->getMaxTaskCount($kind), ($counts[$kind] ?? 0) + $count);
+            $kind = $kinds[(string) $kind];
+            $rows[$kind] = [
+                'count' => min($type->getMaxTaskCount($kind), ($rows[$kind]['count'] ?? 0) + $count),
+                'difficulty' => $rows[$kind]['difficulty'] ?? self::difficulty($row['difficulty'] ?? null, $fallback),
+            ];
         }
 
-        if (!$counts) {
+        if (!$rows) {
             foreach ($type->getDefaultTaskCounts() as $kind => $count) {
-                $counts[$kind] = max(1, min($type->getMaxTaskCount($kind), $count));
+                $rows[$kind] = ['count' => max(1, min($type->getMaxTaskCount($kind), $count)), 'difficulty' => $fallback];
             }
         }
 
-        return $counts;
+        return $rows;
     }
 
     /**
@@ -56,14 +63,14 @@ final class TaskCounts
      *
      * @param array<string|int, int> $counts
      *
-     * @return list<array{kind: string, count: string}>
+     * @return list<array{kind: string, count: string, difficulty: string}>
      */
-    public static function toRows(array $counts): array
+    public static function toRows(array $counts, string $difficulty = 'medium'): array
     {
         $rows = [];
 
         foreach ($counts as $kind => $count) {
-            $rows[] = ['kind' => (string) $kind, 'count' => (string) $count];
+            $rows[] = ['kind' => (string) $kind, 'count' => (string) $count, 'difficulty' => $difficulty];
         }
 
         return $rows;
@@ -97,6 +104,11 @@ final class TaskCounts
         }
 
         return $labels;
+    }
+
+    private static function difficulty(mixed $value, string $fallback): string
+    {
+        return \is_string($value) && \in_array($value, self::DIFFICULTIES, true) ? $value : $fallback;
     }
 
     /**

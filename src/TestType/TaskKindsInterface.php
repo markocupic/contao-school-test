@@ -13,7 +13,7 @@ namespace Markocupic\ContaoSchoolTest\TestType;
 
 /**
  * A test type with several kinds of tasks (Bereiche, Abbildungen, Stufen …). In the backend the
- * teacher lists the kinds and the number of tasks of each in tl_st_test.taskCounts (row wizard);
+ * teacher lists the kinds, the number of tasks and the difficulty of each in tl_st_test.taskCounts (row wizard);
  * every row becomes a section of the test. TaskCounts::rows() reads the field.
  */
 interface TaskKindsInterface
@@ -36,4 +36,9 @@ interface TaskKindsInterface
      * Most tasks of one kind in a test.
      */
     public function getMaxTaskCount(string|int $kind): int;
+
+    /**
+     * Whether the rows have a difficulty (easy, medium, hard) of their own.
+     */
+    public function hasTaskDifficulty(): bool;
 }

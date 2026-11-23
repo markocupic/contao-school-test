@@ -57,16 +57,16 @@ final class EquationTestType implements PracticeTestTypeInterface, TaskKindsInte
 
     public function getPaletteFields(): string
     {
-        return '{config_legend},difficulty,taskCounts';
+        return '{config_legend},taskCounts';
     }
 
     public function generate(array $test): array
     {
-        $difficulty = $this->difficulty((string) ($test['difficulty'] ?? 'medium'));
         $sections = [];
 
-        foreach (TaskCounts::rows($test, $this) as $level => $count) {
+        foreach (TaskCounts::rows($test, $this) as $level => ['count' => $count, 'difficulty' => $difficulty]) {
             $level = (int) $level;
+            $difficulty = $this->difficulty($difficulty);
             $tasks = [];
             $seen = [];
 
@@ -107,6 +107,11 @@ final class EquationTestType implements PracticeTestTypeInterface, TaskKindsInte
     public function getMaxTaskCount(string|int $kind): int
     {
         return 10;
+    }
+
+    public function hasTaskDifficulty(): bool
+    {
+        return true;
     }
 
     public function getPracticeLabels(): array

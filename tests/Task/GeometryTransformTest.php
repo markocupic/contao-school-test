@@ -122,7 +122,7 @@ class GeometryTransformTest extends TestCase
         $fallback = $type->generate(['difficulty' => 'easy', 'taskCounts' => serialize([['kind' => 'achse_frei', 'count' => '1'], ['kind' => 'drehung', 'count' => '0']])]);
         $this->assertSame($areas, array_column($fallback, 'area'));
 
-        $sections = $type->generate(['difficulty' => 'hard', 'taskCounts' => serialize([['kind' => 'punkt_ggb', 'count' => '1']])]);
+        $sections = $type->generate(['taskCounts' => serialize([['kind' => 'punkt_ggb', 'count' => '1', 'difficulty' => 'hard']])]);
         $this->assertSame('Punktspiegelung mit GeoGebra', $sections[0]['title']);
         $this->assertStringContainsString('GeoGebra', $sections[0]['instruction']);
         $this->assertStringContainsString('1.5 mm', $sections[0]['instruction']);
