@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Markocupic\ContaoSchoolTest\Controller\Backend;
 
 use Contao\CoreBundle\Security\ContaoCorePermissions;
+use Contao\CoreBundle\Security\DataContainer\ReadAction;
 use Doctrine\DBAL\Connection;
 use Markocupic\ContaoSchoolTest\Participation\PreviewSession;
 use Markocupic\ContaoSchoolTest\Task\TaskTranslator;
@@ -121,6 +122,11 @@ final class PreviewController
 
         if (!$test) {
             throw new NotFoundHttpException(\sprintf('Test ID %d not found.', $id));
+        }
+
+        // Only the owner of the test (or an admin), see Security\TestVoter
+        if (!$this->security->isGranted(ContaoCorePermissions::DC_PREFIX.'tl_st_test', new ReadAction('tl_st_test', $test))) {
+            throw new AccessDeniedHttpException(\sprintf('Not allowed to read test ID %d.', $id));
         }
 
         return $this->print->decodeTest($test);

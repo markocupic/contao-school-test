@@ -22,7 +22,7 @@ final class FigureAreaTexts
         'Trapez' => ['Trapèze', 'Trapezio', 'Trapezium'],
         'Kreis' => ['Cercle', 'Cerchio', 'Circle'],
         'Zusammengesetzte Flächen' => ['Surfaces composées', 'Superfici composte', 'Composite shapes'],
-        'Flächen mit Pythagoras' => ['Aires avec Pythagore', 'Aree con Pitagora', 'Areas with Pythagoras'],
+        'Flächen mit fehlenden Längen' => ['Aires avec des longueurs manquantes', 'Aree con lunghezze mancanti', 'Areas with missing lengths'],
         'Textaufgaben' => ['Problèmes', 'Problemi', 'Word problems'],
         'Im Koordinatensystem' => ['Dans le repère', 'Nel sistema di coordinate', 'In the coordinate system'],
         'Berechne die gesuchten Grössen. Die Skizzen sind nicht massstabsgetreu. Runde Ergebnisse mit π oder mit Wurzeln auf eine Dezimale.' => ['Calcule les grandeurs demandées. Les figures ne sont pas à l’échelle. Arrondis les résultats avec π ou avec des racines à une décimale.', 'Calcola le grandezze richieste. Gli schizzi non sono in scala. Arrotonda i risultati con π o con radici a un decimale.', 'Calculate the missing values. The sketches are not to scale. Round results with π or square roots to one decimal place.'],

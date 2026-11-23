@@ -32,7 +32,7 @@ final class FigureAreaTestType implements PracticeTestTypeInterface
         'trapez' => 'Trapez',
         'kreis' => 'Kreis',
         'zusammengesetzt' => 'Zusammengesetzte Flächen',
-        'pythagoras' => 'Flächen mit Pythagoras',
+        'pythagoras' => 'Flächen mit fehlenden Längen',
         'koordinaten' => 'Im Koordinatensystem',
         'text' => 'Textaufgaben',
         'gemischt' => 'Alle Bereiche gemischt',

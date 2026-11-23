@@ -15,6 +15,9 @@ declare(strict_types=1);
 namespace Markocupic\ContaoSchoolTest\Controller\Backend;
 
 use Contao\CoreBundle\Exception\ResponseException;
+use Contao\CoreBundle\Exception\AccessDeniedException;
+use Contao\CoreBundle\Security\ContaoCorePermissions;
+use Contao\CoreBundle\Security\DataContainer\ReadAction;
 use Contao\DataContainer;
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
@@ -31,6 +34,7 @@ use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleGenerator;
 use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleGeometry;
 use Markocupic\ContaoSchoolTest\Task\Triangle\TriangleSvg;
 use Markocupic\ContaoSchoolTest\Task\Util;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -50,6 +54,7 @@ class PrintController
         private readonly Evaluator $evaluator,
         private readonly SolutionRenderer $solutions,
         private readonly BoardSvg $board,
+        private readonly Security $security,
     ) {
     }
 
@@ -158,6 +163,11 @@ class PrintController
 
         if (!$test) {
             throw new \RuntimeException(\sprintf('Test ID %d not found.', $id));
+        }
+
+        // Only the owner of the test (or an admin), see Security\TestVoter
+        if (!$this->security->isGranted(ContaoCorePermissions::DC_PREFIX.'tl_st_test', new ReadAction('tl_st_test', $test))) {
+            throw new AccessDeniedException(\sprintf('Not allowed to read test ID %d.', $id));
         }
 
         return $this->decodeTest($test);

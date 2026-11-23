@@ -100,6 +100,16 @@ $GLOBALS['TL_DCA']['tl_st_test'] = [
         'tstamp' => [
             'sql' => 'int(10) unsigned NOT NULL default 0',
         ],
+        // Owner: only this backend user (and admins) see the test, see Security\TestVoter
+        'author' => [
+            'inputType' => 'select',
+            'exclude' => true,
+            'filter' => true,
+            'foreignKey' => 'tl_user.name',
+            'eval' => ['chosen' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'],
+            'sql' => 'int(10) unsigned NOT NULL default 0',
+            'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
+        ],
         'title' => [
             'inputType' => 'text',
             'exclude' => true,

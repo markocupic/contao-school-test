@@ -21,6 +21,7 @@ $GLOBALS['TL_LANG']['tl_st_test']['security_legend'] = 'Sperre und Wiederaufnahm
 $GLOBALS['TL_LANG']['tl_st_test']['seb_legend'] = 'Safe Exam Browser';
 $GLOBALS['TL_LANG']['tl_st_test']['codesheet_legend'] = 'Codeblatt';
 $GLOBALS['TL_LANG']['tl_st_test']['publish_legend'] = 'Freigabe';
+$GLOBALS['TL_LANG']['tl_st_test']['owner_legend'] = 'Besitzer';
 
 $GLOBALS['TL_LANG']['tl_st_test']['title'] = ['Titel', 'Zum Beispiel «Kopfrechnen Quartal 2».'];
 $GLOBALS['TL_LANG']['tl_st_test']['subject'] = ['Fach', 'Erscheint auf Codeblatt und Auswertung.'];
@@ -36,7 +37,7 @@ $GLOBALS['TL_LANG']['tl_st_test']['tasksPerKind'] = ['Aufgaben pro Abschnitt', '
 $GLOBALS['TL_LANG']['tl_st_test']['angleKinds'] = ['Winkelarten', 'Jede gewählte Art ergibt einen Abschnitt im Test. Ohne Auswahl alle.'];
 $GLOBALS['TL_LANG']['tl_st_test']['angleKindsOptions'] = ['scheitel' => 'Scheitel- und Nebenwinkel', 'parallel' => 'Stufenwinkel an Parallelen', 'transversalen' => 'Parallelen und zwei Geraden (Schnittpunkt S, Dreieck)', 'dreieck' => 'Dreieck', 'viereck' => 'Viereck', 'vieleck' => 'Vieleck', 'figuren' => 'Figuren mit Diagonalen und Höhen (Trapez, regelmässiges Fünfeck, Parallelogramm, gleichschenkliges Dreieck)', 'kreis' => 'Winkel im Kreis (Peripherie- und Zentriwinkel)', 'kombi' => 'Kombiniert (mehrere Winkel pro Aufgabe)', 'profi' => 'Profi (gleichschenklige und gleichseitige Dreiecke)'];
 $GLOBALS['TL_LANG']['tl_st_test']['areaKinds'] = ['Bereiche', 'Jeder gewählte Bereich ergibt einen Abschnitt im Test, jede vierte Aufgabe ist eine Textaufgabe. Ohne Auswahl alle.'];
-$GLOBALS['TL_LANG']['tl_st_test']['areaKindsOptions'] = ['dreieck' => 'Dreieck', 'rechteck' => 'Rechteck und Quadrat', 'parallelogramm' => 'Parallelogramm und Raute', 'trapez' => 'Trapez', 'kreis' => 'Kreis (Halb-, Viertelkreis, Kreisring, Sektor)', 'zusammengesetzt' => 'Zusammengesetzte Flächen', 'pythagoras' => 'Flächen mit Pythagoras', 'koordinaten' => 'Im Koordinatensystem (Eckpunkte, Rahmen-Methode)', 'text' => 'Nur Textaufgaben (alle Figuren)'];
+$GLOBALS['TL_LANG']['tl_st_test']['areaKindsOptions'] = ['dreieck' => 'Dreieck', 'rechteck' => 'Rechteck und Quadrat', 'parallelogramm' => 'Parallelogramm und Raute', 'trapez' => 'Trapez', 'kreis' => 'Kreis (Halb-, Viertelkreis, Kreisring, Sektor)', 'zusammengesetzt' => 'Zusammengesetzte Flächen', 'pythagoras' => 'Flächen mit fehlenden Längen (Satz des Pythagoras)', 'koordinaten' => 'Im Koordinatensystem (Eckpunkte, Rahmen-Methode)', 'text' => 'Nur Textaufgaben (alle Figuren)'];
 $GLOBALS['TL_LANG']['tl_st_test']['triangleKinds'] = ['Konstruktionsarten', 'Jede gewählte Art ergibt einen Abschnitt im Test. Ohne Auswahl alle. Die Aufgaben laden GeoGebra.'];
 $GLOBALS['TL_LANG']['tl_st_test']['triangleKindsOptions'] = ['sss' => 'SSS: drei Seiten', 'sws' => 'SWS: zwei Seiten und der Zwischenwinkel', 'wsw' => 'WSW: eine Seite und die anliegenden Winkel', 'ssw' => 'SsW: zwei Seiten und der Gegenwinkel der grösseren Seite', 'hoehe' => 'Mit Höhe (Anspruchsvoller auch ohne gegebene Grundseite)', 'winkelhalbierende' => 'Mit Winkelhalbierender (Seite, anliegender Winkel und dessen Winkelhalbierende)', 'schwerelinie' => 'Mit Schwerelinie (Seite mit Seite oder Winkel; Anspruchsvoller auch Schwerelinie auf eine gegebene Seite)'];
 $GLOBALS['TL_LANG']['tl_st_test']['binomialTopics'] = ['Bereiche', 'Jeder gewählte Bereich ergibt einen Abschnitt im Test. Ohne Auswahl alle.'];
@@ -58,3 +59,4 @@ $GLOBALS['TL_LANG']['tl_st_test']['children'] = 'Teilnahmen des Tests ID %s anze
 $GLOBALS['TL_LANG']['tl_st_test']['codesheet'] = 'Codeblatt drucken';
 $GLOBALS['TL_LANG']['tl_st_test']['evaluation'] = 'Auswertungsblätter drucken';
 $GLOBALS['TL_LANG']['tl_st_test']['preview'] = ['Ausprobieren', 'Den Test selbst lösen wie eine Schülerin oder ein Schüler: ohne Code, ohne SEB, nichts wird gespeichert'];
+$GLOBALS['TL_LANG']['tl_st_test']['author'] = ['Besitzer', 'Nur dieser Backend-Benutzer sieht, bearbeitet und löscht den Test (Administratoren sehen alle Tests). Neue Tests gehören automatisch der Person, die sie anlegt oder kopiert.'];

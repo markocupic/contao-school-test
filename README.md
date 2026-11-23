@@ -96,7 +96,7 @@ Siebter Testtyp: **Flächenberechnung** (Geometrie) mit farbigen, beschrifteten 
 | Trapez | a, c, h | h oder c aus A | gemischte Einheiten, a und c aus Unterschied, Mittellinie |
 | Kreis | A und U aus r | aus d, Halb- und Viertelkreis, r aus U | Kreisring, Sektor, r aus A |
 | Zusammengesetzte Flächen | L- und T-Form (auch Häuschen), Haus, Treppe, Pfeil | Rahmen, U-Form, Kerbe, Stern, Vieleck auf Häuschen, Hallenwand mit Tor, Werkstück (Rechteck und Trapez), Rechteck mit Halbkreis, Quadrat mit zwei Halbkreisen | Quadrat minus Viertelkreis, Laufbahn, Löcher, Kreis im Quadrat, Quadrat im Kreis, Blatt aus zwei Viertelkreisen, Halbkreis-Ausschnitt |
-| Flächen mit Pythagoras | rechtwinkliges Dreieck | Rechteck mit Diagonale, gleichschenkliges Dreieck, Raute, Dreieck und Rechteck (h aus Pythagoras) | gleichschenkliges und rechtwinkliges Trapez, gleichseitiges Dreieck, Werkstück aus zwei Dreiecken, Rechteck mit Halbkreis-Ausschnitt und Turm |
+| Flächen mit fehlenden Längen (im Backend mit Hinweis «Satz des Pythagoras», für die Kinder ohne) | rechtwinkliges Dreieck | Rechteck mit Diagonale, gleichschenkliges Dreieck, Raute, Dreieck und Rechteck (h aus Pythagoras) | gleichschenkliges und rechtwinkliges Trapez, gleichseitiges Dreieck, Werkstück aus zwei Dreiecken, Rechteck mit Halbkreis-Ausschnitt und Turm |
 | Im Koordinatensystem | Rechteck, Dreieck, rechtwinkliges Dreieck, Parallelogramm aus Eckpunkten A(x\|y) | Trapez, L-Form, Haus, Figur im Gitter ablesen | Rahmen-Methode (Viereck, Dreieck, Rechteck mit abgeschnittenen Ecken), Figur mit Viertelkreis im Gitter |
 
 Innerhalb eines Abschnitts kommt keine Aufgabenart doppelt vor (pro Bereich und Niveau gibt es mindestens drei Arten, Leicht auch mit Figuren auf Häuschenpapier). Jede vierte Aufgabe eines Bereichs ist eine **Textaufgabe** (Segel, Parkett, Platten, Grundstück mit Preis, Pizza, Wand mit Farbe, Bildschirm, Giebel …), der Bereich «Textaufgaben» hat nur solche. Textaufgaben zeigen keine Skizze, die Lösung schon. Jeder gesuchte Wert gibt einen Punkt. Werte ohne π und Wurzeln müssen genau stimmen; Ergebnisse mit π oder Wurzeln werden auf eine Dezimale gerundet, π ≈ 3.14 gilt auch, ebenso Folgefehler aus einem gerundeten Zwischenresultat. Beim Üben zeigt die Lösung die Skizze mit den Werten (zusammengesetzte Flächen mit der Zerlegung A₁, A₂) und den Lösungsweg.
@@ -117,6 +117,10 @@ Neues Feld in `tl_st_test`: `areaKinds` (nach dem Update `contao:migrate`).
 
    Läuft das Übungselement allein auf einer Seite, gibt es dafür ein Seiten-Stylesheet (Weltraum-Hintergrund über die ganze Seite, Planet und Mond, App zentriert und auf grossen Bildschirmen grösser). Einschalten im Inhaltselement (Übung und Test) mit «Ganze Seite gestalten (eigene Seite)» (Feld `tl_content.schoolTestPageStyle`, nach dem Update `contao:migrate`). Oder von Hand im Seitenlayout unter «Zusätzliche <head>-Tags»: `<link rel="stylesheet" href="/bundles/markocupiccontaoschooltest/page/mathe-mission.css">`
 7. **Auswertung** (Symbol in der Testliste): Klassenübersicht und pro Schülerin und Schüler ein Blatt mit allen Aufgaben, Antworten, Lösungen, Punkten und Note.
+
+## Rechte im Backend
+
+Zugriff auf «Schultests» haben nur Backend-Benutzer, für deren Benutzergruppe die Module freigeschaltet sind. Jeder Test gehört der Person, die ihn angelegt (oder kopiert) hat (Feld `author`, «Besitzer»). Andere Benutzer sehen den Test nicht in der Liste und können ihn weder öffnen, bearbeiten, kopieren, löschen noch die Teilnahmen, das Codeblatt, die Auswertung oder die Vorschau aufrufen (`Security\TestVoter`, `Security\ParticipationVoter`). Administratoren sehen alle Tests, in der Liste mit dem Namen des Besitzers, und können den Besitzer im Test unter «Besitzer» ändern. Tests ohne Besitzer (angelegt vor diesem Update) sehen nur Administratoren, bis sie einen Besitzer zuweisen. Nach dem Update `contao:migrate` ausführen (neue Spalte `tl_st_test.author`).
 
 ## Regeln im Frontend
 
