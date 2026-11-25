@@ -20,6 +20,16 @@
 .school-test .st-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .school-test .st-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .school-test input { font: inherit; color: inherit; }
+/*
+ * Form fields always light, also when the page (or the operating system) uses a dark color
+ * scheme (e.g. the page style «Mathe-Mission» with color-scheme: dark): otherwise the browser
+ * draws dark fields and white button text on the white cards. :where() keeps the specificity
+ * low, so the rules for the single answer types below still apply.
+ */
+.school-test { color-scheme: light; }
+.school-test :where(input:not([type="hidden"], [type="checkbox"], [type="radio"], [type="range"]), select, textarea) { background: #fff; color: var(--st-ink, #1b2245); border: 2px solid var(--st-line); border-radius: 8px; padding: 4px 8px; }
+.school-test :where(input, select, textarea)::placeholder { color: #98a2b3; opacity: 1; }
+.school-test :where(input:disabled, input[readonly], select:disabled) { background: var(--st-soft); color: var(--st-ink, #1b2245); opacity: 1; -webkit-text-fill-color: currentColor; }
 .school-test, .school-test * { box-sizing: border-box; }
 /* Width: characters + letter spacing + padding + border, independent of the site's font */
 .school-test .st-code { font-size: 1.6rem; font-variant-numeric: tabular-nums; letter-spacing: .2em; width: calc(5ch + 1.2em + 28px); text-align: center; padding: 8px 12px; border: 2px solid var(--st-line); border-radius: 10px; }
@@ -224,7 +234,7 @@
 .school-test .st-choice { display: inline-flex; gap: 6px; }
 .school-test .st-choice .st-opt { padding: 4px 10px; }
 .school-test .st-keys { display: flex; gap: 6px; margin-top: 8px; }
-.school-test .st-key { font: inherit; min-width: 2.6em; padding: 4px 8px; border: 2px solid var(--st-line); border-radius: 8px; background: #fff; cursor: pointer; }
+.school-test .st-key { font: inherit; min-width: 2.6em; padding: 4px 8px; border: 2px solid var(--st-line); border-radius: 8px; background: #fff; color: var(--st-ink, #1b2245); cursor: pointer; }
 .school-test .st-key:disabled { opacity: .45; cursor: default; }
 .school-test .st-kreuz { width: auto; border-collapse: collapse; margin: 6px 0; }
 .school-test .st-kreuz td { min-width: 3.4em; height: 2.2em; padding: 2px 6px; text-align: center; border: 1px solid var(--st-line); }
@@ -384,6 +394,10 @@
 .school-test.st-space .st-in input,
 .school-test.st-space .st-angin input { border: 2px solid #c3c9f0; border-radius: 12px; background: #fff; font-weight: 800; }
 .school-test.st-space .st-num input { width: 8ch; padding: 6px 8px; font-size: 1.08rem; }
+.school-test.st-space .st-term,
+.school-test.st-space .st-tnum,
+.school-test.st-space .st-rat input { border: 2px solid #c3c9f0; border-radius: 12px; background: #fff; font-weight: 700; padding: 6px 10px; font-size: 1.05rem; }
+.school-test.st-space .st-key { border-color: #c3c9f0; border-radius: 10px; font-weight: 700; }
 .school-test.st-space input:focus { border-color: var(--st-accent); box-shadow: 0 0 0 3px rgba(75, 91, 214, .2); }
 .school-test.st-space .st-trybtn { border: 0; border-radius: 12px; background: var(--st-accent); color: #fff; font-weight: 800; padding: 8px 18px; }
 .school-test.st-space .st-task.st-try-ok,
